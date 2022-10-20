@@ -1,7 +1,7 @@
-package ru.kovardin.flutter_yandex_ads.components
+package ru.kardenvan.flutter_yandex_ads_plus.components
 
 import android.util.Log
-import ru.kovardin.flutter_yandex_ads.pigeons.Rewarded
+import ru.kardenvan.flutter_yandex_ads_plus.pigeons.Rewarded
 
 class YandexAdsRewarded: Rewarded.YandexAdsRewarded {
     override fun load() {

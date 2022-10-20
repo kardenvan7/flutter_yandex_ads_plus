@@ -1,4 +1,4 @@
-# flutter_yandex_ads
+# flutter_yandex_ads_plus
 
 Yandex ADS for flutter applicaitions
 
@@ -24,7 +24,7 @@ iOS
 Install package
 
 ```yaml
-flutter_yandex_ads:
+flutter_yandex_ads_plus:
   git:
     url: https://gitflic.ru/project/kovardin/flutter-yandex-ads.git
 ```
@@ -153,8 +153,8 @@ Generate pigeons files fo
 flutter pub run pigeon \
   --input pigeons/yandex.dart \
   --dart_out lib/pigeons/yandex.dart \
-  --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Yandex.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads_plus/pigeons/Yandex.java \
+  --java_package "ru.kovardin.flutter_yandex_ads_plus.pigeons" \
   --objc_header_out ./ios/Classes/pigeons/Yandex.h \
   --objc_source_out ./ios/Classes/pigeons/Yandex.m
 
@@ -162,8 +162,8 @@ flutter pub run pigeon \
 flutter pub run pigeon \
   --input pigeons/interstitial.dart \
   --dart_out lib/pigeons/interstitial.dart \
-  --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Interstitial.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads_plus/pigeons/Interstitial.java \
+  --java_package "ru.kovardin.flutter_yandex_ads_plus.pigeons" \
   --objc_header_out ./ios/Classes/pigeons/Interstitial.h \
   --objc_source_out ./ios/Classes/pigeons/Interstitial.m
 
@@ -171,7 +171,7 @@ flutter pub run pigeon \
 flutter pub run pigeon \
   --input pigeons/rewarded.dart \
   --dart_out lib/pigeons/rewarded.dart \
-  --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads/pigeons/Rewarded.java \
-  --java_package "ru.kovardin.flutter_yandex_ads.pigeons" \
+  --java_out ./android/src/main/kotlin/ru/kovardin/flutter_yandex_ads_plus/pigeons/Rewarded.java \
+  --java_package "ru.kovardin.flutter_yandex_ads_plus.pigeons" \
   --objc_header_out ./ios/Classes/pigeons/Rewarded.h \
   --objc_source_out ./ios/Classes/pigeons/Rewarded.m

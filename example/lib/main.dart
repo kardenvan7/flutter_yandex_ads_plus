@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_yandex_ads/compoenets/interstitial.dart';
-import 'dart:async';
-
-import 'package:flutter_yandex_ads/widgets/banner.dart';
-import 'package:flutter_yandex_ads/yandex.dart';
+import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 
 void main() {
   runApp(const App());
@@ -38,10 +34,18 @@ class _AppState extends State<App> {
             ),
             bottomNavigationBar: const TabBar(
               tabs: [
-                Tab(child: Text('Banner', style: TextStyle(color: Colors.black54, fontSize: 12))),
-                Tab(child: Text('Interstitial', style: TextStyle(color: Colors.black54, fontSize: 12))),
-                Tab(child: Text('Native', style: TextStyle(color: Colors.black54, fontSize: 12))),
-                Tab(child: Text('Rewarded', style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(
+                    child: Text('Banner',
+                        style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(
+                    child: Text('Interstitial',
+                        style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(
+                    child: Text('Native',
+                        style: TextStyle(color: Colors.black54, fontSize: 12))),
+                Tab(
+                    child: Text('Rewarded',
+                        style: TextStyle(color: Colors.black54, fontSize: 12))),
               ],
             ),
             body: TabBarView(
@@ -82,14 +86,15 @@ class _BannerScreenState extends State<BannerScreen> {
         Text('Banner'),
         Container(
           height: 100,
-          child: YandexAdsBannerWidget(
+          child: BannerAdView(
             ads: widget.ads,
             id: 'R-M-DEMO-320x50',
             onAdLoaded: () {
               print('banner onAdLoaded');
             },
             onAdFailedToLoad: (AdLoadError err) {
-              print('banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+              print(
+                  'banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
             },
             onImpression: (String? data) {
               print("banner onImpression ${data ?? ''}");
@@ -114,20 +119,21 @@ class InterstitialScreen extends StatefulWidget {
 }
 
 class _InterstitialScreenState extends State<InterstitialScreen> {
-  late YandexAdsIntersttialComponents interstitial;
+  late YandexAdsInterstitialComponents interstitial;
 
   @override
   void initState() {
     super.initState();
 
-    interstitial = YandexAdsIntersttialComponents(
+    interstitial = YandexAdsInterstitialComponents(
       id: 'R-M-338238-18',
       ads: widget.ads,
       onAdLoaded: () {
         print('interstitial onAdLoaded');
       },
       onAdFailedToLoad: (AdLoadError err) {
-        print('interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
+        print(
+            'interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
       },
       onAdDismissed: () {
         print("interstitial onAdDismissed");

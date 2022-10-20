@@ -1,8 +1,8 @@
-import 'package:flutter_yandex_ads/pigeons/interstitial.dart';
-import 'package:flutter_yandex_ads/yandex.dart';
+import 'package:flutter_yandex_ads_plus/pigeons/interstitial.dart';
+import 'package:flutter_yandex_ads_plus/yandex.dart';
 
-class YandexAdsIntersttialComponents {
-  YandexAdsIntersttialComponents({
+class YandexAdsInterstitialComponents {
+  YandexAdsInterstitialComponents({
     Function? onAdLoaded,
     Function? onAdFailedToLoad,
     Function? onImpression,
@@ -16,35 +16,36 @@ class YandexAdsIntersttialComponents {
   }) {
     interstitial = YandexAdsInterstitial();
     if (onAdLoaded != null) {
-      ads.setOnAdLoaded(id, EventTypes.INTERSTITIAL, onAdLoaded);
+      ads.setOnAdLoaded(id, EventType.interstitial, onAdLoaded);
     }
 
     if (onAdFailedToLoad != null) {
-      ads.setOnAdFailedToLoad(id, EventTypes.INTERSTITIAL, onAdFailedToLoad);
+      ads.setOnAdFailedToLoad(id, EventType.interstitial, onAdFailedToLoad);
     }
 
     if (onImpression != null) {
-      ads.setOnImpression(id, EventTypes.INTERSTITIAL, onImpression);
+      ads.setOnImpression(id, EventType.interstitial, onImpression);
     }
 
     if (onAdClicked != null) {
-      ads.setOnAdCLicked(id, EventTypes.INTERSTITIAL, onAdClicked);
+      ads.setOnAdCLicked(id, EventType.interstitial, onAdClicked);
     }
 
     if (onLeftApplication != null) {
-      ads.setOnLeftApplication(id, EventTypes.INTERSTITIAL, onLeftApplication);
+      ads.setOnLeftApplication(id, EventType.interstitial, onLeftApplication);
     }
 
     if (onReturnedToApplication != null) {
-      ads.setOnReturnedToApplication(id, EventTypes.INTERSTITIAL, onReturnedToApplication);
+      ads.setOnReturnedToApplication(
+          id, EventType.interstitial, onReturnedToApplication);
     }
 
     if (onAdShown != null) {
-      ads.setOnAdShown(id, EventTypes.INTERSTITIAL, onAdShown);
+      ads.setOnAdShown(id, EventType.interstitial, onAdShown);
     }
 
     if (onAdDismissed != null) {
-      ads.setOnAdDismissed(id, EventTypes.INTERSTITIAL, onAdDismissed);
+      ads.setOnAdDismissed(id, EventType.interstitial, onAdDismissed);
     }
   }
 

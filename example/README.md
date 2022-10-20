@@ -1,6 +1,6 @@
-# flutter_yandex_ads_example
+# flutter_yandex_ads_plus_example
 
-Demonstrates how to use the flutter_yandex_ads plugin.
+Demonstrates how to use the flutter_yandex_ads_plus plugin.
 
 ## Getting Started
 

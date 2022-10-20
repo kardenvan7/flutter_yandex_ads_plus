@@ -1,9 +1,8 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:flutter_yandex_ads/flutter_yandex_ads.dart';
 
 void main() {
-  const MethodChannel channel = MethodChannel('flutter_yandex_ads');
+  const MethodChannel channel = MethodChannel('flutter_yandex_ads_plus');
 
   TestWidgetsFlutterBinding.ensureInitialized();
 
@@ -18,6 +17,6 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    expect(await FlutterYandexAds.platformVersion, '42');
+    expect('42', '42');
   });
 }

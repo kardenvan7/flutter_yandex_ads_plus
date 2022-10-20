@@ -1,4 +1,4 @@
-package ru.kovardin.flutter_yandex_ads.views
+package ru.kardenvan.flutter_yandex_ads_plus.views
 
 import android.content.Context
 import android.graphics.Color
