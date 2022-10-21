@@ -64,22 +64,22 @@ static id GetNullableObject(NSDictionary* dict, id key) {
 @implementation EventResponse
 + (instancetype)makeWithData:(nullable NSString *)data
     code:(nullable NSNumber *)code
-    description:(nullable NSString *)description {
+    desc:(nullable NSString *)desc {
   EventResponse* pigeonResult = [[EventResponse alloc] init];
   pigeonResult.data = data;
   pigeonResult.code = code;
-  pigeonResult.description = description;
+  pigeonResult.desc = desc;
   return pigeonResult;
 }
 + (EventResponse *)fromMap:(NSDictionary *)dict {
   EventResponse *pigeonResult = [[EventResponse alloc] init];
   pigeonResult.data = GetNullableObject(dict, @"data");
   pigeonResult.code = GetNullableObject(dict, @"code");
-  pigeonResult.description = GetNullableObject(dict, @"description");
+  pigeonResult.desc = GetNullableObject(dict, @"description");
   return pigeonResult;
 }
 - (NSDictionary *)toMap {
-  return [NSDictionary dictionaryWithObjectsAndKeys:(self.data ? self.data : [NSNull null]), @"data", (self.code ? self.code : [NSNull null]), @"code", (self.description ? self.description : [NSNull null]), @"description", nil];
+  return [NSDictionary dictionaryWithObjectsAndKeys:(self.data ? self.data : [NSNull null]), @"data", (self.code ? self.code : [NSNull null]), @"code", (self.desc ? self.desc : [NSNull null]), @"description", nil];
 }
 @end
 

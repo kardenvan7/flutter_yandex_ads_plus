@@ -59,9 +59,10 @@ extension Banner: YMAAdViewDelegate {
 
     func adViewDidFailLoading(_ adView: YMAAdView, error: Error) {
         let response = EventResponse()
+        
         response.code = 0
-        response.description = "\(error)"
-
+        response.desc = error.localizedDescription
+        
         if let callback = api.callbacks[EventKey(id: id, name: "onAdFailedToLoad", type: EventType.BANNER.rawValue)] {
             callback(response, nil)
         }

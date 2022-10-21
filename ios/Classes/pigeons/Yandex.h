@@ -25,10 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface EventResponse : NSObject
 + (instancetype)makeWithData:(nullable NSString *)data
     code:(nullable NSNumber *)code
-    description:(nullable NSString *)description;
+    desc:(nullable NSString *)desc;
 @property(nonatomic, copy, nullable) NSString * data;
 @property(nonatomic, strong, nullable) NSNumber * code;
-@property(nonatomic, copy, nullable) NSString * description;
+@property(nonatomic, copy, nullable) NSString * desc;
 @end
 
 /// The codec used by YandexAdsApi.
