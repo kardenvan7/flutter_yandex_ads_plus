@@ -88,7 +88,7 @@ class _BannerScreenState extends State<BannerScreen> {
           height: 100,
           child: BannerAdView(
             ads: widget.ads,
-            id: 'R-M-DEMO-320x50',
+            id: 'R-M-208189-36',
             onAdLoaded: () {
               print('banner onAdLoaded');
             },
