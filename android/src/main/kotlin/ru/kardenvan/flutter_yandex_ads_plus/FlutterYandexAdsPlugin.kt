@@ -9,13 +9,9 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import ru.kardenvan.flutter_yandex_ads_plus.components.YandexAdsInterstitial
-import ru.kardenvan.flutter_yandex_ads_plus.components.YandexAdsRewarded
-import ru.kardenvan.flutter_yandex_ads_plus.pigeons.Interstitial
-import ru.kardenvan.flutter_yandex_ads_plus.pigeons.Rewarded
 import ru.kardenvan.flutter_yandex_ads_plus.pigeons.Yandex
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.YandexApi
-import ru.kardenvan.flutter_yandex_ads_plus.views.YandexAdsNative
+import ru.kardenvan.flutter_yandex_ads_plus.views.native_ad.NativeYandexAdFactory
 import ru.kardenvan.flutter_yandex_ads_plus.views.banner.BannerYandexAdFactory
 
 /** FlutterYandexAdsPlugin */
@@ -36,19 +32,16 @@ class FlutterYandexAdsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         val api = YandexApi(context)
         Yandex.YandexAdsApi.setup(binding.binaryMessenger, api)
 
-        // components
-        Interstitial.YandexAdsInterstitial.setup(
-            binding.binaryMessenger,
-            YandexAdsInterstitial(api, context)
-        )
-        Rewarded.YandexAdsRewarded.setup(binding.binaryMessenger, YandexAdsRewarded())
-
         // widgets
         binding.platformViewRegistry.registerViewFactory(
             "yandex-ads-banner",
             BannerYandexAdFactory(api)
         )
-        binding.platformViewRegistry.registerViewFactory("yandex-ads-native", YandexAdsNative())
+
+        binding.platformViewRegistry.registerViewFactory(
+            "yandex-ads-native",
+            NativeYandexAdFactory()
+        )
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {

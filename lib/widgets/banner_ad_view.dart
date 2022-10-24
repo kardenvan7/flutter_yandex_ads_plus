@@ -56,7 +56,7 @@ class BannerAdView extends StatelessWidget {
       height: height,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final Map<String, dynamic> params = _AdParams(
+          final Map<String, dynamic> params = _BannerAdParams(
             adId: id,
             height: height ?? constraints.maxHeight,
             width: width ?? constraints.maxWidth,
@@ -88,8 +88,8 @@ class BannerAdView extends StatelessWidget {
   }
 }
 
-class _AdParams {
-  const _AdParams({
+class _BannerAdParams {
+  const _BannerAdParams({
     required this.adId,
     this.height = 320,
     this.width = 100,

@@ -26,7 +26,7 @@ class _AppState extends State<App> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: DefaultTabController(
-        length: 4,
+        length: 2,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
@@ -35,25 +35,29 @@ class _AppState extends State<App> {
             bottomNavigationBar: const TabBar(
               tabs: [
                 Tab(
-                    child: Text('Banner',
-                        style: TextStyle(color: Colors.black54, fontSize: 12))),
+                  child: Text(
+                    'Native',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
                 Tab(
-                    child: Text('Interstitial',
-                        style: TextStyle(color: Colors.black54, fontSize: 12))),
-                Tab(
-                    child: Text('Native',
-                        style: TextStyle(color: Colors.black54, fontSize: 12))),
-                Tab(
-                    child: Text('Rewarded',
-                        style: TextStyle(color: Colors.black54, fontSize: 12))),
+                  child: Text(
+                    'Banner',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
             body: TabBarView(
               children: [
+                NativeScreen(ads: ads),
                 BannerScreen(ads: ads),
-                InterstitialScreen(ads: ads),
-                Icon(Icons.directions_bike),
-                Icon(Icons.directions_bike),
               ],
             ),
           ),
@@ -64,9 +68,12 @@ class _AppState extends State<App> {
 }
 
 class BannerScreen extends StatefulWidget {
-  BannerScreen({Key? key, required this.ads}) : super(key: key);
+  const BannerScreen({
+    Key? key,
+    required this.ads,
+  }) : super(key: key);
 
-  FlutterYandexAds ads;
+  final FlutterYandexAds ads;
 
   @override
   _BannerScreenState createState() => _BannerScreenState();
@@ -74,34 +81,16 @@ class BannerScreen extends StatefulWidget {
 
 class _BannerScreenState extends State<BannerScreen> {
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('Banner'),
-        Container(
-          height: 100,
+        const Text('Banner'),
+        SizedBox(
+          height: 400,
           child: BannerAdView(
+            id: 'R-M-208186-29',
             ads: widget.ads,
-            id: 'R-M-208189-36',
-            onAdLoaded: () {
-              print('banner onAdLoaded');
-            },
-            onAdFailedToLoad: (AdLoadError err) {
-              print(
-                  'banner onAdFailedToLoad code: ${err.code}, description: ${err.description}');
-            },
-            onImpression: (String? data) {
-              print("banner onImpression ${data ?? ''}");
-            },
-            onAdClicked: () {
-              print('banner onAdClicked');
-            },
           ),
         ),
       ],
@@ -109,57 +98,30 @@ class _BannerScreenState extends State<BannerScreen> {
   }
 }
 
-class InterstitialScreen extends StatefulWidget {
-  InterstitialScreen({Key? key, required this.ads}) : super(key: key);
+class NativeScreen extends StatefulWidget {
+  const NativeScreen({
+    Key? key,
+    required this.ads,
+  }) : super(key: key);
 
-  FlutterYandexAds ads;
+  final FlutterYandexAds ads;
 
   @override
-  _InterstitialScreenState createState() => _InterstitialScreenState();
+  _NativeScreenState createState() => _NativeScreenState();
 }
 
-class _InterstitialScreenState extends State<InterstitialScreen> {
-  late YandexAdsInterstitialComponents interstitial;
-
-  @override
-  void initState() {
-    super.initState();
-
-    interstitial = YandexAdsInterstitialComponents(
-      id: 'R-M-338238-18',
-      ads: widget.ads,
-      onAdLoaded: () {
-        print('interstitial onAdLoaded');
-      },
-      onAdFailedToLoad: (AdLoadError err) {
-        print(
-            'interstitial onAdFailedToLoad code: ${err.code}, description: ${err.description}');
-      },
-      onAdDismissed: () {
-        print("interstitial onAdDismissed");
-      },
-      onAdShown: () {
-        print("interstitial onAdShown");
-      },
-      onImpression: (String? data) {
-        print('interstitial onImpression ${data}');
-      },
-    );
-
-    interstitial.load();
-  }
-
+class _NativeScreenState extends State<NativeScreen> {
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const Text('Interstitial'),
-        ElevatedButton(
-          onPressed: () {
-            interstitial.show();
-          },
-          child: Text('show'),
+      children: const [
+        Text('Native'),
+        SizedBox(
+          height: 400,
+          child: NativeAdView(
+            id: 'R-M-208186-37',
+          ),
         ),
       ],
     );

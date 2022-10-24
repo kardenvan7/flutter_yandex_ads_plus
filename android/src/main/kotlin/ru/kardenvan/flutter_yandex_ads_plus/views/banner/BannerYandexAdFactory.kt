@@ -11,7 +11,7 @@ class BannerYandexAdFactory(private val api: YandexApi) :
     PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
     override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
-        val arguments = PlatformApi.BannerViewArguments(args)
+        val arguments = PlatformApi.BannerAdViewArguments(args)
         val id = arguments.getBannerId()
 
         return BannerYandexAdView(
