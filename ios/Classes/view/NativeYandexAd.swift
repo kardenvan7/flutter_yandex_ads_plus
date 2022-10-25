@@ -34,6 +34,7 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
     private var nativeAdView: YMANativeBannerView!
     private var api: YandexApi!
     private var id: String!
+    private var loader: YMANativeAdLoader!
  
     init(
         frame: CGRect, viewIdentifier viewId: Int64,
@@ -42,15 +43,14 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
         super.init()
         
         self.api = api
-        self.id = "R-M-DEMO-native-i"
+        self.id = id
         self.nativeAdView = YMANativeBannerView()
+        self.loader = YMANativeAdLoader()
         
         loadAd()
     }
-    
-    func loadAd() {
-        let loader = YMANativeAdLoader()
 
+    func loadAd() {
         loader.delegate = self
 
         let conf = YMAMutableNativeAdRequestConfiguration(adUnitID: id)
@@ -71,13 +71,19 @@ extension NativeYandexAdView: YMANativeAdDelegate {
 }
 
 extension NativeYandexAdView: YMANativeAdLoaderDelegate {
-    func nativeAdLoader(_ loader: YMANativeAdLoader, didLoad ad: YMANativeAd) {
+    func nativeAdLoader(
+        _ loader: YMANativeAdLoader,
+        didLoad ad: YMANativeAd
+    ) {
             print("Ad " + self.id + " loaded")
             ad.delegate = self
             nativeAdView.ad = ad
     }
 
-    func nativeAdLoader(_ loader: YMANativeAdLoader, didFailLoadingWithError error: Error) {
+    func nativeAdLoader(
+        _ loader: YMANativeAdLoader,
+        didFailLoadingWithError error: Error
+    ) {
         print("Native ad loading error: \(error)")
     }
 }
