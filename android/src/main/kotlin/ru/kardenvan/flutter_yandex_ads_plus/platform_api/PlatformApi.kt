@@ -37,11 +37,19 @@ class PlatformApi {
     }
 
     class NativeAdViewArguments {
+        private lateinit var id: String
+
+        fun getId(): String {
+            return id
+        }
+
+        private lateinit var minSize: Size
+
+        fun getMinSize(): Size {
+            return minSize
+        }
+
         class Builder {
-
-            private val defaultHeight = 320
-            private val defaultWidth = 100
-
             fun buildFromMap(args: Any?): NativeAdViewArguments {
                 if (args !is Map<*, *>) {
                     throw Exception("Arguments is not map. Given arguments: $args")
@@ -56,29 +64,17 @@ class PlatformApi {
                     )
                 }
 
-                val argsClass = NativeAdViewArguments();
+                val argsClass = NativeAdViewArguments()
 
                 argsClass.id = args["ad_id"] as String
 
-                val minHeight: Int = params["min_height"] as Int? ?: defaultHeight
-                val minWidth: Int = params["min_width"] as Int? ?: defaultWidth
+                val height: Int = params["height"] as Int
+                val width: Int = params["width"] as Int
 
-                argsClass.minSize = Size(minWidth, minHeight)
+                argsClass.minSize = Size(width, height)
 
                 return argsClass
             }
-        }
-
-        private var id: String? = null
-
-        fun getId(): String? {
-            return id
-        }
-
-        private var minSize: Size? = null
-
-        fun getMinSize(): Size? {
-            return minSize
         }
     }
 }

@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_yandex_ads_plus (0.0.2):
+  - flutter_yandex_ads_plus (0.1.0):
     - Flutter
     - YandexMobileAds
   - YandexMobileAds (5.2.1):
@@ -33,7 +33,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_yandex_ads_plus: 004d2575c5128b30f6472e5a2d4ca2f5356668e6
+  flutter_yandex_ads_plus: bfd7c4f5d610afd54587e00ac4171b9aaac8894a
   YandexMobileAds: 3d7708df615f92815a3acedf9869da46d0b4d65e
   YandexMobileMetrica: baf7cea47cb87fc9af963c4f747ce8dd7df3d7c0
 

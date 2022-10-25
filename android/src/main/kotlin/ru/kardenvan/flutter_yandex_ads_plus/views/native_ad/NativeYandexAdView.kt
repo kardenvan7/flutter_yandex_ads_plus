@@ -6,28 +6,28 @@ import android.util.Log
 import android.view.View
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
-import com.yandex.mobile.ads.nativeads.NativeAd
-import com.yandex.mobile.ads.nativeads.NativeAdEventListener
-import com.yandex.mobile.ads.nativeads.NativeAdLoadListener
-import com.yandex.mobile.ads.nativeads.NativeAdLoader
-import com.yandex.mobile.ads.nativeads.NativeAdRequestConfiguration
+import com.yandex.mobile.ads.nativeads.*
 import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import com.yandex.mobile.ads.nativeads.template.appearance.NativeTemplateAppearance
 import com.yandex.mobile.ads.nativeads.template.appearance.TextAppearance
 import io.flutter.plugin.platform.PlatformView
 
-class NativeYandexAdView(context: Context?, adId: String) : PlatformView {
+
+class NativeYandexAdView(
+    context: Context?,
+    private val id: String,
+    width: Int,
+    height: Int
+) : PlatformView {
     private var nativeBannerView: NativeBannerView
-    private var id: String
 
     init {
         val viewContext = context!!
 
         nativeBannerView = NativeBannerView(viewContext)
-        id = adId
 
         setAppearance()
-        loadAd(viewContext)
+        loadAd(viewContext, width, height)
     }
 
     private fun setAppearance() {
@@ -39,11 +39,17 @@ class NativeYandexAdView(context: Context?, adId: String) : PlatformView {
         nativeBannerView.applyAppearance(nativeTemplateAppearance)
     }
 
-    private fun loadAd(context: Context) {
+    private fun loadAd(context: Context, width: Int, height: Int) {
         val loader = NativeAdLoader(context)
+
+        val parameters: HashMap<String, String> = hashMapOf(
+            "preferable-height" to "$height",
+            "preferable-width" to "$width"
+        )
 
         val nativeAdRequestConfiguration = NativeAdRequestConfiguration.Builder(id)
             .setShouldLoadImagesAutomatically(true)
+            .setParameters(parameters)
             .build()
 
         loader.setNativeAdLoadListener(NativeYandexAdEventListener())

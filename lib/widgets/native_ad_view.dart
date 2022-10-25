@@ -27,10 +27,14 @@ class NativeAdView extends StatelessWidget {
     return SizedBox(
       height: height,
       width: width,
-      child: Builder(
-        builder: (context) {
+      child: LayoutBuilder(
+        builder: (context, constraints) {
           final Map<String, dynamic> params = _NativeAdParams(
             adId: id,
+            height: height ??
+                (constraints.hasBoundedHeight ? constraints.maxHeight : 250),
+            width: width ??
+                (constraints.hasBoundedWidth ? constraints.maxWidth : 100),
           ).toMap();
 
           switch (defaultTargetPlatform) {
@@ -62,13 +66,19 @@ class NativeAdView extends StatelessWidget {
 class _NativeAdParams {
   const _NativeAdParams({
     required this.adId,
+    required this.height,
+    required this.width,
   });
 
   final String adId;
+  final double height;
+  final double width;
 
   Map<String, dynamic> toMap() {
     return {
       'ad_id': adId,
+      'height': height.toInt(),
+      'width': width.toInt(),
     };
   }
 }

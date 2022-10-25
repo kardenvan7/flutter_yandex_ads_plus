@@ -11,6 +11,11 @@ class NativeYandexAdFactory: PlatformViewFactory(StandardMessageCodec.INSTANCE) 
         val argsClassBuilder = PlatformApi.NativeAdViewArguments.Builder()
         val argsClass = argsClassBuilder.buildFromMap(args)
 
-        return NativeYandexAdView(context, argsClass.getId()!!)
+        return NativeYandexAdView(
+            context,
+            argsClass.getId(),
+            argsClass.getMinSize().width,
+            argsClass.getMinSize().height
+        )
     }
 }

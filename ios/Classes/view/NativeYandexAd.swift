@@ -20,7 +20,9 @@ class NativeYandexAdViewFactory: NSObject, FlutterPlatformViewFactory {
                 viewIdentifier: viewId,
                 arguments: nil,
                 api: api,
-                id: argsClass.id
+                id: argsClass.id,
+                width: argsClass.width,
+                height: argsClass.height
         )
     }
 
@@ -38,7 +40,8 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
  
     init(
         frame: CGRect, viewIdentifier viewId: Int64,
-        arguments args: Any?, api: YandexApi?, id: String
+        arguments args: Any?, api: YandexApi?, id: String,
+        width: Int, height: Int
     ) {
         super.init()
         
@@ -47,15 +50,18 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
         self.nativeAdView = YMANativeBannerView()
         self.loader = YMANativeAdLoader()
         
-        loadAd()
+        loadAd(width: width, height: height)
     }
 
-    func loadAd() {
+    func loadAd(width: Int, height: Int) {
         loader.delegate = self
 
         let conf = YMAMutableNativeAdRequestConfiguration(adUnitID: id)
-
         conf.shouldLoadImagesAutomatically = true
+        conf.parameters = [
+            "preferable-height": "\(height)",
+            "preferable-width": "\(width)"
+        ]
         
         print("before ad " + id + " load")
         loader.loadAd(with: conf)

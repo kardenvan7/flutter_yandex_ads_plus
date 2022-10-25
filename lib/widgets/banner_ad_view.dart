@@ -58,8 +58,10 @@ class BannerAdView extends StatelessWidget {
         builder: (context, constraints) {
           final Map<String, dynamic> params = _BannerAdParams(
             adId: id,
-            height: height ?? constraints.maxHeight,
-            width: width ?? constraints.maxWidth,
+            height: height ??
+                (constraints.hasBoundedHeight ? constraints.maxHeight : 250),
+            width: width ??
+                (constraints.hasBoundedWidth ? constraints.maxWidth : 100),
           ).toMap();
 
           switch (defaultTargetPlatform) {
@@ -91,8 +93,8 @@ class BannerAdView extends StatelessWidget {
 class _BannerAdParams {
   const _BannerAdParams({
     required this.adId,
-    this.height = 100,
-    this.width = 320,
+    required this.height,
+    required this.width,
   });
 
   final String adId;

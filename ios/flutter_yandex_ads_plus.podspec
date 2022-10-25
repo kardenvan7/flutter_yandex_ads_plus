@@ -4,14 +4,14 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_yandex_ads_plus'
-  s.version          = '0.0.2'
+  s.version          = '0.1.0'
   s.summary          = 'Flutter Yandex Ads.'
   s.description      = <<-DESC
 Flutter Yandex Ads.
                        DESC
-  s.homepage         = 'http://kovardin.ru'
+  s.homepage         = 'https://github.com/kardenvan7/flutter_yandex_ads_plus'
   s.license          = { :file => '../LICENSE' }
-  s.author           = { 'kovardin.ru' => 'artem-kovardin@yandex.ru' }
+  s.author           = { 'kardenvan' => 'glushkovlad98@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'

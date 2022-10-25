@@ -9,14 +9,20 @@ import Foundation
 
 class NativeAdViewArguments {
     let id: String!
+    let height: Int
+    let width: Int
     
-    init(id: String) {
+    init(id: String, height: Int, width: Int) {
         self.id = id
+        self.height = height
+        self.width = width
     }
     
     public static func fromMap(args: [String: Any?]) -> NativeAdViewArguments {
             return NativeAdViewArguments(
-                id: args["ad_id"] as! String
+                id: args["ad_id"] as! String,
+                height: args["height"] as! Int,
+                width: args["width"] as! Int
             )
         }
 }
