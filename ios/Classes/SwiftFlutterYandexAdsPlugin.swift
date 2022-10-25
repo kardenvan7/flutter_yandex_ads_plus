@@ -10,10 +10,15 @@ public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
     YandexAdsApiSetup(messenger, api)
 
     // widgets
-    registrar.register(BannerYandexAdViewFactory(api: api), withId: "yandex-ads-banner")
-
-    // components
-    YandexAdsInterstitialSetup(messenger, YandexAdsInterstitialComponent(api: api))
+    registrar.register(
+        BannerYandexAdViewFactory(api: api),
+        withId: "yandex-ads-banner"
+    )
+      
+      registrar.register(
+          NativeYandexAdViewFactory(api: api),
+          withId: "yandex-ads-native"
+      )
 
   }
 

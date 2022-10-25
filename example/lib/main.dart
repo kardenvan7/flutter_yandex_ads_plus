@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 
@@ -67,7 +69,7 @@ class _AppState extends State<App> {
   }
 }
 
-class BannerScreen extends StatefulWidget {
+class BannerScreen extends StatelessWidget {
   const BannerScreen({
     Key? key,
     required this.ads,
@@ -76,21 +78,17 @@ class BannerScreen extends StatefulWidget {
   final FlutterYandexAds ads;
 
   @override
-  _BannerScreenState createState() => _BannerScreenState();
-}
-
-class _BannerScreenState extends State<BannerScreen> {
-  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text('Banner'),
         SizedBox(
-          height: 400,
+          height: 300,
+          width: 300,
           child: BannerAdView(
-            id: 'R-M-208186-29',
-            ads: widget.ads,
+            id: Platform.isIOS ? 'R-M-208189-28' : 'R-M-208186-29',
+            ads: ads,
           ),
         ),
       ],
@@ -98,7 +96,7 @@ class _BannerScreenState extends State<BannerScreen> {
   }
 }
 
-class NativeScreen extends StatefulWidget {
+class NativeScreen extends StatelessWidget {
   const NativeScreen({
     Key? key,
     required this.ads,
@@ -107,20 +105,16 @@ class NativeScreen extends StatefulWidget {
   final FlutterYandexAds ads;
 
   @override
-  _NativeScreenState createState() => _NativeScreenState();
-}
-
-class _NativeScreenState extends State<NativeScreen> {
-  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: const [
-        Text('Native'),
+      children: [
+        const Text('Native'),
         SizedBox(
-          height: 400,
           child: NativeAdView(
-            id: 'R-M-208186-37',
+            id: Platform.isIOS ? 'R-M-208189-36' : 'R-M-208186-37',
+            height: 250,
+            width: 300,
           ),
         ),
       ],

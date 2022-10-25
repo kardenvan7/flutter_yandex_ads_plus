@@ -11,7 +11,7 @@ class BannerYandexAdViewFactory: NSObject, FlutterPlatformViewFactory {
     }
 
     func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        let argsClass = BannerViewArguments.fromMap(
+        let argsClass = BannerAdViewArguments.fromMap(
             args: args as! [String: Any?]
         )
         

@@ -7,7 +7,7 @@
 
 import Foundation
 
-class BannerViewArguments {
+class BannerAdViewArguments {
     let id: String!
     let height: Int?
     let width: Int?
@@ -18,8 +18,8 @@ class BannerViewArguments {
         self.width = width
     }
     
-    public static func fromMap(args: [String: Any?]) -> BannerViewArguments {
-            return BannerViewArguments(
+    public static func fromMap(args: [String: Any?]) -> BannerAdViewArguments {
+            return BannerAdViewArguments(
                 id: args["ad_id"] as! String,
                 height: args["height"] as! Int?,
                 width: args["width"] as! Int?

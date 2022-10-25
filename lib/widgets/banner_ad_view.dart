@@ -91,8 +91,8 @@ class BannerAdView extends StatelessWidget {
 class _BannerAdParams {
   const _BannerAdParams({
     required this.adId,
-    this.height = 320,
-    this.width = 100,
+    this.height = 100,
+    this.width = 320,
   });
 
   final String adId;
