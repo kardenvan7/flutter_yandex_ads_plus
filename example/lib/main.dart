@@ -27,12 +27,17 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      darkTheme: ThemeData(
+        brightness: Brightness.light,
+      ),
+      themeMode: ThemeMode.light,
       home: DefaultTabController(
         length: 2,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
               title: const Text('Yandex ADS'),
+              actions: [],
             ),
             bottomNavigationBar: const TabBar(
               tabs: [
@@ -113,7 +118,7 @@ class NativeScreen extends StatelessWidget {
         SizedBox(
           child: NativeAdView(
             id: Platform.isIOS ? 'R-M-208189-36' : 'R-M-208186-37',
-            height: 250,
+            height: 300,
             width: 300,
           ),
         ),
