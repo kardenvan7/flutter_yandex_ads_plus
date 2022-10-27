@@ -25,9 +25,7 @@ class BannerAdViewFactory:
                 viewIdentifier: viewId,
                 arguments: nil,
                 api: api,
-                height: argsClass.height,
-                width: argsClass.width,
-                id: argsClass.id
+                argsClass: argsClass
         )
     }
 

@@ -34,7 +34,9 @@ extension UIColor {
         let argb = UInt32(hexString.dropFirst(), radix: 16)
         
         if (argb == nil) {
-            throw "\(hexString) is not valid hex"
+            throw MyError.runtimeError(
+                "\(hexString) is not valid hex"
+            )
         }
 
         self.init(
@@ -49,4 +51,8 @@ extension UIColor {
             self.init(cgColor: defaultColor.cgColor)
         }
     }
+}
+
+enum MyError: Error {
+    case runtimeError(String)
 }

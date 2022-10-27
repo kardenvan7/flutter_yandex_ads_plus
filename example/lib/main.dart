@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 
@@ -37,7 +38,6 @@ class _AppState extends State<App> {
           child: Scaffold(
             appBar: AppBar(
               title: const Text('Yandex ADS'),
-              actions: [],
             ),
             bottomNavigationBar: const TabBar(
               tabs: [
@@ -74,7 +74,7 @@ class _AppState extends State<App> {
   }
 }
 
-class BannerScreen extends StatelessWidget {
+class BannerScreen extends StatefulWidget {
   const BannerScreen({
     Key? key,
     required this.ads,
@@ -83,17 +83,64 @@ class BannerScreen extends StatelessWidget {
   final FlutterYandexAds ads;
 
   @override
+  State<BannerScreen> createState() => _BannerScreenState();
+}
+
+class _BannerScreenState extends State<BannerScreen> {
+  String? _deviceId;
+  bool _infoRetrieved = false;
+
+  @override
+  void initState() {
+    super.initState();
+    final infoPlugin = DeviceInfoPlugin();
+
+    if (Platform.isIOS) {
+      infoPlugin.iosInfo.then(
+        (value) => setState(
+          () {
+            _infoRetrieved = true;
+            _deviceId = value.identifierForVendor;
+          },
+        ),
+      );
+    } else if (Platform.isAndroid) {
+      infoPlugin.androidInfo.then(
+        (value) => setState(
+          () {
+            _infoRetrieved = true;
+            _deviceId = value.id;
+          },
+        ),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text('Banner'),
-        SizedBox(
-          height: 300,
-          width: 300,
-          child: BannerAdView(
-            id: Platform.isIOS ? 'R-M-208189-28' : 'R-M-208186-29',
-            ads: ads,
+        Visibility(
+          visible: _infoRetrieved,
+          child: SizedBox(
+            height: 300,
+            width: 300,
+            child: BannerAdView(
+              id: Platform.isIOS ? 'R-M-208189-24' : 'R-M-208186-25',
+              ads: widget.ads,
+              additionalLoadParams: Platform.isIOS
+                  ? null
+                  //      {
+                  //         "adf_ownerid": "171817",
+                  //         "adf_p1": "ciouy",
+                  //         "adf_p2": "fhme",
+                  //         "adf_pt": "b",
+                  //         "adf_puid24": _deviceId ?? "9",
+                  //       }
+                  : null,
+            ),
           ),
         ),
       ],

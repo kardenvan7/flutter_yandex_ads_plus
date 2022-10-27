@@ -9,6 +9,7 @@ class BannerAdView extends StatelessWidget {
     required this.ads,
     this.height,
     this.width,
+    this.additionalLoadParams,
     Function? onAdLoaded,
     Function? onAdFailedToLoad,
     Function? onImpression,
@@ -47,6 +48,7 @@ class BannerAdView extends StatelessWidget {
   final FlutterYandexAds ads;
   final double? height;
   final double? width;
+  final Map<String, String>? additionalLoadParams;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +64,7 @@ class BannerAdView extends StatelessWidget {
                 (constraints.hasBoundedHeight ? constraints.maxHeight : 250),
             width: width ??
                 (constraints.hasBoundedWidth ? constraints.maxWidth : 100),
+            additionalLoadParams: additionalLoadParams,
           ).toMap();
 
           switch (defaultTargetPlatform) {
@@ -95,17 +98,20 @@ class _BannerAdParams {
     required this.adId,
     required this.height,
     required this.width,
+    this.additionalLoadParams,
   });
 
   final String adId;
   final double height;
   final double width;
+  final Map<String, String>? additionalLoadParams;
 
   Map<String, dynamic> toMap() {
     return {
       'ad_id': adId,
       'height': height.toInt(),
       'width': width.toInt(),
+      'additional_load_parameters': additionalLoadParams,
     };
   }
 }

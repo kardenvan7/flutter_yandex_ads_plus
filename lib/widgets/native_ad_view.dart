@@ -9,6 +9,8 @@ class NativeAdView extends StatelessWidget {
     this.height,
     this.width,
     this.theme,
+    this.iosTheme,
+    this.androidTheme,
     Function? onAdLoaded,
     Function? onAdFailedToLoad,
     Function? onImpression,
@@ -22,6 +24,8 @@ class NativeAdView extends StatelessWidget {
   final double? height;
   final double? width;
   final NativeAdTheme? theme;
+  final NativeAdTheme? androidTheme;
+  final NativeAdTheme? iosTheme;
 
   double get _defaultHeight => 250;
   double get _defaultWidth => 100;
@@ -48,19 +52,21 @@ class NativeAdView extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           final defaultTheme = _getDefaultNativeAdTheme(context);
-          final finalTheme = theme != null
+          final commonTheme = theme != null
               ? defaultTheme.copyWithAnother(theme!)
               : defaultTheme;
 
-          final Map<String, dynamic> params = _NativeAdParams(
-            adId: id,
-            height: _calcHeight(constraints),
-            width: _calcWidth(constraints),
-            theme: finalTheme,
-          ).toMap();
-
           switch (defaultTargetPlatform) {
             case TargetPlatform.android:
+              final Map<String, dynamic> params = _NativeAdParams(
+                adId: id,
+                height: _calcHeight(constraints),
+                width: _calcWidth(constraints),
+                theme: androidTheme != null
+                    ? commonTheme.copyWithAnother(androidTheme!)
+                    : commonTheme,
+              ).toMap();
+
               return AndroidView(
                 viewType: viewType,
                 creationParams: params,
@@ -68,6 +74,15 @@ class NativeAdView extends StatelessWidget {
               );
 
             case TargetPlatform.iOS:
+              final Map<String, dynamic> params = _NativeAdParams(
+                adId: id,
+                height: _calcHeight(constraints),
+                width: _calcWidth(constraints),
+                theme: iosTheme != null
+                    ? commonTheme.copyWithAnother(iosTheme!)
+                    : commonTheme,
+              ).toMap();
+
               return UiKitView(
                 viewType: viewType,
                 creationParams: params,

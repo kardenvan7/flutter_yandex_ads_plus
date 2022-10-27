@@ -14,7 +14,7 @@ class BannerAdViewArgumentsFactory {
                 id: args["ad_id"] as! String,
                 height: args["height"] as! Int?,
                 width: args["width"] as! Int?,
-                additionalParams: args["additional_load_params"] as? [String: String]
+                additionalParams: args["additional_load_parameters"] as? [String: String]
             )
         }
 }

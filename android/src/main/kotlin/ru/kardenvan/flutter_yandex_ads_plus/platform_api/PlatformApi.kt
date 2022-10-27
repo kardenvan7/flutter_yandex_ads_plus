@@ -21,12 +21,20 @@ class PlatformApi {
 
                 val height: Int = map["height"] as Int? ?: 320
                 val width: Int = map["width"] as Int? ?: 100
+                val rawAdditionalParams = map["additional_load_parameters"]
+                val additionalParams: Map<*,*>? =
+                    if (rawAdditionalParams is Map<*,*>)
+                        rawAdditionalParams
+                    else
+                        null
+
 
                 val size = Size(width, height)
 
                 return BannerAdViewArguments(
                     id = map["ad_id"] as String,
                     size = size,
+                    additionalLoadParameters = additionalParams
                 )
             }
         }

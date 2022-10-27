@@ -1,4 +1,6 @@
 PODS:
+  - device_info_plus (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
   - flutter_yandex_ads_plus (0.1.0):
     - Flutter
@@ -17,6 +19,7 @@ PODS:
     - YandexMobileMetrica/Static/Core
 
 DEPENDENCIES:
+  - device_info_plus (from `.symlinks/plugins/device_info_plus/ios`)
   - Flutter (from `Flutter`)
   - flutter_yandex_ads_plus (from `.symlinks/plugins/flutter_yandex_ads_plus/ios`)
 
@@ -26,12 +29,15 @@ SPEC REPOS:
     - YandexMobileMetrica
 
 EXTERNAL SOURCES:
+  device_info_plus:
+    :path: ".symlinks/plugins/device_info_plus/ios"
   Flutter:
     :path: Flutter
   flutter_yandex_ads_plus:
     :path: ".symlinks/plugins/flutter_yandex_ads_plus/ios"
 
 SPEC CHECKSUMS:
+  device_info_plus: e5c5da33f982a436e103237c0c85f9031142abed
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_yandex_ads_plus: bfd7c4f5d610afd54587e00ac4171b9aaac8894a
   YandexMobileAds: 3d7708df615f92815a3acedf9869da46d0b4d65e

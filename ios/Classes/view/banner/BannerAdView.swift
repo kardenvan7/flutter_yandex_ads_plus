@@ -87,9 +87,16 @@ extension BannerAdView: YMAAdViewDelegate {
         response.code = 0
         response.desc = error.localizedDescription
         
-        if let callback = api.callbacks[EventKey(id: id, name: "onAdFailedToLoad", type: EventType.BANNER.rawValue)] {
-            callback(response, nil)
-        }
+        print("Ad " + id + " failed to load: \(error.localizedDescription)")
+        
+        if let callback =
+            api.callbacks[
+                EventKey(
+                    id: id, name: "onAdFailedToLoad", type: EventType.BANNER.rawValue
+                )
+            ] {
+                callback(response, nil)
+            }
     }
 
     func adViewDidClick(_ adView: YMAAdView) {
