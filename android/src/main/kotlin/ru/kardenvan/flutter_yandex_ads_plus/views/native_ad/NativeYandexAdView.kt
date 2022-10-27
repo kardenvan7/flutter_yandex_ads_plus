@@ -8,15 +8,11 @@ import com.yandex.mobile.ads.common.ImpressionData
 import com.yandex.mobile.ads.nativeads.*
 import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import io.flutter.plugin.platform.PlatformView
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.NativeAdViewTheme
 
 
 class NativeYandexAdView(
     context: Context?,
-    width: Int,
-    height: Int,
-    private val id: String,
-    private val theme: NativeAdViewTheme
+    private val arguments: NativeAdViewArguments
 ) : PlatformView {
     private var nativeBannerView: NativeBannerView
 
@@ -27,18 +23,18 @@ class NativeYandexAdView(
 
         setAppearance()
 
-        loadAd(viewContext, width, height)
+        loadAd(viewContext)
     }
 
-    private fun loadAd(context: Context, width: Int, height: Int) {
+    private fun loadAd(context: Context) {
         val loader = NativeAdLoader(context)
 
         val parameters: HashMap<String, String> = hashMapOf(
-            "preferable-height" to "$height",
-            "preferable-width" to "$width"
+            "preferable-height" to "${arguments.getMinSize().height}",
+            "preferable-width" to "${arguments.getMinSize().width}"
         )
 
-        val nativeAdRequestConfiguration = NativeAdRequestConfiguration.Builder(id)
+        val nativeAdRequestConfiguration = NativeAdRequestConfiguration.Builder(arguments.getId())
             .setShouldLoadImagesAutomatically(true)
             .setParameters(parameters)
             .build()
@@ -53,48 +49,46 @@ class NativeYandexAdView(
 
     private inner class NativeYandexAdEventListener: NativeAdLoadListener {
         override fun onAdLoaded(nativeAd: NativeAd) {
-            Log.d("FlutterYandexAdPlus", "Ad $id loaded")
+            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} loaded")
             bindNativeAd(nativeAd)
         }
 
         override fun onAdFailedToLoad(requetsError: AdRequestError) {
-            Log.d("FlutterYandexAdPlus", "Ad $id failed to load: ${requetsError.description}")
+            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} failed to load: ${requetsError.description}")
         }
     }
 
     private fun bindNativeAd(nativeAd: NativeAd) {
-        nativeAd.setNativeAdEventListener(NativeAdYandexAdsEventListener(id = id))
+        nativeAd.setNativeAdEventListener(NativeAdYandexAdsEventListener())
 
         nativeBannerView.setAd(nativeAd)
     }
 
     private fun setAppearance() {
-        val nativeTemplateAppearance = NativeTemplateAppearanceFactory.fromTheme(theme)
+        val nativeTemplateAppearance = NativeTemplateAppearanceFactory.fromTheme(arguments.getTheme())
 
         nativeBannerView.applyAppearance(nativeTemplateAppearance)
     }
 
     override fun dispose() {
-        Log.d("FlutterYandexAdPlus", "Ad $id disposed")
-    }
-}
-
-class NativeAdYandexAdsEventListener(private val id: String): NativeAdEventListener {
-
-    override fun onAdClicked() {
-       Log.d("FlutterYandexAdPlus", "Ad $id clicked")
+        Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} disposed")
     }
 
-    override fun onLeftApplication() {
-        Log.d("FlutterYandexAdPlus", "Ad $id left application")
-    }
+    inner class NativeAdYandexAdsEventListener: NativeAdEventListener {
+        override fun onAdClicked() {
+            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} clicked")
+        }
 
-    override fun onReturnedToApplication() {
-        Log.d("FlutterYandexAdPlus", "Ad $id returned to application")
-    }
+        override fun onLeftApplication() {
+            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} left application")
+        }
 
-    override fun onImpression(impression: ImpressionData?) {
-        Log.d("FlutterYandexAdPlus", "Ad $id impression: $impression")
-    }
+        override fun onReturnedToApplication() {
+            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} returned to application")
+        }
 
+        override fun onImpression(impression: ImpressionData?) {
+            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} impression: $impression")
+        }
+    }
 }

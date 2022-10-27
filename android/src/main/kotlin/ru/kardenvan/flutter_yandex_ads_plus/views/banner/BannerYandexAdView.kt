@@ -9,22 +9,21 @@ import com.yandex.mobile.ads.banner.BannerAdView
 import com.yandex.mobile.ads.common.AdRequest
 import io.flutter.plugin.platform.PlatformView
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.PlatformApi
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.YandexApi
 
 class BannerYandexAdView(
     context: Context?,
-    id: String,
-    size: Size,
-    listener: BannerYandexAdEventListener
-) :
-    PlatformView {
+    arguments: BannerAdViewArguments,
+    api: YandexApi,
+) : PlatformView {
     private val banner: BannerAdView
 
     init {
         banner = BannerAdView(context!!)
-        banner.setAdSize(AdSize.flexibleSize(size.width, size.height))
+        banner.setAdSize(AdSize.flexibleSize(arguments.getSize().width, arguments.getSize().height))
         banner.setBackgroundColor(Color.TRANSPARENT)
-        banner.setAdUnitId(id)
-        banner.setBannerAdEventListener(listener)
+        banner.setAdUnitId(arguments.getId())
+        banner.setBannerAdEventListener(BannerYandexAdEventListener(api = api, id = arguments.getId()))
 
         val request: AdRequest = AdRequest.Builder().build()
         banner.loadAd(request)

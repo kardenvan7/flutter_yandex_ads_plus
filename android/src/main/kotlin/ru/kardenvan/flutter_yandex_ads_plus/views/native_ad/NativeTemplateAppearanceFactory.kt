@@ -7,8 +7,6 @@ import com.yandex.mobile.ads.nativeads.template.appearance.ButtonAppearance
 import com.yandex.mobile.ads.nativeads.template.appearance.NativeTemplateAppearance
 import com.yandex.mobile.ads.nativeads.template.appearance.RatingAppearance
 import com.yandex.mobile.ads.nativeads.template.appearance.TextAppearance
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.NativeAdViewTheme
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.TextStyle
 
 
 class NativeTemplateAppearanceFactory {
@@ -44,7 +42,7 @@ class NativeTemplateAppearanceFactory {
 
     class TextAppearanceFactory {
         companion object Factory {
-            fun fromTheme(textTheme: TextStyle): TextAppearance {
+            fun fromTheme(textTheme: NativeAdTextStyle): TextAppearance {
                 return TextAppearance.Builder()
                     .setTextColor(textTheme.getColor() ?: Color.BLACK)
                     .setTextSize(textTheme.getSize())

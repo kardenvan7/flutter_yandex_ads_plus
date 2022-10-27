@@ -11,14 +11,12 @@ class BannerYandexAdFactory(private val api: YandexApi) :
     PlatformViewFactory(StandardMessageCodec.INSTANCE) {
 
     override fun create(context: Context?, viewId: Int, args: Any?): PlatformView {
-        val arguments = PlatformApi.BannerAdViewArguments(args)
-        val id = arguments.getBannerId()
+        if (args !is Map<*, *>) {
+            throw Exception("Arguments parameter is not a Map. Args: $args")
+        }
 
-        return BannerYandexAdView(
-            context,
-            id,
-            arguments.getBannerSize(),
-            BannerYandexAdEventListener(api = api, id = id)
-        )
+        val arguments = PlatformApi.BannerAdViewArgumentsFactory.fromMap(args)
+
+        return BannerYandexAdView(context, arguments, api)
     }
 }
