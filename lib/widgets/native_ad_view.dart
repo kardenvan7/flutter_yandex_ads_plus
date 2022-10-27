@@ -153,8 +153,9 @@ NativeAdTheme _getDefaultNativeAdTheme(context) {
           ),
         ),
         ratingTheme: NativeAdRatingTheme(
-          starColor: Colors.grey,
-          progressStarColor: Colors.yellow,
+          emptyStarColor: Colors.grey,
+          filledStarColor: Colors.yellow,
+          starSize: 12,
         ),
       );
 
@@ -222,8 +223,9 @@ NativeAdTheme _getDefaultNativeAdTheme(context) {
           ),
         ),
         ratingTheme: NativeAdRatingTheme(
-          starColor: Colors.grey,
-          progressStarColor: Colors.yellow,
+          emptyStarColor: Colors.grey,
+          filledStarColor: Colors.yellow,
+          starSize: 12,
         ),
       );
   }
@@ -411,17 +413,20 @@ class NativeAdTextStyle {
 
 class NativeAdRatingTheme {
   const NativeAdRatingTheme({
-    required this.starColor,
-    required this.progressStarColor,
+    required this.emptyStarColor,
+    required this.filledStarColor,
+    required this.starSize,
   });
 
-  final Color? starColor;
-  final Color? progressStarColor;
+  final Color? emptyStarColor;
+  final Color? filledStarColor;
+  final double starSize;
 
   Map<String, dynamic> toMap() {
     return {
-      'star_color': starColor?.toHexString(),
-      'progress_star_color': progressStarColor?.toHexString(),
+      'star_color': emptyStarColor?.toHexString(),
+      'progress_star_color': filledStarColor?.toHexString(),
+      'star_size': starSize,
     };
   }
 }

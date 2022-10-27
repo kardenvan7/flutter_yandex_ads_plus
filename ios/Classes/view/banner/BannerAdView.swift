@@ -1,62 +1,68 @@
-import Flutter
-import UIKit
+//
+//  BannerAdView.swift
+//  flutter_yandex_ads_plus
+//
+//  Created by apple on 27.10.2022.
+//
+
+import Foundation
 import YandexMobileAds
+import Flutter
 
-class BannerYandexAdViewFactory: NSObject, FlutterPlatformViewFactory {
-    private var api: YandexApi
-
-    init(api: YandexApi) {
-        self.api = api
-        super.init()
-    }
-
-    func create(withFrame frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?) -> FlutterPlatformView {
-        let argsClass = BannerAdViewArguments.fromMap(
-            args: args as! [String: Any?]
-        )
-        
-        return BannerYandexAdView(
-                frame: frame,
-                viewIdentifier: viewId,
-                arguments: nil,
-                api: api,
-                height: argsClass.height,
-                width: argsClass.width,
-                id: argsClass.id
-        )
-    }
-
-    public func createArgsCodec() -> FlutterMessageCodec & NSObjectProtocol {
-        return FlutterStandardMessageCodec.sharedInstance()
-    }
-}
-
-class BannerYandexAdView: NSObject, FlutterPlatformView {
+class BannerAdView: NSObject, FlutterPlatformView {
     private var banner: YMAAdView!
     private var api: YandexApi!
     private var id: String!
  
-    init(frame: CGRect, viewIdentifier viewId: Int64, arguments args: Any?, api: YandexApi?, height: Int?, width: Int?, id: String) {
+    init(
+        frame: CGRect,
+        viewIdentifier viewId: Int64,
+        arguments args: Any?,
+        api: YandexApi?,
+        argsClass: BannerAdViewArguments
+    ) {
         super.init()
         
         self.api = api
-        self.id = id
+        self.id = argsClass.id
 
         banner = YMAAdView(
             adUnitID: id,
             adSize: YMAAdSize.flexibleSize(
-                with: .init(width: width ?? 320, height: height ?? 100)
+                with: .init(
+                    width: argsClass.width ?? 320,
+                    height: argsClass.height ?? 100
+                )
             )
         )
         
         banner.delegate = self
 
         banner.removeFromSuperview()
-    
         
-        let request = YMAAdRequest()
+        let request = getRequest(
+            params: argsClass.additionalLoadParams
+        )
         
         banner.loadAd(with: request)
+    }
+    
+    func getRequest(params: [String: Any?]?) -> YMAAdRequest {
+        let request = YMAMutableAdRequest()
+        
+        if (params != nil) {
+            var parameters = Dictionary<String, String>()
+
+            for (key, value) in params! {
+                if let stringValue = value as? String {
+                    parameters[key] = stringValue
+                }
+            }
+
+            request.parameters = parameters
+        }
+
+        return request
     }
 
     func view() -> UIView {
@@ -64,7 +70,7 @@ class BannerYandexAdView: NSObject, FlutterPlatformView {
     }
 }
 
-extension BannerYandexAdView: YMAAdViewDelegate {
+extension BannerAdView: YMAAdViewDelegate {
     func adViewDidLoad(_ adView: YMAAdView) {
         let response = EventResponse()
         
@@ -137,4 +143,5 @@ extension BannerYandexAdView: YMAAdViewDelegate {
         }
     }
 }
+
 

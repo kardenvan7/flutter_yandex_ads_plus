@@ -2,7 +2,9 @@ import Flutter
 import UIKit
 
 public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
-  public static func register(with registrar: FlutterPluginRegistrar) {
+  public static func register(
+    with registrar: FlutterPluginRegistrar
+  ) {
     let messenger : FlutterBinaryMessenger = registrar.messenger()
 
     // api setup
@@ -11,14 +13,14 @@ public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
 
     // widgets
     registrar.register(
-        BannerYandexAdViewFactory(api: api),
+        BannerAdViewFactory(api: api),
         withId: "yandex-ads-banner"
     )
       
-      registrar.register(
-          NativeYandexAdViewFactory(api: api),
-          withId: "yandex-ads-native"
-      )
+    registrar.register(
+        NativeAdViewFactory(api: api),
+        withId: "yandex-ads-native"
+    )
 
   }
 
