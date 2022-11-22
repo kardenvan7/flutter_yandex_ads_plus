@@ -128,18 +128,9 @@ class _BannerScreenState extends State<BannerScreen> {
             height: 300,
             width: 300,
             child: BannerAdView(
-              id: Platform.isIOS ? 'R-M-208189-24' : 'R-M-208186-25',
+              id: Platform.isIOS ? 'R-M-DEMO-320x50' : 'R-M-DEMO-300x250',
               ads: widget.ads,
-              additionalLoadParams: Platform.isIOS
-                  ? null
-                  //      {
-                  //         "adf_ownerid": "171817",
-                  //         "adf_p1": "ciouy",
-                  //         "adf_p2": "fhme",
-                  //         "adf_pt": "b",
-                  //         "adf_puid24": _deviceId ?? "9",
-                  //       }
-                  : null,
+              additionalLoadParams: null,
             ),
           ),
         ),

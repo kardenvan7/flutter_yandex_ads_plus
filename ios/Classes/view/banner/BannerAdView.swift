@@ -36,6 +36,8 @@ class BannerAdView: NSObject, FlutterPlatformView {
             )
         )
         
+        banner.translatesAutoresizingMaskIntoConstraints = false
+        
         banner.delegate = self
 
         banner.removeFromSuperview()
