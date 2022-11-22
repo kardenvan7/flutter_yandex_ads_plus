@@ -12,16 +12,19 @@ class NativeAdViewArguments {
     let height: Int
     let width: Int
     let theme: NativeAdViewTheme
+    let additionalParameters: [String: String]?
     
     init(
         id: String,
         height: Int,
         width: Int,
-        theme: NativeAdViewTheme
+        theme: NativeAdViewTheme,
+        additionalParameters: [String: String]?
     ) {
         self.id = id
         self.height = height
         self.width = width
         self.theme = theme
+        self.additionalParameters = additionalParameters
     }
 }

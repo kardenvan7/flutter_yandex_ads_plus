@@ -26,20 +26,34 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
         
         super.init()
         
-        loadAd()
+        loadAdWithAdditionalParams(
+            additionalParams: argsClass.additionalParameters
+        )
     }
 
-    func loadAd() {
+    func loadAdWithAdditionalParams(
+        additionalParams: [String: String]?
+    ) {
         loader.delegate = self
 
         let conf = YMAMutableNativeAdRequestConfiguration(
             adUnitID: id
         )
 
-        conf.parameters = [
+        var parameters = [
             "preferable-height": "\(height)",
             "preferable-width": "\(width)"
         ]
+        
+        if (additionalParams != nil) {
+            for (key, value) in additionalParams! {
+                parameters[key] = value
+            }
+        }
+        
+        print("Additional parameters: \(parameters)")
+        
+        conf.parameters = parameters
         
         setAppearance()
         loader.loadAd(with: conf)

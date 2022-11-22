@@ -34,6 +34,21 @@ class NativeYandexAdView(
             "preferable-width" to "${arguments.getMinSize().width}"
         )
 
+        val additionalParams = arguments.getAdditionalParams()
+
+        if (additionalParams != null) {
+            for (arg in additionalParams.iterator()) {
+                val key = arg.key
+                val value = arg.value
+
+                if (key is String && value is String) {
+                    parameters[key] = value
+                }
+            }
+        }
+
+        Log.d("FlutterYandexAdsPlus", "$parameters")
+
         val nativeAdRequestConfiguration = NativeAdRequestConfiguration.Builder(arguments.getId())
             .setShouldLoadImagesAutomatically(true)
             .setParameters(parameters)

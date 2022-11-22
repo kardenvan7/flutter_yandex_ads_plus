@@ -6,6 +6,7 @@ class NativeAdViewArguments(
     private val id: String,
     private val minSize: Size,
     private val theme: NativeAdViewTheme,
+    private val additionalParams: Map<*, *>?,
 ) {
     fun getId(): String {
         return id
@@ -17,5 +18,9 @@ class NativeAdViewArguments(
 
     fun getTheme(): NativeAdViewTheme {
         return theme
+    }
+
+    fun getAdditionalParams(): Map<*, *>? {
+        return additionalParams
     }
 }

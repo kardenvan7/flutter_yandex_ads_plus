@@ -44,6 +44,7 @@ android {
     defaultConfig {
         applicationId "ru.kardenvan.flutter_yandex_ads_plus_example"
         minSdkVersion 21
+        compileSdkVersion 33
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

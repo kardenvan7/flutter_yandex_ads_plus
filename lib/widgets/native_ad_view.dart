@@ -6,6 +6,7 @@ import 'package:flutter_yandex_ads_plus/utils/color_extension.dart';
 class NativeAdView extends StatelessWidget {
   const NativeAdView({
     required this.id,
+    this.additionalLoadParameters,
     this.height,
     this.width,
     this.theme,
@@ -21,6 +22,7 @@ class NativeAdView extends StatelessWidget {
   }) : super(key: key);
 
   final String id;
+  final Map<String, String>? additionalLoadParameters;
   final double? height;
   final double? width;
   final NativeAdTheme? theme;
@@ -65,6 +67,7 @@ class NativeAdView extends StatelessWidget {
                 theme: androidTheme != null
                     ? commonTheme.copyWithAnother(androidTheme!)
                     : commonTheme,
+                additionalParameters: additionalLoadParameters,
               ).toMap();
 
               return AndroidView(
@@ -81,6 +84,7 @@ class NativeAdView extends StatelessWidget {
                 theme: iosTheme != null
                     ? commonTheme.copyWithAnother(iosTheme!)
                     : commonTheme,
+                additionalParameters: additionalLoadParameters,
               ).toMap();
 
               return UiKitView(
@@ -252,12 +256,14 @@ class _NativeAdParams {
     required this.height,
     required this.width,
     required this.theme,
+    required this.additionalParameters,
   });
 
   final String adId;
   final double height;
   final double width;
   final NativeAdTheme theme;
+  final Map<String, String>? additionalParameters;
 
   Map<String, dynamic> toMap() {
     return {
@@ -265,6 +271,7 @@ class _NativeAdParams {
       'height': height.toInt(),
       'width': width.toInt(),
       'theme': theme.toMap(),
+      'additional_parameters': additionalParameters,
     };
   }
 }

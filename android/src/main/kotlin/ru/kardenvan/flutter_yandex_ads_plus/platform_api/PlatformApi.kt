@@ -55,7 +55,8 @@ class PlatformApi {
                 return NativeAdViewArguments(
                     id = args["ad_id"] as String,
                     minSize = minSize,
-                    theme = NativeAdViewThemeFactory.fromMap(args["theme"] as Map<*,*>)
+                    theme = NativeAdViewThemeFactory.fromMap(args["theme"] as Map<*,*>),
+                    additionalParams = args["additional_parameters"] as Map<*, *>?,
                 )
             }
         }

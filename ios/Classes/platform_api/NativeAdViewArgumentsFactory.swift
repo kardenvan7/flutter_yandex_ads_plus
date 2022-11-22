@@ -16,7 +16,8 @@ class NativeAdViewArgumentsFactory {
                 width: args["width"] as! Int,
                 theme: NativeAdViewThemeFactory.fromMap(
                     map: args["theme"] as! [String: Any?]
-                )
+                ),
+                additionalParameters: args["additional_parameters"] as! [String: String]?
             )
         }
     

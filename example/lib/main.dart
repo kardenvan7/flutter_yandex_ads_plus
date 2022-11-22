@@ -130,7 +130,6 @@ class _BannerScreenState extends State<BannerScreen> {
             child: BannerAdView(
               id: Platform.isIOS ? 'R-M-DEMO-320x50' : 'R-M-DEMO-300x250',
               ads: widget.ads,
-              additionalLoadParams: null,
             ),
           ),
         ),
@@ -158,6 +157,10 @@ class NativeScreen extends StatelessWidget {
             id: Platform.isIOS ? 'R-M-208189-36' : 'R-M-208186-37',
             height: 300,
             width: 300,
+            additionalLoadParameters: const {
+              'test': '123',
+              'notText': '132',
+            },
           ),
         ),
       ],
