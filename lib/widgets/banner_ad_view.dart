@@ -10,6 +10,7 @@ class BannerAdView extends StatelessWidget {
     this.height,
     this.width,
     this.additionalLoadParameters,
+    this.iosSettings,
     Function? onAdLoaded,
     Function? onAdFailedToLoad,
     Function? onImpression,
@@ -49,6 +50,7 @@ class BannerAdView extends StatelessWidget {
   final double? height;
   final double? width;
   final Map<String, String>? additionalLoadParameters;
+  final IosBannerAdViewSettings? iosSettings;
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +67,7 @@ class BannerAdView extends StatelessWidget {
             width: width ??
                 (constraints.hasBoundedWidth ? constraints.maxWidth : 100),
             additionalLoadParams: additionalLoadParameters,
+            iosSettings: iosSettings,
           ).toMap();
 
           switch (defaultTargetPlatform) {
@@ -99,19 +102,48 @@ class _BannerAdParams {
     required this.height,
     required this.width,
     this.additionalLoadParams,
+    this.iosSettings,
   });
 
   final String adId;
   final double height;
   final double width;
   final Map<String, String>? additionalLoadParams;
+  final IosBannerAdViewSettings? iosSettings;
+
+  IosBannerAdViewSettings get defaultIosSettings {
+    return const IosBannerAdViewSettings(
+      translatesAutoResizingMaskIntoConstraints: true,
+    );
+  }
 
   Map<String, dynamic> toMap() {
-    return {
+    final params = {
       'ad_id': adId,
       'height': height.toInt(),
       'width': width.toInt(),
       'additional_load_parameters': additionalLoadParams,
+    };
+
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      params['settings'] = iosSettings?.toMap() ?? defaultIosSettings.toMap();
+    }
+
+    return params;
+  }
+}
+
+class IosBannerAdViewSettings {
+  const IosBannerAdViewSettings({
+    this.translatesAutoResizingMaskIntoConstraints = true,
+  });
+
+  final bool translatesAutoResizingMaskIntoConstraints;
+
+  Map<String, dynamic> toMap() {
+    return {
+      'translates_auto_resizing_mask_into_constraints':
+          translatesAutoResizingMaskIntoConstraints,
     };
   }
 }

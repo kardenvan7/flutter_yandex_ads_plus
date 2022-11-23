@@ -30,13 +30,13 @@ class BannerAdView: NSObject, FlutterPlatformView {
             adUnitID: id,
             adSize: YMAAdSize.flexibleSize(
                 with: .init(
-                    width: argsClass.width ?? 320,
-                    height: argsClass.height ?? 100
+                    width: argsClass.width ?? 300,
+                    height: argsClass.height ?? 250
                 )
             )
         )
         
-        banner.translatesAutoresizingMaskIntoConstraints = false
+        banner.translatesAutoresizingMaskIntoConstraints = argsClass.settings.translatesAutoresizingMaskIntoConstraints
         
         banner.delegate = self
 

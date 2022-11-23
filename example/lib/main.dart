@@ -125,11 +125,14 @@ class _BannerScreenState extends State<BannerScreen> {
         Visibility(
           visible: _infoRetrieved,
           child: SizedBox(
-            height: 300,
-            width: 300,
+            height: 20,
             child: BannerAdView(
+              height: Platform.isIOS ? 50 : 250,
               id: Platform.isIOS ? 'R-M-DEMO-320x50' : 'R-M-DEMO-300x250',
               ads: widget.ads,
+              iosSettings: const IosBannerAdViewSettings(
+                translatesAutoResizingMaskIntoConstraints: false,
+              ),
             ),
           ),
         ),

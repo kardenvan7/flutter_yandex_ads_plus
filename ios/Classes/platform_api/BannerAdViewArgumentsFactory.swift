@@ -14,7 +14,21 @@ class BannerAdViewArgumentsFactory {
                 id: args["ad_id"] as! String,
                 height: args["height"] as! Int?,
                 width: args["width"] as! Int?,
-                additionalParams: args["additional_load_parameters"] as? [String: String]
+                additionalParams: args["additional_load_parameters"] as? [String: String],
+                settings: BannerAdViewSettingsFactory.fromMap(
+                    map: args["settings"] as! [String: Any?]
+                )
             )
         }
+    
+    class BannerAdViewSettingsFactory {
+        public static func fromMap(map: [String: Any?]) -> BannerAdViewSettings {
+            return BannerAdViewSettings(
+                translatesAutoresizingMaskIntoConstraints:
+                    map[
+                        "translates_auto_resizing_mask_into_constraints"
+                    ] as! Bool
+            )
+        }
+    }
 }

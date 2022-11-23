@@ -12,16 +12,19 @@ class BannerAdViewArguments {
     let height: Int?
     let width: Int?
     let additionalLoadParams: [String: String]?
+    let settings: BannerAdViewSettings
 
     init(
         id: String,
         height: Int?,
         width: Int?,
-        additionalParams: [String: String]?
+        additionalParams: [String: String]?,
+        settings: BannerAdViewSettings
     ) {
         self.id = id
         self.height = height
         self.width = width
         self.additionalLoadParams = additionalParams
+        self.settings = settings
     }
 }
