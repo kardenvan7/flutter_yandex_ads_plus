@@ -15,13 +15,7 @@ import ru.kardenvan.flutter_yandex_ads_plus.views.native_ad.NativeYandexAdFactor
 import ru.kardenvan.flutter_yandex_ads_plus.views.banner.BannerYandexAdFactory
 
 /** FlutterYandexAdsPlugin */
-class FlutterYandexAdsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
-    /// The MethodChannel that will the communication between Flutter and native Android
-    ///
-    /// This local reference serves to register the plugin with the Flutter Engine and unregister it
-    /// when the Flutter Engine is detached from the Activity
-    private lateinit var channel: MethodChannel
-
+class FlutterYandexAdsPlugin : FlutterPlugin, ActivityAware {
     private lateinit var context: Context
     private lateinit var activity: Activity
 
@@ -44,11 +38,7 @@ class FlutterYandexAdsPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         )
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
-    }
-
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        channel.setMethodCallHandler(null)
     }
 
     override fun onDetachedFromActivity() {

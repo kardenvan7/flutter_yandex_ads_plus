@@ -60,12 +60,17 @@ class BannerAdView extends StatelessWidget {
       height: height,
       child: LayoutBuilder(
         builder: (context, constraints) {
+          final adWidth = width ??
+              (constraints.hasBoundedWidth ? constraints.maxWidth : 100);
+          final adHeight = height ??
+              (constraints.hasBoundedHeight ? constraints.maxHeight : 250);
+
+          print(adWidth);
+
           final Map<String, dynamic> params = _BannerAdParams(
             adId: id,
-            height: height ??
-                (constraints.hasBoundedHeight ? constraints.maxHeight : 250),
-            width: width ??
-                (constraints.hasBoundedWidth ? constraints.maxWidth : 100),
+            height: adHeight,
+            width: adWidth,
             additionalLoadParams: additionalLoadParameters,
             iosSettings: iosSettings,
           ).toMap();
