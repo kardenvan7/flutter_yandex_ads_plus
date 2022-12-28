@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 
@@ -8,22 +5,8 @@ void main() {
   runApp(const App());
 }
 
-class App extends StatefulWidget {
+class App extends StatelessWidget {
   const App({Key? key}) : super(key: key);
-
-  @override
-  State<App> createState() => _AppState();
-}
-
-class _AppState extends State<App> {
-  FlutterYandexAds ads = FlutterYandexAds();
-
-  @override
-  void initState() {
-    super.initState();
-
-    ads.initialize();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +44,10 @@ class _AppState extends State<App> {
                 ),
               ],
             ),
-            body: TabBarView(
+            body: const TabBarView(
               children: [
-                NativeScreen(ads: ads),
-                BannerScreen(ads: ads),
+                NativeAdTabView(),
+                BannerAdTabView(),
               ],
             ),
           ),
@@ -74,47 +57,10 @@ class _AppState extends State<App> {
   }
 }
 
-class BannerScreen extends StatefulWidget {
-  const BannerScreen({
+class BannerAdTabView extends StatelessWidget {
+  const BannerAdTabView({
     Key? key,
-    required this.ads,
   }) : super(key: key);
-
-  final FlutterYandexAds ads;
-
-  @override
-  State<BannerScreen> createState() => _BannerScreenState();
-}
-
-class _BannerScreenState extends State<BannerScreen> {
-  String? _deviceId;
-  bool _infoRetrieved = false;
-
-  @override
-  void initState() {
-    super.initState();
-    final infoPlugin = DeviceInfoPlugin();
-
-    if (Platform.isIOS) {
-      infoPlugin.iosInfo.then(
-        (value) => setState(
-          () {
-            _infoRetrieved = true;
-            _deviceId = value.identifierForVendor;
-          },
-        ),
-      );
-    } else if (Platform.isAndroid) {
-      infoPlugin.androidInfo.then(
-        (value) => setState(
-          () {
-            _infoRetrieved = true;
-            _deviceId = value.id;
-          },
-        ),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -122,32 +68,74 @@ class _BannerScreenState extends State<BannerScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         const Text('Banner'),
-        Visibility(
-          visible: _infoRetrieved,
-          child: SizedBox(
-            height: 250,
-            child: BannerAdView(
+        Column(
+          children: [
+            BannerAdView(
+              height: 50,
+              id: 'R-M-DEMO-320x50',
+              iosSettings: const IosBannerAdViewSettings(
+                translatesAutoResizingMaskIntoConstraints: true,
+              ),
+              onAdLoaded: () {
+                debugPrint('SMALL BANNER AD LOADED');
+              },
+              onAdFailedToLoad: (int code, String description) {
+                debugPrint(
+                  'SMALL BANNER AD FAILED TO LOAD: CODE $code, DESC: $description',
+                );
+              },
+              onImpression: (String? impression) {
+                debugPrint('SMALL BANNER AD IMPRESSION: $impression');
+              },
+              onAdClicked: () {
+                debugPrint('SMALL BANNER AD R-M-DEMO-320x50 CLICKED');
+              },
+              onLeftApplication: () {
+                debugPrint('SMALL BANNER AD LEFT APP');
+              },
+              onReturnedToApplication: () {
+                debugPrint('SMALL BANNER RETURNED TO APP');
+              },
+            ),
+            const SizedBox(height: 20),
+            BannerAdView(
               height: 250,
-              id: Platform.isIOS ? 'R-M-DEMO-320x50' : 'R-M-DEMO-300x250',
-              ads: widget.ads,
+              id: 'R-M-DEMO-300x250',
               iosSettings: const IosBannerAdViewSettings(
                 translatesAutoResizingMaskIntoConstraints: false,
               ),
+              onAdLoaded: () {
+                debugPrint('BIG BANNER AD LOADED');
+              },
+              onAdFailedToLoad: (int code, String description) {
+                debugPrint(
+                  'BIG BANNER AD FAILED TO LOAD: CODE $code, DESC: $description',
+                );
+              },
+              onImpression: (String? impression) {
+                debugPrint('BIG BANNER AD IMPRESSION: $impression');
+              },
+              onAdClicked: () {
+                debugPrint('BIG BANNER AD CLICKED');
+              },
+              onLeftApplication: () {
+                debugPrint('BIG BANNER AD LEFT APP');
+              },
+              onReturnedToApplication: () {
+                debugPrint('BIG BANNER AD RETURNED TO APP');
+              },
             ),
-          ),
+          ],
         ),
       ],
     );
   }
 }
 
-class NativeScreen extends StatelessWidget {
-  const NativeScreen({
+class NativeAdTabView extends StatelessWidget {
+  const NativeAdTabView({
     Key? key,
-    required this.ads,
   }) : super(key: key);
-
-  final FlutterYandexAds ads;
 
   @override
   Widget build(BuildContext context) {
@@ -157,12 +145,32 @@ class NativeScreen extends StatelessWidget {
         const Text('Native'),
         SizedBox(
           child: NativeAdView(
-            id: Platform.isIOS ? 'R-M-208189-36' : 'R-M-208186-37',
+            id: 'demo-native-app-yandex',
             height: 300,
             width: 300,
             additionalLoadParameters: const {
               'test': '123',
               'notText': '132',
+            },
+            onAdLoaded: () {
+              debugPrint('NATIVE AD LOADED');
+            },
+            onAdFailedToLoad: (int code, String description) {
+              debugPrint(
+                'NATIVE AD FAILED TO LOAD: CODE $code, DESC: $description',
+              );
+            },
+            onImpression: (String? impression) {
+              debugPrint('NATIVE AD IMPRESSION: $impression');
+            },
+            onAdClicked: () {
+              debugPrint('NATIVE AD CLICKED');
+            },
+            onLeftApplication: () {
+              debugPrint('NATIVE LEFT APP');
+            },
+            onReturnedToApplication: () {
+              debugPrint('NATIVE RETURNED TO APP');
             },
           ),
         ),

@@ -1,40 +1,63 @@
 package ru.kardenvan.flutter_yandex_ads_plus.views.native_ad
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
 import com.yandex.mobile.ads.nativeads.*
 import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import io.flutter.plugin.platform.PlatformView
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.BasicAdEventDispatcher
 
 
 class NativeYandexAdView(
     context: Context?,
-    private val arguments: NativeAdViewArguments
+    arguments: NativeYandexAdViewArguments,
+    private val eventDispatcher: BasicAdEventDispatcher,
 ) : PlatformView {
-    private var nativeBannerView: NativeBannerView
+    private val nativeBannerView: NativeBannerView = NativeBannerView(context!!)
+    private var nativeAd: NativeAd? = null
 
-    init {
-        val viewContext = context!!
+    private val viewUid = arguments.viewUid
 
-        nativeBannerView = NativeBannerView(viewContext)
-
-        setAppearance()
-
-        loadAd(viewContext)
+    override fun getView(): View {
+        return nativeBannerView
     }
 
-    private fun loadAd(context: Context) {
+    init {
+        configureAndLoadAd(context!!, arguments)
+    }
+
+    private fun configureAndLoadAd(context: Context, arguments: NativeYandexAdViewArguments) {
+        val configuration = configureAd(arguments)
+
+        loadAd(context, configuration)
+    }
+
+    private fun setAppearance(theme: NativeYandexAdViewTheme) {
+        val nativeTemplateAppearance = NativeYandexAdTemplateAppearanceFactory.fromTheme(theme)
+
+        nativeBannerView.applyAppearance(nativeTemplateAppearance)
+    }
+
+    private fun loadAd(context: Context, configuration: NativeAdRequestConfiguration) {
         val loader = NativeAdLoader(context)
 
+        loader.setNativeAdLoadListener(NativeYandexAdEventListener())
+        loader.loadAd(configuration)
+    }
+
+    private fun configureAd(
+        arguments: NativeYandexAdViewArguments
+    ): NativeAdRequestConfiguration {
+        setAppearance(arguments.theme)
+
         val parameters: HashMap<String, String> = hashMapOf(
-            "preferable-height" to "${arguments.getMinSize().height}",
-            "preferable-width" to "${arguments.getMinSize().width}"
+            "preferable-height" to "${arguments.minSize.height}",
+            "preferable-width" to "${arguments.minSize.width}"
         )
 
-        val additionalParams = arguments.getAdditionalParams()
+        val additionalParams = arguments.additionalParams
 
         if (additionalParams != null) {
             for (arg in additionalParams.iterator()) {
@@ -47,63 +70,50 @@ class NativeYandexAdView(
             }
         }
 
-        Log.d("FlutterYandexAdsPlus", "$parameters")
-
-        val nativeAdRequestConfiguration = NativeAdRequestConfiguration.Builder(arguments.getId())
+        return NativeAdRequestConfiguration.Builder(arguments.adId)
             .setShouldLoadImagesAutomatically(true)
             .setParameters(parameters)
             .build()
-
-        loader.setNativeAdLoadListener(NativeYandexAdEventListener())
-        loader.loadAd(nativeAdRequestConfiguration)
     }
 
-    override fun getView(): View {
-        return nativeBannerView
-    }
+    private inner class NativeYandexAdEventListener : NativeAdLoadListener {
+        override fun onAdLoaded(ad: NativeAd) {
+            eventDispatcher.sendAdLoadedEvent(viewUid)
 
-    private inner class NativeYandexAdEventListener: NativeAdLoadListener {
-        override fun onAdLoaded(nativeAd: NativeAd) {
-            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} loaded")
-            bindNativeAd(nativeAd)
+            bindNativeAd(ad)
         }
 
         override fun onAdFailedToLoad(requetsError: AdRequestError) {
-            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} failed to load: ${requetsError.description}")
+            eventDispatcher.sendAdFailedToLoadEvent(viewUid, requetsError)
+        }
+
+        private fun bindNativeAd(ad: NativeAd) {
+            nativeAd = ad
+            ad.setNativeAdEventListener(NativeAdYandexAdsEventListener())
+
+            nativeBannerView.setAd(ad)
         }
     }
 
-    private fun bindNativeAd(nativeAd: NativeAd) {
-        nativeAd.setNativeAdEventListener(NativeAdYandexAdsEventListener())
-
-        nativeBannerView.setAd(nativeAd)
-    }
-
-    private fun setAppearance() {
-        val nativeTemplateAppearance = NativeTemplateAppearanceFactory.fromTheme(arguments.getTheme())
-
-        nativeBannerView.applyAppearance(nativeTemplateAppearance)
-    }
-
-    override fun dispose() {
-        Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} disposed")
-    }
-
-    inner class NativeAdYandexAdsEventListener: NativeAdEventListener {
+    private inner class NativeAdYandexAdsEventListener: NativeAdEventListener {
         override fun onAdClicked() {
-            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} clicked")
+            eventDispatcher.sendAdClickedEvent(viewUid)
         }
 
         override fun onLeftApplication() {
-            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} left application")
+            eventDispatcher.sendLeftApplicationEvent(viewUid)
         }
 
         override fun onReturnedToApplication() {
-            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} returned to application")
+            eventDispatcher.sendReturnedToApplicationEvent(viewUid)
         }
 
         override fun onImpression(impression: ImpressionData?) {
-            Log.d("FlutterYandexAdPlus", "Ad ${arguments.getId()} impression: $impression")
+            eventDispatcher.sendImpressionEvent(viewUid, impression)
         }
+    }
+
+    override fun dispose() {
+        nativeAd?.setNativeAdEventListener(null)
     }
 }

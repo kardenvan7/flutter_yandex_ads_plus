@@ -1,23 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/utils/color_extension.dart';
 
-class NativeAdView extends StatelessWidget {
+class NativeAdView extends StatefulWidget {
   const NativeAdView({
     required this.id,
     this.additionalLoadParameters,
     this.height,
     this.width,
     this.theme,
-    this.iosTheme,
-    this.androidTheme,
-    Function? onAdLoaded,
-    Function? onAdFailedToLoad,
-    Function? onImpression,
-    Function? onAdClicked,
-    Function? onLeftApplication,
-    Function? onReturnedToApplication,
+    this.onAdLoaded,
+    this.onAdFailedToLoad,
+    this.onImpression,
+    this.onAdClicked,
+    this.onLeftApplication,
+    this.onReturnedToApplication,
     Key? key,
   }) : super(key: key);
 
@@ -26,70 +26,123 @@ class NativeAdView extends StatelessWidget {
   final double? height;
   final double? width;
   final NativeAdTheme? theme;
-  final NativeAdTheme? androidTheme;
-  final NativeAdTheme? iosTheme;
+
+  final VoidCallback? onAdLoaded;
+  final void Function(int code, String description)? onAdFailedToLoad;
+  final void Function(String? impression)? onImpression;
+  final VoidCallback? onAdClicked;
+  final VoidCallback? onLeftApplication;
+  final VoidCallback? onReturnedToApplication;
+
+  @override
+  State<NativeAdView> createState() => _NativeAdViewState();
+}
+
+class _NativeAdViewState extends State<NativeAdView> {
+  /// Ad unique id. It is needed because it is possible for user to create
+  /// several instances of ads with the same [widget.id]
+  ///
+  late String _viewUId;
+
+  /// Api instance
+  ///
+  late FlutterYandexAdsApi _api;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _setApi();
+    _setViewUid();
+    _setUpListener();
+  }
+
+  /// Sets api instance as state property
+  ///
+  void _setApi() {
+    _api = FlutterYandexAdsApi();
+  }
+
+  /// Sets ad unique id.
+  ///
+  void _setViewUid() {
+    _viewUId = DateTime.now().hashCode.toString();
+  }
+
+  /// Sets up ad events listener
+  ///
+  void _setUpListener() {
+    final listener = BasicAdEventListener(
+      viewUid: _viewUId,
+      onAdLoaded: widget.onAdLoaded,
+      onAdFailedToLoad: widget.onAdFailedToLoad,
+      onLeftApplication: widget.onLeftApplication,
+      onReturnedToApplication: widget.onReturnedToApplication,
+      onAdClicked: widget.onAdClicked,
+      onImpression: widget.onImpression,
+    );
+
+    _api.addNativeAdEventListener(listener);
+  }
+
+  @override
+  void dispose() {
+    _api.removeNativeAdEventListener(_viewUId);
+
+    super.dispose();
+  }
 
   double get _defaultHeight => 250;
+
   double get _defaultWidth => 100;
 
   double _calcHeight(BoxConstraints constraints) {
-    return height ??
+    return widget.height ??
         (constraints.hasBoundedHeight ? constraints.maxHeight : _defaultHeight);
   }
 
   double _calcWidth(BoxConstraints constraints) {
-    return width ??
+    return widget.width ??
         (constraints.hasBoundedWidth ? constraints.maxWidth : _defaultWidth);
   }
 
   @override
   Widget build(BuildContext context) {
-    const String viewType = 'yandex-ads-native';
+    const String viewType = PlatformApiConfig.nativeAdViewTypeId;
 
     return Container(
       clipBehavior: Clip.hardEdge,
       decoration: const BoxDecoration(),
-      height: height,
-      width: width,
+      height: widget.height,
+      width: widget.width,
       child: LayoutBuilder(
         builder: (context, constraints) {
           final defaultTheme = _getDefaultNativeAdTheme(context);
-          final commonTheme = theme != null
-              ? defaultTheme.copyWithAnother(theme!)
+          final theme = widget.theme != null
+              ? defaultTheme.copyWithAnother(widget.theme!)
               : defaultTheme;
+
+          final params = _NativeAdParams(
+            viewUid: _viewUId,
+            adUid: widget.id,
+            height: _calcHeight(constraints),
+            width: _calcWidth(constraints),
+            theme: theme,
+            additionalParameters: widget.additionalLoadParameters,
+          );
 
           switch (defaultTargetPlatform) {
             case TargetPlatform.android:
-              final Map<String, dynamic> params = _NativeAdParams(
-                adId: id,
-                height: _calcHeight(constraints),
-                width: _calcWidth(constraints),
-                theme: androidTheme != null
-                    ? commonTheme.copyWithAnother(androidTheme!)
-                    : commonTheme,
-                additionalParameters: additionalLoadParameters,
-              ).toMap();
-
               return AndroidView(
                 viewType: viewType,
-                creationParams: params,
+                creationParams: params.toMap(),
                 creationParamsCodec: const StandardMessageCodec(),
               );
 
             case TargetPlatform.iOS:
-              final Map<String, dynamic> params = _NativeAdParams(
-                adId: id,
-                height: _calcHeight(constraints),
-                width: _calcWidth(constraints),
-                theme: iosTheme != null
-                    ? commonTheme.copyWithAnother(iosTheme!)
-                    : commonTheme,
-                additionalParameters: additionalLoadParameters,
-              ).toMap();
-
               return UiKitView(
                 viewType: viewType,
-                creationParams: params,
+                creationParams: params.toMap(),
                 creationParamsCodec: const StandardMessageCodec(),
               );
 
@@ -251,23 +304,26 @@ NativeAdTheme _getDefaultNativeAdTheme(context) {
 }
 
 class _NativeAdParams {
-  const _NativeAdParams({
-    required this.adId,
+  _NativeAdParams({
+    required this.viewUid,
+    required this.adUid,
     required this.height,
     required this.width,
     required this.theme,
     required this.additionalParameters,
   });
 
-  final String adId;
+  final String viewUid;
+  final String adUid;
   final double height;
   final double width;
-  final NativeAdTheme theme;
+  NativeAdTheme theme;
   final Map<String, String>? additionalParameters;
 
   Map<String, dynamic> toMap() {
     return {
-      'ad_id': adId,
+      'view_uid': viewUid,
+      'ad_uid': adUid,
       'height': height.toInt(),
       'width': width.toInt(),
       'theme': theme.toMap(),

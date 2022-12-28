@@ -4,18 +4,22 @@ version: 0.2.3
 homepage: https://github.com/kardenvan7/flutter_yandex_ads_plus
 
 environment:
-  sdk: ">=2.16.1 <3.0.0"
+  sdk: ">=2.17.0 <3.0.0"
   flutter: ">=2.5.0"
 
 dependencies:
   flutter:
     sdk: flutter
+  freezed_annotation: ^2.2.0
+  json_annotation: ^4.7.0
 
 dev_dependencies:
+  build_runner: null
   flutter_test:
     sdk: flutter
   flutter_lints: ^1.0.0
-  pigeon: ^4.1.0
+  freezed: ^2.3.2
+  json_serializable: ^6.5.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
