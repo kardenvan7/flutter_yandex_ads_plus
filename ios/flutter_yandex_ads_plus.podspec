@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_yandex_ads_plus'
-  s.version          = '0.2.3'
+  s.version          = '0.3.0'
   s.summary          = 'Flutter Yandex Ads.'
   s.description      = <<-DESC
 Flutter Yandex Ads.
