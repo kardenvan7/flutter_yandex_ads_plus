@@ -2,29 +2,34 @@ import Flutter
 import UIKit
 
 public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
-  public static func register(
-    with registrar: FlutterPluginRegistrar
-  ) {
-    let messenger : FlutterBinaryMessenger = registrar.messenger()
+    private static var api: FlutterYandexAdsApi!
 
-    // api setup
-    let api = YandexApi()
-    YandexAdsApiSetup(messenger, api)
+    public static func register(
+        with registrar: FlutterPluginRegistrar
+    ) {
+        let messenger : FlutterBinaryMessenger = registrar.messenger()
+          
+        api = FlutterYandexAdsApi(messenger: messenger)
 
-    // widgets
-    registrar.register(
-        BannerAdViewFactory(api: api),
-        withId: "yandex-ads-banner"
-    )
-      
-    registrar.register(
-        NativeAdViewFactory(api: api),
-        withId: "yandex-ads-native"
-    )
-
-  }
-
-  public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
-  }
+        // widgets
+        registrar.register(
+            BannerYandexAdViewFactory(
+                eventDispatcher: api.bannerAdEventDispatcher
+            ),
+            withId: PlatfromApiConfig.bannerAdViewTypeId
+        )
+          
+        registrar.register(
+            NativeYandexAdViewFactory(
+                eventDispatcher: api.nativeAdEventDispatcher
+            ),
+            withId: PlatfromApiConfig.nativeAdViewTypeId
+        )
+    }
+    
+    public func detachFromEngine(
+        for registrar: FlutterPluginRegistrar
+    ) {
+        SwiftFlutterYandexAdsPlugin.api.dispose()
+    }
 }

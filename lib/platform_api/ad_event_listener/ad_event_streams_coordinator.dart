@@ -1,7 +1,8 @@
 import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
 
+import 'ad_event_stream_receiver.dart';
 import 'basic/basic_ad_event_listener.dart';
-import 'basic/basic_ad_event_stream_receiver.dart';
+import 'native/native_ad_event_listener.dart';
 
 /// Class-singleton responsible for adding and removing subscriptions to
 /// different ad event streams.
@@ -19,15 +20,13 @@ class AdEventStreamsCoordinator {
 
   /// Banner ad events receiver
   ///
-  final BasicAdEventStreamReceiver bannerAdEventsReceiver =
-      BasicAdEventStreamReceiver(
+  final AdEventStreamReceiver bannerAdEventsReceiver = AdEventStreamReceiver(
     channelName: PlatformApiConfig.bannerAdEventChannelName,
   );
 
   /// Native ad events receiver
   ///
-  final BasicAdEventStreamReceiver nativeAdEventsReceiver =
-      BasicAdEventStreamReceiver(
+  final AdEventStreamReceiver nativeAdEventsReceiver = AdEventStreamReceiver(
     channelName: PlatformApiConfig.nativeAdEventChannelName,
   );
 
@@ -46,7 +45,7 @@ class AdEventStreamsCoordinator {
 
   /// Adds listener to the list of listeners able to receive native ad events
   ///
-  void addNativeAdEventListener(BasicAdEventListener listener) {
+  void addNativeAdEventListener(NativeAdEventListener listener) {
     nativeAdEventsReceiver.addEventListener(listener);
   }
 
@@ -55,5 +54,10 @@ class AdEventStreamsCoordinator {
   ///
   void removeNativeAdEventListener(String viewUid) {
     nativeAdEventsReceiver.removeEventListener(viewUid);
+  }
+
+  void dispose() {
+    bannerAdEventsReceiver.dispose();
+    nativeAdEventsReceiver.dispose();
   }
 }

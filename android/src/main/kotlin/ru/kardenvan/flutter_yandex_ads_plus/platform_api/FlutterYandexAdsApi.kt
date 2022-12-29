@@ -12,17 +12,6 @@ import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.AdE
  *
 */
 class FlutterYandexAdsApi constructor(binaryMessenger: BinaryMessenger) {
-    companion object Constants {
-        /**
-         * Name for banner ad event channel
-         */
-        private const val bannerAdsEventChannelName = PlatformApiConfig.bannerAdEventChannelName
-
-        /**
-         * Name for native ad event channel
-         */
-        private const val nativeAdsEventChannelName = PlatformApiConfig.nativeAdEventChannelName
-    }
 
     /**
      * Event dispatcher for banner ads.
@@ -38,13 +27,13 @@ class FlutterYandexAdsApi constructor(binaryMessenger: BinaryMessenger) {
      * Event channel for banner ad events.
      */
     private val bannerAdEventChannel: EventChannel =
-        EventChannel(binaryMessenger, bannerAdsEventChannelName)
+        EventChannel(binaryMessenger, PlatformApiConfig.bannerAdEventChannelName)
 
     /**
      * Event channel for native ad events.
      */
     private val nativeAdEventChannel: EventChannel =
-        EventChannel(binaryMessenger, nativeAdsEventChannelName)
+        EventChannel(binaryMessenger, PlatformApiConfig.nativeAdEventChannelName)
 
     init {
         setStreamHandlers()
@@ -76,7 +65,7 @@ class FlutterYandexAdsApi constructor(binaryMessenger: BinaryMessenger) {
     /**
      * Event stream handler for ad events
      */
-    private inner class AdEventStreamHandler(
+    private class AdEventStreamHandler(
         private val dispatcher: AdEventDispatcher
     ): StreamHandler {
         /**

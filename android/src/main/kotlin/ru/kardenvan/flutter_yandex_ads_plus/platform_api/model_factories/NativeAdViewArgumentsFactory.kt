@@ -3,9 +3,9 @@ package ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories
 import android.graphics.Color
 import android.util.Size
 import ru.kardenvan.flutter_yandex_ads_plus.utils.ColorFactory
-import ru.kardenvan.flutter_yandex_ads_plus.views.native_ad.NativeYandexAdTextStyle
-import ru.kardenvan.flutter_yandex_ads_plus.views.native_ad.NativeYandexAdViewArguments
-import ru.kardenvan.flutter_yandex_ads_plus.views.native_ad.NativeYandexAdViewTheme
+import ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad.NativeYandexAdTextStyle
+import ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad.NativeYandexAdViewArguments
+import ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad.NativeYandexAdViewTheme
 
 class NativeAdViewArgumentsFactory {
     companion object Factory {

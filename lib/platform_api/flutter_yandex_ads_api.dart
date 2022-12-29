@@ -1,5 +1,8 @@
 import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/ad_event_streams_coordinator.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/basic/basic_ad_event_listener.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/native/native_ad_event_listener.dart';
+
+import 'ad_event_listener/ad_event_listener.dart';
 
 /// Class responsible for initialization of components of FlutterYandexAdsPlus
 /// plugin.
@@ -23,8 +26,16 @@ class FlutterYandexAdsApi {
   ///
   late AdEventStreamsCoordinator _streamsCoordinator;
 
+  /// Performs initialization steps
+  ///
   void initialize() {
     _setUpStreamCoordinator();
+  }
+
+  /// Cleans up memory
+  ///
+  void dispose() {
+    _streamsCoordinator.dispose();
   }
 
   /// Adds event listener for banner ad view.
@@ -47,7 +58,7 @@ class FlutterYandexAdsApi {
   ///
   /// Every next call for the same ad view overrides previous one.
   ///
-  void addNativeAdEventListener(BasicAdEventListener listener) {
+  void addNativeAdEventListener(NativeAdEventListener listener) {
     _streamsCoordinator.addNativeAdEventListener(listener);
   }
 

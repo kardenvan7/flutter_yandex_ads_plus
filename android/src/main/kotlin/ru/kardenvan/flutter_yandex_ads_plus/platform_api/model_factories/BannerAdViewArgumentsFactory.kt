@@ -1,7 +1,7 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories
 
 import android.util.Size
-import ru.kardenvan.flutter_yandex_ads_plus.views.banner.BannerYandexAdViewArguments
+import ru.kardenvan.flutter_yandex_ads_plus.views.banner_yandex_ad.BannerYandexAdViewArguments
 
 class BannerAdViewArgumentsFactory {
     companion object Factory {

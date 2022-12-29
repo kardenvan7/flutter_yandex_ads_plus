@@ -88,7 +88,7 @@ class BannerAdTabView extends StatelessWidget {
                 debugPrint('SMALL BANNER AD IMPRESSION: $impression');
               },
               onAdClicked: () {
-                debugPrint('SMALL BANNER AD R-M-DEMO-320x50 CLICKED');
+                debugPrint('SMALL BANNER AD CLICKED');
               },
               onLeftApplication: () {
                 debugPrint('SMALL BANNER AD LEFT APP');
@@ -96,13 +96,19 @@ class BannerAdTabView extends StatelessWidget {
               onReturnedToApplication: () {
                 debugPrint('SMALL BANNER RETURNED TO APP');
               },
+              willPresentScreen: () {
+                debugPrint('SMALL BANNER WILL PRESENT SCREEN');
+              },
+              didDismissScreen: () {
+                debugPrint('SMALL BANNER DID DISMISS SCREEN');
+              },
             ),
             const SizedBox(height: 20),
             BannerAdView(
               height: 250,
               id: 'R-M-DEMO-300x250',
               iosSettings: const IosBannerAdViewSettings(
-                translatesAutoResizingMaskIntoConstraints: false,
+                translatesAutoResizingMaskIntoConstraints: true,
               ),
               onAdLoaded: () {
                 debugPrint('BIG BANNER AD LOADED');
@@ -123,6 +129,12 @@ class BannerAdTabView extends StatelessWidget {
               },
               onReturnedToApplication: () {
                 debugPrint('BIG BANNER AD RETURNED TO APP');
+              },
+              willPresentScreen: () {
+                debugPrint('BIG BANNER WILL PRESENT SCREEN');
+              },
+              didDismissScreen: () {
+                debugPrint('BIG BANNER DID DISMISS SCREEN');
               },
             ),
           ],
@@ -167,10 +179,19 @@ class NativeAdTabView extends StatelessWidget {
               debugPrint('NATIVE AD CLICKED');
             },
             onLeftApplication: () {
-              debugPrint('NATIVE LEFT APP');
+              debugPrint('NATIVE AD LEFT APP');
             },
             onReturnedToApplication: () {
-              debugPrint('NATIVE RETURNED TO APP');
+              debugPrint('NATIVE AD RETURNED TO APP');
+            },
+            willPresentScreen: () {
+              debugPrint('NATIVE AD WILL PRESENT SCREEN');
+            },
+            didDismissScreen: () {
+              debugPrint('NATIVE AD DID DISMISS SCREEN');
+            },
+            onClose: () {
+              debugPrint('NATIVE AD USER CLOSE REQUEST');
             },
           ),
         ),
