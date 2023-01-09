@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
@@ -42,12 +42,22 @@ class App extends StatelessWidget {
                     ),
                   ),
                 ),
+                Tab(
+                  child: Text(
+                    'Interstitial',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
             body: const TabBarView(
               children: [
                 NativeAdTabView(),
                 BannerAdTabView(),
+                InterstitialAdTabView(),
               ],
             ),
           ),

@@ -31,6 +31,7 @@ class FlutterYandexAdsApi {
   /// Performs initialization steps
   ///
   void initialize() {
+    _setUpMethodChannel();
     _setUpStreamCoordinator();
   }
 
