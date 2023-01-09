@@ -2,10 +2,11 @@ package ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories
 
 import android.graphics.Color
 import android.util.Size
+import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
+import ru.kardenvan.flutter_yandex_ads_plus.ads.native_yandex_ad.NativeYandexAdTextStyle
 import ru.kardenvan.flutter_yandex_ads_plus.utils.ColorFactory
-import ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad.NativeYandexAdTextStyle
-import ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad.NativeYandexAdViewArguments
-import ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad.NativeYandexAdViewTheme
+import ru.kardenvan.flutter_yandex_ads_plus.ads.native_yandex_ad.NativeYandexAdViewArguments
+import ru.kardenvan.flutter_yandex_ads_plus.ads.native_yandex_ad.NativeYandexAdViewTheme
 
 class NativeAdViewArgumentsFactory {
     companion object Factory {
@@ -28,12 +29,19 @@ class NativeAdViewArgumentsFactory {
 
             val minSize = Size(args["width"] as Int, args["height"] as Int)
 
+            val rawParams = args["parameters"]
+            var parameters: AdParameters? = null
+
+            if (rawParams is Map<*, *>) {
+                parameters = AdParametersFactory.fromMap(rawParams)
+            }
+
             return NativeYandexAdViewArguments(
                 viewUid = viewUid,
                 adId = adUid,
                 minSize = minSize,
                 theme = NativeAdViewThemeFactory.fromMap(args["theme"] as Map<*,*>),
-                additionalParams = args["additional_parameters"] as Map<*, *>?,
+                parameters = parameters,
             )
         }
     }

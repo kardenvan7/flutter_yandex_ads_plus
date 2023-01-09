@@ -1,7 +1,8 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories
 
 import android.util.Size
-import ru.kardenvan.flutter_yandex_ads_plus.views.banner_yandex_ad.BannerYandexAdViewArguments
+import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
+import ru.kardenvan.flutter_yandex_ads_plus.ads.banner_yandex_ad.BannerYandexAdViewArguments
 
 class BannerAdViewArgumentsFactory {
     companion object Factory {
@@ -28,20 +29,19 @@ class BannerAdViewArgumentsFactory {
             val width: Int = map["width"] as Int? ?: 300
             val size = Size(width, height)
 
-            val rawAdditionalParams = map["additional_load_parameters"]
-            val additionalParams: Map<*,*>? =
-                if (rawAdditionalParams is Map<*,*>)
-                    rawAdditionalParams
-                else
-                    null
+            val rawParams = map["parameters"]
+            var parameters: AdParameters? = null
 
+            if (rawParams is Map<*, *>) {
+                parameters = AdParametersFactory.fromMap(rawParams)
+            }
 
 
             return BannerYandexAdViewArguments(
                 viewUid = viewUid,
                 adUid = adUid,
                 size = size,
-                additionalLoadParameters = additionalParams,
+                parameters = parameters,
             )
         }
     }

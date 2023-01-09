@@ -1,5 +1,8 @@
-import 'package:flutter/services.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_yandex_ads_plus/core/ad_parameters/ad_parameters.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/ad_event_streams_coordinator.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/interstitial/interstitial_ad_event_listener.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
 
 import 'ad_event_listener/ad_event_listener.dart';
@@ -22,16 +25,18 @@ class FlutterYandexAdsApi {
   ///
   static FlutterYandexAdsApi? _instance;
 
-  late MethodChannel _methodChannel;
+  /// Method call dispatcher from Flutter to platform
+  ///
+  late AdMethodCallDispatcher _methodCallDispatcher;
 
-  /// Instance of a streams listeners coordinator.
+  /// Instance of a platform-to-Flutter event streams coordinator.
   ///
   late AdEventStreamsCoordinator _streamsCoordinator;
 
   /// Performs initialization steps
   ///
   void initialize() {
-    _setUpMethodChannel();
+    _setUpMethodCallDispatcher();
     _setUpStreamCoordinator();
   }
 
@@ -73,12 +78,66 @@ class FlutterYandexAdsApi {
     _streamsCoordinator.removeNativeAdEventListener(viewUId);
   }
 
-  Future<void> showInterstitialAd() async {
-    await _methodChannel.invokeMethod("showInterstitialAd");
+  /// Adds event listener for native ad view.
+  ///
+  /// Every next call for the same ad view overrides previous one.
+  ///
+  void addInterstitialAdEventListener(InterstitialAdEventListener listener) {
+    _streamsCoordinator.addInterstitialAdEventListener(listener);
   }
 
-  void _setUpMethodChannel() {
-    _methodChannel = const MethodChannel(PlatformApiConfig.methodChannelName);
+  /// Removes event listener for native ad view.
+  ///
+  /// Does nothing if listener was not set up for this ad view.
+  ///
+  void removeInterstitialAdEventListener(String viewUId) {
+    _streamsCoordinator.removeInterstitialAdEventListener(viewUId);
+  }
+
+  /// Platform request to show native [InterstitialAd]
+  ///
+  Future<void> showInterstitialAd({
+    required String adId,
+    AdParameters? parameters,
+    VoidCallback? onAdLoaded,
+    void Function(int code, String description)? onAdFailedToLoad,
+    void Function(String? impression)? onImpression,
+    VoidCallback? onAdClicked,
+    VoidCallback? onLeftApplication,
+    VoidCallback? onReturnedToApplication,
+    VoidCallback? onAdShown,
+    VoidCallback? onAdDismissed,
+  }) async {
+    await _methodCallDispatcher.showInterstitialAd(
+      adId: adId,
+      parameters: parameters,
+    );
+
+    final listener = InterstitialAdEventListener(
+      viewUid: adId,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: (code, desc) {
+        onAdFailedToLoad?.call(code, desc);
+        _streamsCoordinator.removeInterstitialAdEventListener(adId);
+      },
+      onImpression: onImpression,
+      onAdClicked: onAdClicked,
+      onLeftApplication: onLeftApplication,
+      onReturnedToApplication: onReturnedToApplication,
+      onAdShown: onAdShown,
+      onAdDismissed: () {
+        onAdDismissed?.call();
+        _streamsCoordinator.removeInterstitialAdEventListener(adId);
+      },
+    );
+
+    _streamsCoordinator.addInterstitialAdEventListener(listener);
+  }
+
+  void _setUpMethodCallDispatcher() {
+    _methodCallDispatcher = AdMethodCallDispatcher(
+      channelName: PlatformApiConfig.methodChannelName,
+    );
   }
 
   /// Creates and saves in property an instance of a stream coordinator.

@@ -1,4 +1,4 @@
-package ru.kardenvan.flutter_yandex_ads_plus.views.native_yandex_ad
+package ru.kardenvan.flutter_yandex_ads_plus.ads.native_yandex_ad
 
 import android.graphics.Color
 import com.yandex.mobile.ads.nativeads.template.HorizontalOffset

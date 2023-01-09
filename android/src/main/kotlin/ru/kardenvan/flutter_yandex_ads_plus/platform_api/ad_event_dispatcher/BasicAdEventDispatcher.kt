@@ -2,13 +2,16 @@ package ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher
 
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
+import io.flutter.plugin.common.BinaryMessenger
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event.BasicAdEvent
 
 /**
  * Class responsible for dispatching basic ad events to the Flutter side.
  */
-class BasicAdEventDispatcher: AdEventDispatcher() {
-
+open class BasicAdEventDispatcher(
+    binaryMessenger: BinaryMessenger,
+    channelName: String,
+): AdEventDispatcher(binaryMessenger, channelName) {
     /**
      * Dispatches event notifying that ad with given [viewUid] was successfully loaded.
      */
@@ -29,7 +32,6 @@ class BasicAdEventDispatcher: AdEventDispatcher() {
             )
         )
     }
-
 
     /**
      * Dispatches event notifying that ad with given [viewUid] called an impression that contains

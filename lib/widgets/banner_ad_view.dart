@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_yandex_ads_plus/core/ad_parameters/ad_parameters.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
 
 import '../platform_api/platform_api.dart';
@@ -17,8 +18,7 @@ import '../platform_api/platform_api.dart';
 /// [width] - ad width. If not set, takes up all available width if width
 /// constraint is bounded. If not - sets to default width of 300px.
 ///
-/// [additionalLoadParameters] - parameters given by the ad provider
-/// (like AdFox or others).
+/// [parameters] - additional ad request parameters.
 ///
 /// [iosSettings] - additional presentation settings for iOS.
 ///
@@ -52,7 +52,7 @@ class BannerAdView extends StatefulWidget {
     required this.id,
     this.height,
     this.width,
-    this.additionalLoadParameters,
+    this.parameters,
     this.iosSettings,
     this.onAdLoaded,
     this.onAdFailedToLoad,
@@ -68,7 +68,7 @@ class BannerAdView extends StatefulWidget {
   final String id;
   final double? height;
   final double? width;
-  final Map<String, String>? additionalLoadParameters;
+  final AdParameters? parameters;
   final IosBannerAdViewSettings? iosSettings;
 
   final VoidCallback? onAdLoaded;
@@ -167,7 +167,7 @@ class _BannerAdViewState extends State<BannerAdView> {
             adUId: widget.id,
             height: _calculateHeight(constraints),
             width: _calculateWidth(constraints),
-            additionalLoadParams: widget.additionalLoadParameters,
+            parameters: widget.parameters,
             iosSettings: widget.iosSettings,
           ).toMap();
 
@@ -203,7 +203,7 @@ class _BannerAdParams {
     required this.adUId,
     required this.height,
     required this.width,
-    this.additionalLoadParams,
+    this.parameters,
     this.iosSettings,
   });
 
@@ -211,7 +211,7 @@ class _BannerAdParams {
   final String adUId;
   final double height;
   final double width;
-  final Map<String, String>? additionalLoadParams;
+  final AdParameters? parameters;
   final IosBannerAdViewSettings? iosSettings;
 
   IosBannerAdViewSettings get defaultIosSettings {
@@ -226,7 +226,7 @@ class _BannerAdParams {
       'ad_uid': adUId,
       'height': height.toInt(),
       'width': width.toInt(),
-      'additional_load_parameters': additionalLoadParams,
+      'parameters': parameters?.toJson(),
     };
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {

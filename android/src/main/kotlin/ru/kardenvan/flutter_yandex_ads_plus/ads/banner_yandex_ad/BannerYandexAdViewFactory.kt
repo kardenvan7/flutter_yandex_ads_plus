@@ -1,4 +1,4 @@
-package ru.kardenvan.flutter_yandex_ads_plus.views.banner_yandex_ad
+package ru.kardenvan.flutter_yandex_ads_plus.ads.banner_yandex_ad
 
 import android.content.Context
 import io.flutter.plugin.common.StandardMessageCodec

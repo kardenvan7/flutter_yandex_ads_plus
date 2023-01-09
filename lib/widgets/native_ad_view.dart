@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_yandex_ads_plus/core/ad_parameters/ad_parameters.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/utils/color_extension.dart';
@@ -17,8 +18,7 @@ import 'package:flutter_yandex_ads_plus/utils/color_extension.dart';
 /// [width] - ad width. If not set, takes up all available width if width
 /// constraint is bounded. If not - sets to default width of 300px.
 ///
-/// [additionalLoadParameters] - parameters given by the ad provider
-/// (like AdFox or others).
+/// [parameters] - additional ad request parameters.
 ///
 /// [onAdLoaded] - callback triggered when the ad is successfully loaded.
 ///
@@ -54,7 +54,7 @@ import 'package:flutter_yandex_ads_plus/utils/color_extension.dart';
 class NativeAdView extends StatefulWidget {
   const NativeAdView({
     required this.id,
-    this.additionalLoadParameters,
+    this.parameters,
     this.height,
     this.width,
     this.theme,
@@ -71,7 +71,7 @@ class NativeAdView extends StatefulWidget {
   }) : super(key: key);
 
   final String id;
-  final Map<String, String>? additionalLoadParameters;
+  final AdParameters? parameters;
   final double? height;
   final double? width;
   final NativeAdTheme? theme;
@@ -182,7 +182,7 @@ class _NativeAdViewState extends State<NativeAdView> {
             height: _calculateHeight(constraints),
             width: _calculateWidth(constraints),
             theme: theme,
-            additionalParameters: widget.additionalLoadParameters,
+            parameters: widget.parameters,
           );
 
           switch (defaultTargetPlatform) {
@@ -364,7 +364,7 @@ class _NativeAdParams {
     required this.height,
     required this.width,
     required this.theme,
-    required this.additionalParameters,
+    required this.parameters,
   });
 
   final String viewUid;
@@ -372,7 +372,7 @@ class _NativeAdParams {
   final double height;
   final double width;
   NativeAdTheme theme;
-  final Map<String, String>? additionalParameters;
+  final AdParameters? parameters;
 
   Map<String, dynamic> toMap() {
     return {
@@ -381,7 +381,7 @@ class _NativeAdParams {
       'height': height.toInt(),
       'width': width.toInt(),
       'theme': theme.toMap(),
-      'additional_parameters': additionalParameters,
+      'parameters': parameters?.toJson(),
     };
   }
 }

@@ -18,4 +18,6 @@ class PlatformApiConfig {
       'banner_yandex_ad_event_channel';
   static const String nativeAdEventChannelName =
       'native_yandex_ad_event_channel';
+  static const String interstitialAdEventChannelName =
+      'interstitial_yandex_ad_event_channel';
 }

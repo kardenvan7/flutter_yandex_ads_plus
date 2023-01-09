@@ -23,5 +23,6 @@ class PlatformApiConfig {
 
         const val bannerAdEventChannelName: String = "banner_yandex_ad_event_channel"
         const val nativeAdEventChannelName: String = "native_yandex_ad_event_channel"
+        const val interstitialAdEventChannelName: String = "interstitial_yandex_ad_event_channel"
     }
 }

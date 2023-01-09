@@ -168,12 +168,14 @@ class NativeAdTabView extends StatelessWidget {
         SizedBox(
           child: NativeAdView(
             id: 'demo-native-app-yandex',
-            height: 300,
+            height: 170,
             width: 300,
-            additionalLoadParameters: const {
-              'test': '123',
-              'notText': '132',
-            },
+            parameters: const AdParameters(
+              custom: {
+                'test': '123',
+                'notText': '132',
+              },
+            ),
             onAdLoaded: () {
               debugPrint('NATIVE AD LOADED');
             },
@@ -213,8 +215,36 @@ class NativeAdTabView extends StatelessWidget {
 class InterstitialAdTabView extends StatelessWidget {
   const InterstitialAdTabView({Key? key}) : super(key: key);
 
-  void _onAdShowPressed() {
-    FlutterYandexAdsPlus.showInterstitialAd();
+  Future<void> _onAdShowPressed() async {
+    await FlutterYandexAdsPlus.showInterstitialAd(
+      adId: "demo-interstitial-yandex",
+      onAdLoaded: () {
+        debugPrint('INTERSTITIAL AD LOADED');
+      },
+      onAdFailedToLoad: (int code, String description) {
+        debugPrint(
+          'INTERSTITIAL AD FAILED TO LOAD: CODE $code, DESC: $description',
+        );
+      },
+      onImpression: (String? impression) {
+        debugPrint('INTERSTITIAL AD IMPRESSION: $impression');
+      },
+      onAdClicked: () {
+        debugPrint('INTERSTITIAL AD CLICKED');
+      },
+      onLeftApplication: () {
+        debugPrint('INTERSTITIAL AD LEFT APP');
+      },
+      onReturnedToApplication: () {
+        debugPrint('INTERSTITIAL AD RETURNED TO APP');
+      },
+      onAdShown: () {
+        debugPrint('INTERSTITIAL AD SHOWN');
+      },
+      onAdDismissed: () {
+        debugPrint('INTERSTITIAL AD DISMISSED');
+      },
+    );
   }
 
   @override

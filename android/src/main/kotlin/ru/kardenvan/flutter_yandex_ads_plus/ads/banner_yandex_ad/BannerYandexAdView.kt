@@ -1,4 +1,4 @@
-package ru.kardenvan.flutter_yandex_ads_plus.views.banner_yandex_ad
+package ru.kardenvan.flutter_yandex_ads_plus.ads.banner_yandex_ad
 
 import android.content.Context
 import android.graphics.Color
@@ -11,7 +11,9 @@ import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
 import io.flutter.plugin.platform.PlatformView
+import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.BasicAdEventDispatcher
+import ru.kardenvan.flutter_yandex_ads_plus.utils.AdRequestFacade
 
 class BannerYandexAdView(
     context: Context?,
@@ -23,15 +25,15 @@ class BannerYandexAdView(
 
     init {
         setUpAd(arguments)
-        loadAd(arguments.additionalLoadParameters)
+        loadAd(arguments.parameters)
     }
 
     override fun getView(): View {
         return banner
     }
 
-    private fun loadAd(additionalLoadParameters: Map<*, *>? = null) {
-        val request: AdRequest = buildRequest(additionalLoadParameters)
+    private fun loadAd(parameters: AdParameters?) {
+        val request: AdRequest = buildRequest(parameters)
 
         banner.loadAd(request)
     }
@@ -59,25 +61,8 @@ class BannerYandexAdView(
         banner.setBackgroundColor(Color.TRANSPARENT)
     }
 
-    private fun buildRequest(params: Map<*,*>?): AdRequest {
-        val requestBuilder = AdRequest.Builder()
-
-        if (params != null) {
-            val paramsMap: MutableMap<String, String> = mutableMapOf()
-
-            for (entry in params) {
-                val key = entry.key
-                val value = entry.value
-
-                if (key is String && value is String) {
-                    paramsMap[key] = value
-                }
-            }
-
-            requestBuilder.setParameters(paramsMap)
-        }
-
-        return requestBuilder.build()
+    private fun buildRequest(parameters: AdParameters?): AdRequest {
+        return AdRequestFacade.buildWithParameters(parameters)
     }
 
     override fun dispose() {

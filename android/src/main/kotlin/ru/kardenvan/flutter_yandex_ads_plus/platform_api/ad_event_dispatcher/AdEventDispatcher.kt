@@ -1,5 +1,6 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher
 
+import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.EventChannel
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event.AdEvent
 
@@ -8,27 +9,36 @@ import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event.AdEvent
  *
  * Use [sendEvent] method in child classes to send events.
  */
-abstract class AdEventDispatcher {
-    private var eventSink: EventChannel.EventSink? = null
+abstract class AdEventDispatcher(
+    binaryMessenger: BinaryMessenger,
+    channelName: String,
+) {
+    private val eventChannel: EventChannel = EventChannel(binaryMessenger, channelName)
 
-    /**
-     * Sets eventSink property value to [sink].
-     */
-    fun setSink(sink: EventChannel.EventSink) {
-        eventSink = sink
+    init {
+        eventChannel.setStreamHandler(Handler)
+    }
+
+    private object Handler: EventChannel.StreamHandler {
+        private var eventSink: EventChannel.EventSink? = null
+
+        override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
+            eventSink = events
+        }
+
+        override fun onCancel(arguments: Any?) {
+            eventSink = null
+        }
+
+        fun sendEvent(data: Map<*, *>) {
+            eventSink?.success(data)
+        }
     }
 
     /**
-     * Sets [eventSink] property to null.
-     */
-    fun removeSink() {
-        eventSink = null
-    }
-
-    /**
-     * Encodes event and sends it to Flutter-side if [eventSink] is set.
+     * Encodes event and sends it to Flutter-side.
      */
     protected fun sendEvent(event: AdEvent) {
-        eventSink?.success(event.toMap())
+        Handler.sendEvent(event.toMap())
     }
 }

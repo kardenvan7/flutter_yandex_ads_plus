@@ -1,3 +1,4 @@
+import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/interstitial/interstitial_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
 
 import 'ad_event_stream_receiver.dart';
@@ -30,6 +31,13 @@ class AdEventStreamsCoordinator {
     channelName: PlatformApiConfig.nativeAdEventChannelName,
   );
 
+  /// Interstitial ad events receiver
+  ///
+  final AdEventStreamReceiver interstitialAdEventsReceiver =
+      AdEventStreamReceiver(
+    channelName: PlatformApiConfig.interstitialAdEventChannelName,
+  );
+
   /// Adds listener to the list of listeners able to receive banner ad events
   ///
   void addBannerAdEventListener(BasicAdEventListener listener) {
@@ -56,8 +64,22 @@ class AdEventStreamsCoordinator {
     nativeAdEventsReceiver.removeEventListener(viewUid);
   }
 
+  /// Adds listener to the list of listeners able to receive banner ad events
+  ///
+  void addInterstitialAdEventListener(InterstitialAdEventListener listener) {
+    interstitialAdEventsReceiver.addEventListener(listener);
+  }
+
+  /// Removes listener with corresponding [viewUid] from the list of listeners
+  /// able to receive banner ad events
+  ///
+  void removeInterstitialAdEventListener(String viewUid) {
+    interstitialAdEventsReceiver.removeEventListener(viewUid);
+  }
+
   void dispose() {
     bannerAdEventsReceiver.dispose();
     nativeAdEventsReceiver.dispose();
+    interstitialAdEventsReceiver.dispose();
   }
 }
