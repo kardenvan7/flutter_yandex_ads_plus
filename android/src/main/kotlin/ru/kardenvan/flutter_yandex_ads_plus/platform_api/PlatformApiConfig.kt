@@ -13,6 +13,11 @@ class PlatformApiConfig {
         const val nativeAdViewTypeId: String = "native_yandex_ad"
 
         /**
+         * Method channel name
+         */
+        const val methodChannelName: String = "flutter_yandex_ads_plus_method_channel"
+
+        /**
          * Event channel names
          */
 
