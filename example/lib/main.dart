@@ -199,3 +199,21 @@ class NativeAdTabView extends StatelessWidget {
     );
   }
 }
+
+class InterstitialAdTabView extends StatelessWidget {
+  const InterstitialAdTabView({Key? key}) : super(key: key);
+
+  void _onAdShowPressed() {
+    FlutterYandexAdsPlus.showInterstitialAd();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: _onAdShowPressed,
+        child: const Text("Show interstitial ad"),
+      ),
+    );
+  }
+}

@@ -1,6 +1,6 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/ad_event_streams_coordinator.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/basic/basic_ad_event_listener.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/native/native_ad_event_listener.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
 
 import 'ad_event_listener/ad_event_listener.dart';
 
@@ -21,6 +21,8 @@ class FlutterYandexAdsApi {
   /// Singleton instance of this class
   ///
   static FlutterYandexAdsApi? _instance;
+
+  late MethodChannel _methodChannel;
 
   /// Instance of a streams listeners coordinator.
   ///
@@ -68,6 +70,14 @@ class FlutterYandexAdsApi {
   ///
   void removeNativeAdEventListener(String viewUId) {
     _streamsCoordinator.removeNativeAdEventListener(viewUId);
+  }
+
+  Future<void> showInterstitialAd() async {
+    await _methodChannel.invokeMethod("showInterstitialAd");
+  }
+
+  void _setUpMethodChannel() {
+    _methodChannel = const MethodChannel(PlatformApiConfig.methodChannelName);
   }
 
   /// Creates and saves in property an instance of a stream coordinator.
