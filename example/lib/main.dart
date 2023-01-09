@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       home: DefaultTabController(
-        length: 2,
+        length: 3,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
@@ -42,12 +42,22 @@ class App extends StatelessWidget {
                     ),
                   ),
                 ),
+                Tab(
+                  child: Text(
+                    'Interstitial',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
             body: const TabBarView(
               children: [
                 NativeAdTabView(),
                 BannerAdTabView(),
+                InterstitialAdTabView(),
               ],
             ),
           ),
@@ -196,6 +206,24 @@ class NativeAdTabView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class InterstitialAdTabView extends StatelessWidget {
+  const InterstitialAdTabView({Key? key}) : super(key: key);
+
+  void _onAdShowPressed() {
+    FlutterYandexAdsPlus.showInterstitialAd();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: _onAdShowPressed,
+        child: const Text("Show interstitial ad"),
+      ),
     );
   }
 }
