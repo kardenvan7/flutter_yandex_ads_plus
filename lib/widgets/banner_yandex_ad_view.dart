@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_yandex_ads_plus/core/ad_parameters/ad_parameters.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/platform_api.dart';
+import 'package:flutter_yandex_ads_plus/utils/unique_id_generator.dart';
 
-import '../platform_api/platform_api.dart';
-
-/// Flutter-implementation of native [BannerAdView] (Kotlin, Android) and
+/// Flutter-implementation of native [BannerYandexAdView] (Kotlin, Android) and
 /// [YMAAdView] (Swift, iOS).
 ///
 /// [id] - unique identifier of the ad, obtained in partner interface.
@@ -47,8 +45,8 @@ import '../platform_api/platform_api.dart';
 /// in response to the user interacting with the banner. Due to
 /// YandexAds native SDK limitations this callback works only on iOS.
 ///
-class BannerAdView extends StatefulWidget {
-  const BannerAdView({
+class BannerYandexAdView extends StatefulWidget {
+  const BannerYandexAdView({
     required this.id,
     this.height,
     this.width,
@@ -81,45 +79,31 @@ class BannerAdView extends StatefulWidget {
   final VoidCallback? didDismissScreen;
 
   @override
-  State<BannerAdView> createState() => _BannerAdViewState();
+  State<BannerYandexAdView> createState() => _BannerYandexAdViewState();
 }
 
-class _BannerAdViewState extends State<BannerAdView> {
+class _BannerYandexAdViewState extends State<BannerYandexAdView> {
   /// Ad unique id. It is needed because it is possible for user to create
   /// several instances of ads with the same [widget.id]
   ///
-  late String _viewUId;
+  final String _viewUId = UniqueIdGenerator.generate();
 
   /// Api instance
   ///
-  late FlutterYandexAdsApi _api;
+  final FlutterYandexAdsApi _api = FlutterYandexAdsApi();
 
   @override
   void initState() {
     super.initState();
 
-    _setApi();
-    _setViewUid();
-    _setUpListener();
-  }
-
-  /// Sets api instance as state property
-  ///
-  void _setApi() {
-    _api = FlutterYandexAdsApi();
-  }
-
-  /// Sets ad unique id.
-  ///
-  void _setViewUid() {
-    _viewUId = DateTime.now().hashCode.toString();
+    _setUpEventListener();
   }
 
   /// Sets up ad events listener
   ///
-  void _setUpListener() {
+  void _setUpEventListener() {
     final listener = BasicAdEventListener(
-      viewUid: _viewUId,
+      uId: _viewUId,
       onAdLoaded: widget.onAdLoaded,
       onAdFailedToLoad: widget.onAdFailedToLoad,
       onLeftApplication: widget.onLeftApplication,
@@ -130,12 +114,12 @@ class _BannerAdViewState extends State<BannerAdView> {
       didDismissScreen: widget.didDismissScreen,
     );
 
-    _api.addBannerAdEventListener(listener);
+    _api.addAdEventListener(listener);
   }
 
   @override
   void dispose() {
-    _api.removeBannerAdEventListener(_viewUId);
+    _api.removeAdEventListener(_viewUId);
 
     super.dispose();
   }
@@ -162,14 +146,14 @@ class _BannerAdViewState extends State<BannerAdView> {
       width: widget.width,
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final Map<String, dynamic> params = _BannerAdParams(
-            viewUid: _viewUId,
-            adUId: widget.id,
+          final Map<String, dynamic> params = BannerAdParameters(
+            uid: _viewUId,
+            adId: widget.id,
             height: _calculateHeight(constraints),
             width: _calculateWidth(constraints),
             parameters: widget.parameters,
             iosSettings: widget.iosSettings,
-          ).toMap();
+          ).toJson();
 
           switch (defaultTargetPlatform) {
             case TargetPlatform.android:
@@ -194,60 +178,5 @@ class _BannerAdViewState extends State<BannerAdView> {
         },
       ),
     );
-  }
-}
-
-class _BannerAdParams {
-  const _BannerAdParams({
-    required this.viewUid,
-    required this.adUId,
-    required this.height,
-    required this.width,
-    this.parameters,
-    this.iosSettings,
-  });
-
-  final String viewUid;
-  final String adUId;
-  final double height;
-  final double width;
-  final AdParameters? parameters;
-  final IosBannerAdViewSettings? iosSettings;
-
-  IosBannerAdViewSettings get defaultIosSettings {
-    return const IosBannerAdViewSettings(
-      translatesAutoResizingMaskIntoConstraints: true,
-    );
-  }
-
-  Map<String, dynamic> toMap() {
-    final params = {
-      'view_uid': viewUid,
-      'ad_uid': adUId,
-      'height': height.toInt(),
-      'width': width.toInt(),
-      'parameters': parameters?.toJson(),
-    };
-
-    if (defaultTargetPlatform == TargetPlatform.iOS) {
-      params['settings'] = iosSettings?.toMap() ?? defaultIosSettings.toMap();
-    }
-
-    return params;
-  }
-}
-
-class IosBannerAdViewSettings {
-  const IosBannerAdViewSettings({
-    this.translatesAutoResizingMaskIntoConstraints = true,
-  });
-
-  final bool translatesAutoResizingMaskIntoConstraints;
-
-  Map<String, dynamic> toMap() {
-    return {
-      'translates_auto_resizing_mask_into_constraints':
-          translatesAutoResizingMaskIntoConstraints,
-    };
   }
 }

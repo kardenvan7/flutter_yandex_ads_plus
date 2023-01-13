@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/ad_event/ad_event.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/ad_event_listener.dart';
-import 'package:flutter_yandex_ads_plus/utils/logger.dart';
+import 'package:flutter_yandex_ads_plus/platform_api/ad_event_stream_receiver/ad_event_listener/ad_event_listener.dart';
+import 'package:flutter_yandex_ads_plus/utils/plugin_logger.dart';
+
+export 'ad_event_listener/ad_event_listener.dart';
 
 /// Class responsible for creating platform ad event stream as well as adding
 /// and removing subscriptions to it.
@@ -42,7 +44,7 @@ class AdEventStreamReceiver {
   /// Adds listener to the list of active stream listeners.
   ///
   void _addAdEventListener(AdEventListener listener) {
-    _listeners[listener.viewUid] = listener;
+    _listeners[listener.uId] = listener;
   }
 
   /// Removes subscription from the active stream listeners.
@@ -70,14 +72,14 @@ class AdEventStreamReceiver {
     try {
       final eventMap = Map<String, dynamic>.from(event);
       final parsedEvent = AdEvent.fromJson(eventMap);
-      final listener = _listeners[parsedEvent.viewUid];
+      final listener = _listeners[parsedEvent.uid];
 
       if (listener == null) return;
 
       listener.emitCallbackByEvent(parsedEvent);
     } catch (e, st) {
-      Logger.log(e);
-      Logger.log(st);
+      PluginLogger.log(e);
+      PluginLogger.log(st);
     }
   }
 

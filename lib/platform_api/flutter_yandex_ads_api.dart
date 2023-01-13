@@ -1,19 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/core/ad_parameters/ad_parameters.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/ad_event_streams_coordinator.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/ad_event_listener/interstitial/interstitial_ad_event_listener.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/config.dart';
+import 'package:flutter_yandex_ads_plus/utils/unique_id_generator.dart';
 
-import 'ad_event_listener/ad_event_listener.dart';
+import 'ad_event_stream_receiver/ad_event_stream_receiver.dart';
+import 'ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
+import 'platform_api_config.dart';
 
 /// Class responsible for initialization of components of FlutterYandexAdsPlus
 /// plugin.
 ///
 class FlutterYandexAdsApi {
-  FlutterYandexAdsApi._() {
-    initialize();
-  }
+  FlutterYandexAdsApi._();
 
   factory FlutterYandexAdsApi() {
     _instance ??= FlutterYandexAdsApi._();
@@ -25,73 +22,32 @@ class FlutterYandexAdsApi {
   ///
   static FlutterYandexAdsApi? _instance;
 
-  /// Method call dispatcher from Flutter to platform
+  /// Instance of method call dispatcher from Flutter to platform
   ///
-  late AdMethodCallDispatcher _methodCallDispatcher;
+  final AdMethodCallDispatcher _methodCallDispatcher = AdMethodCallDispatcher(
+    channelName: PlatformApiConfig.methodChannelName,
+  );
 
-  /// Instance of a platform-to-Flutter event streams coordinator.
+  /// Instance of a platform-to-Flutter event stream receiver.
   ///
-  late AdEventStreamsCoordinator _streamsCoordinator;
+  final AdEventStreamReceiver _eventStreamReceiver = AdEventStreamReceiver(
+    channelName: PlatformApiConfig.eventChannelName,
+  );
 
-  /// Performs initialization steps
-  ///
-  void initialize() {
-    _setUpMethodCallDispatcher();
-    _setUpStreamCoordinator();
-  }
-
-  /// Cleans up memory
-  ///
-  void dispose() {
-    _streamsCoordinator.dispose();
-  }
-
-  /// Adds event listener for banner ad view.
+  /// Adds event listener for ad view.
   ///
   /// Every next call for the same ad view overrides previous one.
   ///
-  void addBannerAdEventListener(BasicAdEventListener listener) {
-    _streamsCoordinator.addBannerAdEventListener(listener);
+  void addAdEventListener(AdEventListener listener) {
+    _eventStreamReceiver.addEventListener(listener);
   }
 
   /// Removes event listener for banner ad view.
   ///
   /// Does nothing if listener was not set up for this ad view.
   ///
-  void removeBannerAdEventListener(String viewUId) {
-    _streamsCoordinator.removeBannerAdEventListener(viewUId);
-  }
-
-  /// Adds event listener for native ad view.
-  ///
-  /// Every next call for the same ad view overrides previous one.
-  ///
-  void addNativeAdEventListener(NativeAdEventListener listener) {
-    _streamsCoordinator.addNativeAdEventListener(listener);
-  }
-
-  /// Removes event listener for native ad view.
-  ///
-  /// Does nothing if listener was not set up for this ad view.
-  ///
-  void removeNativeAdEventListener(String viewUId) {
-    _streamsCoordinator.removeNativeAdEventListener(viewUId);
-  }
-
-  /// Adds event listener for native ad view.
-  ///
-  /// Every next call for the same ad view overrides previous one.
-  ///
-  void addInterstitialAdEventListener(InterstitialAdEventListener listener) {
-    _streamsCoordinator.addInterstitialAdEventListener(listener);
-  }
-
-  /// Removes event listener for native ad view.
-  ///
-  /// Does nothing if listener was not set up for this ad view.
-  ///
-  void removeInterstitialAdEventListener(String viewUId) {
-    _streamsCoordinator.removeInterstitialAdEventListener(viewUId);
+  void removeAdEventListener(String viewUId) {
+    _eventStreamReceiver.removeEventListener(viewUId);
   }
 
   /// Platform request to show native [InterstitialAd]
@@ -108,17 +64,14 @@ class FlutterYandexAdsApi {
     VoidCallback? onAdShown,
     VoidCallback? onAdDismissed,
   }) async {
-    await _methodCallDispatcher.showInterstitialAd(
-      adId: adId,
-      parameters: parameters,
-    );
+    final uid = UniqueIdGenerator.generate();
 
     final listener = InterstitialAdEventListener(
-      viewUid: adId,
+      uId: uid,
       onAdLoaded: onAdLoaded,
       onAdFailedToLoad: (code, desc) {
         onAdFailedToLoad?.call(code, desc);
-        _streamsCoordinator.removeInterstitialAdEventListener(adId);
+        _eventStreamReceiver.removeEventListener(adId);
       },
       onImpression: onImpression,
       onAdClicked: onAdClicked,
@@ -127,24 +80,22 @@ class FlutterYandexAdsApi {
       onAdShown: onAdShown,
       onAdDismissed: () {
         onAdDismissed?.call();
-        _streamsCoordinator.removeInterstitialAdEventListener(adId);
+        _eventStreamReceiver.removeEventListener(adId);
       },
     );
 
-    _streamsCoordinator.addInterstitialAdEventListener(listener);
-  }
+    _eventStreamReceiver.addEventListener(listener);
 
-  void _setUpMethodCallDispatcher() {
-    _methodCallDispatcher = AdMethodCallDispatcher(
-      channelName: PlatformApiConfig.methodChannelName,
+    return _methodCallDispatcher.showInterstitialAd(
+      uid: uid,
+      adId: adId,
+      parameters: parameters,
     );
   }
 
-  /// Creates and saves in property an instance of a stream coordinator.
+  /// Cleans up memory
   ///
-  /// Repeating calls do nothing.
-  ///
-  void _setUpStreamCoordinator() {
-    _streamsCoordinator = AdEventStreamsCoordinator();
+  void dispose() {
+    _eventStreamReceiver.dispose();
   }
 }

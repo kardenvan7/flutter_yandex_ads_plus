@@ -1,9 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_yandex_ads_plus/platform_api/flutter_yandex_ads_api.dart';
 
 import 'core/ad_parameters/ad_parameters.dart';
+import 'platform_api/flutter_yandex_ads_api.dart';
 
 export 'core/ad_parameters/ad_parameters.dart';
+export 'core/ios_banner_ad_view_settings.dart';
+export 'core/native_ad_theme/native_ad_theme.dart';
 export 'widgets/widgets.dart';
 
 class FlutterYandexAdsPlus {

@@ -7,9 +7,8 @@ import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event.AdEvent
 /**
  * Class responsible for dispatching ad events to Flutter-side.
  *
- * Use [sendEvent] method in child classes to send events.
  */
-abstract class AdEventDispatcher(
+class FlutterYandexAdsEventDispatcher(
     binaryMessenger: BinaryMessenger,
     channelName: String,
 ) {
@@ -38,7 +37,7 @@ abstract class AdEventDispatcher(
     /**
      * Encodes event and sends it to Flutter-side.
      */
-    protected fun sendEvent(event: AdEvent) {
+    fun sendEvent(event: AdEvent) {
         Handler.sendEvent(event.toMap())
     }
 }

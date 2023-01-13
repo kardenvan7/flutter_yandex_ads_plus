@@ -10,14 +10,9 @@ class PlatformApiConfig {
 
   /// Method channel name
   static const String methodChannelName =
-      "flutter_yandex_ads_plus_method_channel";
+      'flutter_yandex_ads_plus_method_channel';
 
-  /// Event channel names
-
-  static const String bannerAdEventChannelName =
-      'banner_yandex_ad_event_channel';
-  static const String nativeAdEventChannelName =
-      'native_yandex_ad_event_channel';
-  static const String interstitialAdEventChannelName =
-      'interstitial_yandex_ad_event_channel';
+  /// Event channel name
+  static const String eventChannelName =
+      'flutter_yandex_ads_plus_event_channel';
 }

@@ -7,18 +7,18 @@ import ru.kardenvan.flutter_yandex_ads_plus.ads.banner_yandex_ad.BannerYandexAdV
 class BannerAdViewArgumentsFactory {
     companion object Factory {
         fun fromMap(map: Map<*, *>): BannerYandexAdViewArguments {
-            val viewUid = map["view_uid"]
+            val uid = map["uid"]
 
-            if (viewUid !is String) {
+            if (uid !is String) {
                 throw Exception(
-                    "Arguments map doesn't contain required parameter \"ad_id\".\n" +
+                    "Arguments map doesn't contain required parameter \"uid\".\n" +
                             "Given arguments: $map"
                 )
             }
 
-            val adUid = map["ad_uid"]
+            val adId = map["ad_id"]
 
-            if (adUid !is String) {
+            if (adId !is String) {
                 throw Exception(
                     "Arguments map doesn't contain required parameter \"ad_id\".\n" +
                             "Given arguments: $map"
@@ -38,8 +38,8 @@ class BannerAdViewArgumentsFactory {
 
 
             return BannerYandexAdViewArguments(
-                viewUid = viewUid,
-                adUid = adUid,
+                uid = uid,
+                adId = adId,
                 size = size,
                 parameters = parameters,
             )

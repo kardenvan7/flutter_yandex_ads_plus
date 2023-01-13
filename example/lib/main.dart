@@ -80,7 +80,7 @@ class BannerAdTabView extends StatelessWidget {
         const Text('Banner'),
         Column(
           children: [
-            BannerAdView(
+            BannerYandexAdView(
               height: 50,
               id: 'R-M-DEMO-320x50',
               iosSettings: const IosBannerAdViewSettings(
@@ -114,7 +114,7 @@ class BannerAdTabView extends StatelessWidget {
               },
             ),
             const SizedBox(height: 20),
-            BannerAdView(
+            BannerYandexAdView(
               height: 250,
               id: 'R-M-DEMO-300x250',
               iosSettings: const IosBannerAdViewSettings(
@@ -166,7 +166,7 @@ class NativeAdTabView extends StatelessWidget {
       children: [
         const Text('Native'),
         SizedBox(
-          child: NativeAdView(
+          child: NativeYandexAdView(
             id: 'demo-native-app-yandex',
             height: 170,
             width: 300,

@@ -14,15 +14,16 @@ class FlutterYandexAdsPlugin : FlutterPlugin, ActivityAware {
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         api = FlutterYandexAdsApi(binding.binaryMessenger)
+        val eventDispatcher = api.adEventDispatcher
 
         binding.platformViewRegistry.registerViewFactory(
             PlatformApiConfig.bannerAdViewTypeId,
-            BannerYandexAdViewFactory(api.bannerAdEventDispatcher)
+            BannerYandexAdViewFactory(eventDispatcher)
         )
 
         binding.platformViewRegistry.registerViewFactory(
             PlatformApiConfig.nativeAdViewTypeId,
-            NativeYandexAdViewFactory(api.nativeAdEventDispatcher)
+            NativeYandexAdViewFactory(eventDispatcher)
         )
     }
 

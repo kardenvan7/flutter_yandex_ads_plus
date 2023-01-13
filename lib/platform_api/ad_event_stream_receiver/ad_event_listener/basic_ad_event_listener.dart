@@ -2,11 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/platform_api/ad_event/ad_event.dart';
 
 import '../../ad_event/type/basic_ad_event_type.dart';
-import '../ad_event_listener.dart';
+import 'ad_event_listener.dart';
 
 class BasicAdEventListener extends AdEventListener {
   const BasicAdEventListener({
-    required super.viewUid,
+    required super.uId,
     this.onAdLoaded,
     this.onAdFailedToLoad,
     this.onImpression,

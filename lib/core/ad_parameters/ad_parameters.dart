@@ -1,31 +1,29 @@
 import 'dart:ui';
 
-import 'package:flutter_yandex_ads_plus/utils/brightness_json_converter.dart';
-import 'package:flutter_yandex_ads_plus/utils/location/location.dart';
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'location.dart';
 
-part 'ad_parameters.freezed.dart';
-part 'ad_parameters.g.dart';
+export 'location.dart';
 
 /// Data class containing additional ad request parameters.
 ///
-@freezed
-class AdParameters with _$AdParameters {
-  const AdParameters._();
+class AdParameters {
+  const AdParameters({
+    this.age,
+    this.biddingData,
+    this.contextQuery,
+    this.contextTags,
+    this.gender,
+    this.custom,
+    this.brightness,
+    this.location,
+  });
 
-  const factory AdParameters({
-    String? age,
-    String? biddingData,
-    String? contextQuery,
-    List<String>? contextTags,
-    String? gender,
-    Map<String, String>? custom,
-    @JsonKey(name: "preferred_theme")
-    @BrightnessJsonConverter()
-        Brightness? brightness,
-    Location? location,
-  }) = _AdParameters;
-
-  factory AdParameters.fromJson(Map<String, dynamic> json) =>
-      _$AdParametersFromJson(json);
+  final String? age;
+  final String? biddingData;
+  final String? contextQuery;
+  final List<String>? contextTags;
+  final String? gender;
+  final Map<String, String>? custom;
+  final Brightness? brightness;
+  final Location? location;
 }

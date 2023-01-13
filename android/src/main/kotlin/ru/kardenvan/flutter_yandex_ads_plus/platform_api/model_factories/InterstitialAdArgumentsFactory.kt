@@ -6,9 +6,13 @@ import ru.kardenvan.flutter_yandex_ads_plus.ads.interstitial_yandex_ad.Interstit
 class InterstitialAdArgumentsFactory {
     companion object Factory {
         fun fromMap(map: Map<*, *>): InterstitialYandexAdArguments {
-            val adUid = map["ad_uid"]
+            val uid = map["uid"]
 
-            if (adUid !is String) throw Exception("Ad uid is not valid. Current value: $adUid")
+            if (uid !is String) throw Exception("Ad uid is not valid. Current value: $uid")
+
+            val adId = map["ad_id"]
+
+            if (adId !is String) throw Exception("Ad id is not valid. Current value: $adId")
 
             val params = map["parameters"]
 
@@ -21,7 +25,8 @@ class InterstitialAdArgumentsFactory {
             }
 
             return InterstitialYandexAdArguments(
-                adUid = adUid,
+                uid = uid,
+                adId = adId,
                 parameters = parameters,
             )
         }

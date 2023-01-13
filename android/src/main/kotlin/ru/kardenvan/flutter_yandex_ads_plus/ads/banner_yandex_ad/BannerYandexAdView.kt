@@ -12,16 +12,15 @@ import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
 import io.flutter.plugin.platform.PlatformView
 import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.BasicAdEventDispatcher
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade.BasicAdEventDispatcherFacade
 import ru.kardenvan.flutter_yandex_ads_plus.utils.AdRequestFacade
 
 class BannerYandexAdView(
     context: Context?,
     arguments: BannerYandexAdViewArguments,
-    private val eventDispatcher: BasicAdEventDispatcher,
+    private val eventDispatcher: BasicAdEventDispatcherFacade,
 ) : PlatformView {
     private val banner: BannerAdView = BannerAdView(context!!)
-    private val viewUid: String = arguments.viewUid
 
     init {
         setUpAd(arguments)
@@ -39,7 +38,7 @@ class BannerYandexAdView(
     }
 
     private fun setUpAd(arguments: BannerYandexAdViewArguments) {
-        setBannerId(arguments.adUid)
+        setBannerId(arguments.adId)
         setBannerSize(arguments.size)
         setBannerAppearance()
         setBannerEventListener()
@@ -71,27 +70,27 @@ class BannerYandexAdView(
 
     private inner class BannerYandexAdEventListener: BannerAdEventListener {
         override fun onAdLoaded() {
-            eventDispatcher.sendAdLoadedEvent(viewUid)
+            eventDispatcher.sendAdLoadedEvent()
         }
 
         override fun onAdFailedToLoad(error: AdRequestError) {
-            eventDispatcher.sendAdFailedToLoadEvent(viewUid, error)
+            eventDispatcher.sendAdFailedToLoadEvent(error)
         }
 
         override fun onLeftApplication() {
-            eventDispatcher.sendLeftApplicationEvent(viewUid)
+            eventDispatcher.sendLeftApplicationEvent()
         }
 
         override fun onReturnedToApplication() {
-            eventDispatcher.sendReturnedToApplicationEvent(viewUid)
+            eventDispatcher.sendReturnedToApplicationEvent()
         }
 
         override fun onImpression(data: ImpressionData?) {
-            eventDispatcher.sendImpressionEvent(viewUid, data)
+            eventDispatcher.sendImpressionEvent(data)
         }
 
         override fun onAdClicked() {
-            eventDispatcher.sendAdClickedEvent(viewUid)
+            eventDispatcher.sendAdClickedEvent()
         }
     }
 }

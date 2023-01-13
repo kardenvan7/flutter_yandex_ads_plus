@@ -11,19 +11,17 @@ import ru.kardenvan.flutter_yandex_ads_plus.ads.native_yandex_ad.NativeYandexAdV
 class NativeAdViewArgumentsFactory {
     companion object Factory {
         fun fromMap(args: Map<*, *>): NativeYandexAdViewArguments {
-            val viewUid = args["view_uid"]
+            val viewUid = args["uid"]
             if (viewUid !is String) {
                 throw Exception(
-                    "Arguments map doesn't contain required parameter \"ad_id\"." +
-                            "Given arguments: $args"
+                    "Argument \"uid\" is invalid. Given arguments: $args"
                 )
             }
 
-            val adUid = args["ad_uid"]
-            if (adUid !is String) {
+            val adId = args["ad_id"]
+            if (adId !is String) {
                 throw Exception(
-                    "Arguments map doesn't contain required parameter \"ad_id\"." +
-                            "Given arguments: $args"
+                    "Arguments \"ad_id\" is invalid. Given arguments: $args"
                 )
             }
 
@@ -38,7 +36,7 @@ class NativeAdViewArgumentsFactory {
 
             return NativeYandexAdViewArguments(
                 viewUid = viewUid,
-                adId = adUid,
+                adId = adId,
                 minSize = minSize,
                 theme = NativeAdViewThemeFactory.fromMap(args["theme"] as Map<*,*>),
                 parameters = parameters,

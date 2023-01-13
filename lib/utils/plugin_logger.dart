@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
-class Logger {
-  const Logger._();
+class PluginLogger {
+  const PluginLogger._();
 
   static const String _pluginPrefix = 'FlutterYandexAdsPlus';
 

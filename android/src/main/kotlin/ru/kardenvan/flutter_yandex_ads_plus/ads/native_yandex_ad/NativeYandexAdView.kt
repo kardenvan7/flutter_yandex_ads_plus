@@ -9,18 +9,16 @@ import com.yandex.mobile.ads.nativeads.*
 import com.yandex.mobile.ads.nativeads.template.NativeBannerView
 import io.flutter.plugin.platform.PlatformView
 import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.BasicAdEventDispatcher
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade.BasicAdEventDispatcherFacade
 
 
 class NativeYandexAdView(
     context: Context?,
     arguments: NativeYandexAdViewArguments,
-    private val eventDispatcher: BasicAdEventDispatcher,
+    private val eventDispatcher: BasicAdEventDispatcherFacade,
 ) : PlatformView {
     private val nativeBannerView: NativeBannerView = NativeBannerView(context!!)
     private var nativeAd: NativeAd? = null
-
-    private val viewUid = arguments.viewUid
 
     init {
         configureAndLoadAd(context!!, arguments)
@@ -110,13 +108,13 @@ class NativeYandexAdView(
 
     private inner class NativeYandexAdEventListener : NativeAdLoadListener {
         override fun onAdLoaded(ad: NativeAd) {
-            eventDispatcher.sendAdLoadedEvent(viewUid)
+            eventDispatcher.sendAdLoadedEvent()
 
             bindNativeAd(ad)
         }
 
         override fun onAdFailedToLoad(requetsError: AdRequestError) {
-            eventDispatcher.sendAdFailedToLoadEvent(viewUid, requetsError)
+            eventDispatcher.sendAdFailedToLoadEvent(requetsError)
         }
 
         private fun bindNativeAd(ad: NativeAd) {
@@ -129,19 +127,19 @@ class NativeYandexAdView(
 
     private inner class NativeAdYandexAdsEventListener: NativeAdEventListener {
         override fun onAdClicked() {
-            eventDispatcher.sendAdClickedEvent(viewUid)
+            eventDispatcher.sendAdClickedEvent()
         }
 
         override fun onLeftApplication() {
-            eventDispatcher.sendLeftApplicationEvent(viewUid)
+            eventDispatcher.sendLeftApplicationEvent()
         }
 
         override fun onReturnedToApplication() {
-            eventDispatcher.sendReturnedToApplicationEvent(viewUid)
+            eventDispatcher.sendReturnedToApplicationEvent()
         }
 
         override fun onImpression(impression: ImpressionData?) {
-            eventDispatcher.sendImpressionEvent(viewUid, impression)
+            eventDispatcher.sendImpressionEvent(impression)
         }
     }
 
