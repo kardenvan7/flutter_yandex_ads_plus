@@ -1,5 +1,5 @@
 //
-//  NativeAdEvent.swift
+//  NativeAdEventDispatcher.swift
 //  flutter_yandex_ads_plus
 //
 //  Created by apple on 30.12.2022.
@@ -7,14 +7,18 @@
 
 import Foundation
 
-class NativeAdEvent: AdEvent {
-    init(
-        viewUid: String,
-        type: NativeAdEvent.NativeAdEventType,
-        parameters: [String : Any?]? = nil
+class NativeAdEventDispatcherFacade: BasicAdEventDispatcherFacade {
+    func sendOnAdCloseEvent() {
+        sendNativeAdEvent(
+            type: NativeAdEventType.onClose
+        )
+    }
+    
+    private func sendNativeAdEvent(
+        type: NativeAdEventType,
+        parameters: [String: Any?]? = nil
     ) {
-        super.init(
-            viewUid: viewUid,
+        sendEvent(
             type: type.getValue(),
             parameters: parameters
         )

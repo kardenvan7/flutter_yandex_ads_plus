@@ -8,23 +8,23 @@
 import Foundation
 
 class BannerYandexAdViewArguments {
-    let viewUid: String!
-    let adUid: String!
+    let uid: String
+    let adId: String
     let height: Int
     let width: Int
     let additionalLoadParams: [String: String]?
     let settings: BannerYandexAdViewSettings
 
     init(
-        viewUid: String,
-        adUid: String,
+        uid: String,
+        adId: String,
         height: Int,
         width: Int,
         additionalParams: [String: String]?,
         settings: BannerYandexAdViewSettings
     ) {
-        self.viewUid = viewUid
-        self.adUid = adUid
+        self.uid = uid
+        self.adId = adId
         self.height = height
         self.width = width
         self.additionalLoadParams = additionalParams

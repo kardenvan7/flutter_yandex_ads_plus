@@ -8,7 +8,7 @@
 import Foundation
 
 class NativeYandexAdViewArguments {
-    let viewUid: String
+    let uid: String
     let adUid: String
     let height: Int
     let width: Int
@@ -16,15 +16,15 @@ class NativeYandexAdViewArguments {
     let additionalParameters: [String: String]?
     
     init(
-        viewUid: String,
-        adUid: String,
+        uid: String,
+        adId: String,
         height: Int,
         width: Int,
         theme: NativeYandexAdViewTheme,
         additionalParameters: [String: String]?
     ) {
-        self.viewUid = viewUid
-        self.adUid = adUid
+        self.uid = uid
+        self.adUid = adId
         self.height = height
         self.width = width
         self.theme = theme

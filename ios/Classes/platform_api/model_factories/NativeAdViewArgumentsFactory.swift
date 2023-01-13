@@ -10,19 +10,19 @@ import UIKit
 
 class NativeAdViewArgumentsFactory {
     public static func fromMap(args: [String: Any?]) -> NativeYandexAdViewArguments {
-            var viewUid = args["view_uid"]
+            var uid = args["uid"]
         
-            if (!(viewUid is String)) {
+            if (!(uid is String)) {
                 PluginLogger.log(
-                    message: "Argument \"view_uid\" is not valid"
+                    message: "Argument \"uid\" is not valid"
                 )
             }
         
-            var adUid = args["ad_uid"]
+            var adId = args["ad_id"]
         
-            if (!(adUid is String)) {
+            if (!(adId is String)) {
                 PluginLogger.log(
-                    message: "Argument \"ad_uid\" is not valid"
+                    message: "Argument \"ad_id\" is not valid"
                 )
             }
         
@@ -43,8 +43,8 @@ class NativeAdViewArgumentsFactory {
             }
                 
             return NativeYandexAdViewArguments(
-                viewUid: viewUid as! String,
-                adUid: adUid as! String,
+                uid: uid as! String,
+                adId: adId as! String,
                 height: height as! Int,
                 width: width as! Int,
                 theme: NativeAdViewThemeFactory.fromMap(

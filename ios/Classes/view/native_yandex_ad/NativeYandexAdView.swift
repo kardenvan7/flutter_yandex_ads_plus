@@ -6,20 +6,18 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
     private let nativeAdView: YMANativeBannerView
     private let loader: YMANativeAdLoader
     private let arguments: NativeYandexAdViewArguments
-    private let eventDispatcher: NativeAdEventDispatcher
-    private let viewUid: String
+    private let eventDispatcher: NativeAdEventDispatcherFacade
  
     init(
         frame: CGRect,
         viewIdentifier viewId: Int64,
         arguments args: Any?,
         argsClass: NativeYandexAdViewArguments,
-        eventDispatcher: NativeAdEventDispatcher
+        eventDispatcher: NativeAdEventDispatcherFacade
     ) {
         self.nativeAdView = YMANativeBannerView()
         self.loader = YMANativeAdLoader()
         self.arguments = argsClass
-        self.viewUid = argsClass.viewUid
         self.eventDispatcher = eventDispatcher
         
         super.init()
@@ -80,7 +78,7 @@ extension NativeYandexAdView: YMANativeAdLoaderDelegate {
         _ loader: YMANativeAdLoader,
         didLoad ad: YMANativeAd
     ) {
-        eventDispatcher.sendOnAdLoadedEvent(viewUid: viewUid)
+        eventDispatcher.sendOnAdLoadedEvent()
         ad.delegate = self
         nativeAdView.ad = ad
     }
@@ -90,7 +88,6 @@ extension NativeYandexAdView: YMANativeAdLoaderDelegate {
         didFailLoadingWithError error: Error
     ) {
         eventDispatcher.sendOnAdFailedToLoadEvent(
-            viewUid: viewUid,
             error: error
         )
     }
@@ -98,11 +95,11 @@ extension NativeYandexAdView: YMANativeAdLoaderDelegate {
 
 extension NativeYandexAdView: YMANativeAdDelegate {
     func nativeAdDidClick(_ ad: YMANativeAd) {
-        eventDispatcher.sendOnAdClickedEvent(viewUid: viewUid)
+        eventDispatcher.sendOnAdClickedEvent()
     }
     
     func nativeAdWillLeaveApplication(_ ad: YMANativeAd) {
-        eventDispatcher.sendLeftApplicationEvent(viewUid: viewUid)
+        eventDispatcher.sendLeftApplicationEvent()
     }
     
     func nativeAd(
@@ -110,7 +107,6 @@ extension NativeYandexAdView: YMANativeAdDelegate {
         didTrackImpressionWith impressionData: YMAImpressionData?
     ) {
         eventDispatcher.sendOnImpressionEvent(
-            viewUid: viewUid,
             data: impressionData?.rawData
         )
     }
@@ -119,17 +115,17 @@ extension NativeYandexAdView: YMANativeAdDelegate {
         _ ad: YMANativeAd,
         didDismissScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendDidDismissScreenEvent(viewUid: viewUid)
+        eventDispatcher.sendDidDismissScreenEvent()
     }
     
     func nativeAd(
         _ ad: YMANativeAd,
         willPresentScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendWillPresentScreenEvent(viewUid: viewUid)
+        eventDispatcher.sendWillPresentScreenEvent()
     }
     
     func close(_ ad: YMANativeAd) {
-        eventDispatcher.sendOnAdCloseEvent(viewUid: viewUid)
+        eventDispatcher.sendOnAdCloseEvent()
     }
 }

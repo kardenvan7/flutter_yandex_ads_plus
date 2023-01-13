@@ -8,23 +8,23 @@
 import Foundation
 
 class AdEvent {
-    private let viewUid: String
+    private let uid: String
     private let type: String
     private let parameters: [String: Any?]?
 
     init(
-        viewUid: String,
+        uid: String,
         type: String,
         parameters: [String: Any?]? = nil
     ) {
-        self.viewUid = viewUid
+        self.uid = uid
         self.type = type
         self.parameters = parameters
     }
     
     func toMap() -> [String: Any?] {
         return [
-            "view_uid": viewUid,
+            "uid": uid,
             "type": type,
             "parameters": parameters
         ]

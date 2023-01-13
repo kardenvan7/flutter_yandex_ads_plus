@@ -11,23 +11,17 @@ import Flutter
 
 class BannerYandexAdView: NSObject, FlutterPlatformView {
     private let banner: YMAAdView
-    private let viewUid: String
-    private let adUid: String
-    private let eventDispatcher: BasicAdEventDispatcher
+    private let eventDispatcher: BasicAdEventDispatcherFacade
  
     init(
         frame: CGRect,
         viewIdentifier viewId: Int64,
         arguments args: Any?,
         argsClass: BannerYandexAdViewArguments,
-        eventDispatcher: BasicAdEventDispatcher
-     
+        eventDispatcher: BasicAdEventDispatcherFacade
     ) {
-        self.adUid = argsClass.adUid
-        self.viewUid = argsClass.viewUid
-
         self.banner = YMAAdView(
-            adUnitID: adUid,
+            adUnitID: argsClass.adId,
             adSize: YMAAdSize.flexibleSize(
                 with: .init(
                     width: argsClass.width,
@@ -88,18 +82,17 @@ class BannerYandexAdView: NSObject, FlutterPlatformView {
 
 extension BannerYandexAdView: YMAAdViewDelegate {
     func adViewDidLoad(_ adView: YMAAdView) {
-        eventDispatcher.sendOnAdLoadedEvent(viewUid: viewUid)
+        eventDispatcher.sendOnAdLoadedEvent()
     }
 
     func adViewDidFailLoading(_ adView: YMAAdView, error: Error) {
         eventDispatcher.sendOnAdFailedToLoadEvent(
-            viewUid: viewUid,
             error: error
         )
     }
 
     func adViewDidClick(_ adView: YMAAdView) {
-        eventDispatcher.sendOnAdClickedEvent(viewUid: viewUid)
+        eventDispatcher.sendOnAdClickedEvent()
     }
 
     func adView(
@@ -107,25 +100,25 @@ extension BannerYandexAdView: YMAAdViewDelegate {
         didTrackImpressionWith impressionData: YMAImpressionData?
     ) {
         eventDispatcher.sendOnImpressionEvent(
-            viewUid: viewUid, data: impressionData?.rawData
+           data: impressionData?.rawData
         )
     }
 
     func adViewWillLeaveApplication(_ adView: YMAAdView) {
-        eventDispatcher.sendLeftApplicationEvent(viewUid: viewUid)
+        eventDispatcher.sendLeftApplicationEvent()
     }
 
     func adView(
         _ adView: YMAAdView,
         didDismissScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendDidDismissScreenEvent(viewUid: viewUid)
+        eventDispatcher.sendDidDismissScreenEvent()
     }
     
     func adView(
         _ adView: YMAAdView,
         willPresentScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendWillPresentScreenEvent(viewUid: viewUid)
+        eventDispatcher.sendWillPresentScreenEvent()
     }
 }

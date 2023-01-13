@@ -13,8 +13,10 @@ class PlatfromApiConfig {
     public static let bannerAdViewTypeId: String = "banner_yandex_ad"
     public static let nativeAdViewTypeId: String = "native_yandex_ad"
     
-    /// Event channel names
     
-    public static let bannerAdEventChannelName: String = "banner_yandex_ad_event_channel"
-    public static let nativeAdEventChannelName: String = "native_yandex_ad_event_channel"
+    /// Event channel name
+    public static let eventChannelName: String = "flutter_yandex_ads_plus_event_channel"
+    
+    /// Method channel name
+    public static let methodChannelName: String = "flutter_yandex_ads_plus_method_channel"
 }

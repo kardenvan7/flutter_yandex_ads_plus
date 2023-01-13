@@ -4,10 +4,10 @@ import YandexMobileAds
 
 class BannerYandexAdViewFactory:
     NSObject, FlutterPlatformViewFactory {
-    private let eventDispatcher: BasicAdEventDispatcher
+    private let eventDispatcher: AdEventDispatcher
 
     init(
-        eventDispatcher: BasicAdEventDispatcher
+        eventDispatcher: AdEventDispatcher
     ) {
         self.eventDispatcher = eventDispatcher
         super.init()
@@ -27,7 +27,10 @@ class BannerYandexAdViewFactory:
                 viewIdentifier: viewId,
                 arguments: nil,
                 argsClass: argsClass,
-                eventDispatcher: eventDispatcher
+                eventDispatcher: BasicAdEventDispatcherFacade(
+                    uid: argsClass.uid,
+                    dispatcher: eventDispatcher
+                )
         )
     }
 

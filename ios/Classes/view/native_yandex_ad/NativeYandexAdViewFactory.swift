@@ -1,10 +1,10 @@
 import Flutter
 
 class NativeYandexAdViewFactory: NSObject, FlutterPlatformViewFactory {
-    private let eventDispatcher: NativeAdEventDispatcher
+    private let eventDispatcher: AdEventDispatcher
     
     init(
-        eventDispatcher: NativeAdEventDispatcher
+        eventDispatcher: AdEventDispatcher
     ) {
         self.eventDispatcher = eventDispatcher
         super.init()
@@ -24,7 +24,10 @@ class NativeYandexAdViewFactory: NSObject, FlutterPlatformViewFactory {
                 viewIdentifier: viewId,
                 arguments: nil,
                 argsClass: argsClass,
-                eventDispatcher: eventDispatcher
+                eventDispatcher: NativeAdEventDispatcherFacade(
+                    uid: argsClass.uid,
+                    dispatcher:  eventDispatcher
+                )
         )
     }
 

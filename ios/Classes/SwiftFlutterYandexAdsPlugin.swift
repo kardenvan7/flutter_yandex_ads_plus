@@ -14,14 +14,14 @@ public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
         // widgets
         registrar.register(
             BannerYandexAdViewFactory(
-                eventDispatcher: api.bannerAdEventDispatcher
+                eventDispatcher: api.eventDispatcher
             ),
             withId: PlatfromApiConfig.bannerAdViewTypeId
         )
           
         registrar.register(
             NativeYandexAdViewFactory(
-                eventDispatcher: api.nativeAdEventDispatcher
+                eventDispatcher: api.eventDispatcher
             ),
             withId: PlatfromApiConfig.nativeAdViewTypeId
         )
