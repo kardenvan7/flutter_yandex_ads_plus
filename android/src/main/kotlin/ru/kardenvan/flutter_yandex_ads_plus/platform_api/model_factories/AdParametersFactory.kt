@@ -8,53 +8,21 @@ import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
 class AdParametersFactory {
     companion object Factory {
         fun fromMap(map: Map<*, *>): AdParameters {
-            var contextTags: MutableList<String>? = null
-            val rawContextTags = map["context_tags"]
-
-            if (rawContextTags is List<*>) {
-                contextTags = mutableListOf()
-
-                for (tag in rawContextTags) {
-                    if (tag is String) {
-                        contextTags.add(tag)
-                    }
-                }
-            }
-
-            var theme: AdTheme? = null
-            val rawTheme = map["preferred_theme"]
-
-            if (rawTheme is String) {
-                theme = AdThemeFactory.fromString(rawTheme)
-            }
-
-            var location: Location? = null
-            val rawLocation = map["location"]
-
-            if (rawLocation is Map<*,*>) {
-                location = LocationFactory.fromMap(rawLocation)
-            }
-
-            var customParams: Map<String, String>? = null
-            val rawCustomParams = map["custom"]
-
-            if (rawCustomParams is Map<*,*>) {
-                customParams = buildCustomParameters(rawCustomParams)
-            }
-
             return AdParameters(
-                age = map["age"] as String?,
+                age = (map["age"] as Int?)?.toString(),
                 biddingData = map["bidding_data"] as String?,
                 contextQuery = map["context_query"] as String?,
-                contextTags = contextTags,
+                contextTags = parseContextTagsFromJson(map["context_tags"] as String?),
                 gender = map["gender"] as String?,
-                preferredTheme = theme,
-                location = location,
-                custom = customParams,
+                preferredTheme = parseThemeFromJson(map["preferred_theme"]),
+                location = parseLocationFromJson(map["location"]),
+                custom = parseCustomParametersFromJson(map["custom"]),
             )
         }
 
-        private fun buildCustomParameters(rawParams: Map<*, *>): Map<String, String> {
+        private fun parseCustomParametersFromJson(rawParams: Any?): Map<String, String>? {
+            if (rawParams !is Map<*, *>) return null
+
             val customParams = mutableMapOf<String, String>()
 
             for (param in rawParams) {
@@ -67,6 +35,42 @@ class AdParametersFactory {
             }
 
             return customParams
+        }
+
+        private fun parseContextTagsFromJson(json: Any?): List<String>? {
+            var contextTags: MutableList<String>? = null
+
+            if (json is List<*>) {
+                contextTags = mutableListOf()
+
+                for (tag in json) {
+                    if (tag is String) {
+                        contextTags.add(tag)
+                    }
+                }
+            }
+
+            return contextTags
+        }
+
+        private fun parseThemeFromJson(json: Any?): AdTheme? {
+            var theme: AdTheme? = null
+
+            if (json is String) {
+                theme = AdThemeFactory.fromString(json)
+            }
+
+            return theme
+        }
+
+        private fun parseLocationFromJson(json: Any?): Location? {
+            var location: Location? = null
+
+            if (json is Map<*,*>) {
+                location = LocationFactory.fromMap(json)
+            }
+
+            return location
         }
     }
 

@@ -10,41 +10,74 @@ import CoreLocation
 
 class AdParametersFactory {
     public static func fromMap(map: [String: Any?]) -> AdParameters {
-        let rawAge = map["age"]
-        var age: NSNumber?
+        return AdParameters(
+            age: parseAgeFromJson(json: map["age"] as Any?),
+            biddingData: map["bidding_data"] as? String,
+            headerBiddingData: map["headers_bidding_data"] as? String,
+            contextQuery: map["context_query"] as? String,
+            contextTags: parseContextTagsListFromJson(
+                json: map["context_tags"] as Any?
+            ),
+            gender: map["gender"] as? String,
+            location: parseCLLocationFromJson(json: map["location"] as Any?),
+            custom: parseCustomParametersFromJson(
+                json: map["custom"] as Any?
+            )
+        )
+    }
+    
+    private static func parseCustomParametersFromJson(json: Any?)
+        -> [String: String]? {
+        var custom: [String: String]? = nil
         
-        if (rawAge is NSString) {
-            age = NSNumber(value: (rawAge as! NSString).integerValue)
+        if (json is [String : Any?]) {
+            custom = [:]
+                
+            for (key, value) in (json as! [String: Any?]) {
+                if (value is String) {
+                    custom![key] = value as? String
+                }
+            }
         }
         
-        let rawContextTags = map["context_tags"]
+        return custom
+    }
+    
+    private static func parseContextTagsListFromJson(json: Any?) -> [String]? {
         var contextTags: [String]? = nil
         
-        if (rawContextTags is [Any?]) {
+        if (json is [Any?]) {
             contextTags = []
             
-            for (tag) in (rawContextTags as! [Any?]) {
+            for (tag) in (json as! [Any?]) {
                 if (tag is String) {
                     contextTags!.append(tag as! String)
                 }
             }
         }
         
-        let rawLocation = map["location"]
+        return contextTags
+    }
+    
+    private static func parseCLLocationFromJson(json: Any?) -> CLLocation? {
         var location: CLLocation? = nil
         
-        if (rawLocation is [String: String]) {
-            let latitude = rawLocation["latitude"]
+        if (json is [String: Any?]) {
+            location = CLLocationFactory.fromMap(
+                map: json as! [String: Any?]
+            )
         }
         
-        return AdParameters(
-            age: age,
-            biddingData: map["bidding_data"] as! String?,
-            contextQuery: map["context_query"] as! String?,
-            contextTags: contextTags,
-            gender: map["gender"] as! String?,
-            location: <#T##CLLocation?#>,
-            custom: [String : String]?
-        )
+        return location
+    }
+    
+    private static func parseAgeFromJson(json: Any?) -> NSNumber? {
+        var age: NSNumber?
+        
+        if (json is Int) {
+            age = NSNumber(value: json as! Int)
+        }
+        
+        return age
     }
 }

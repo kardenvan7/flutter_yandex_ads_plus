@@ -35,13 +35,13 @@ class BannerYandexAdView: NSObject, FlutterPlatformView {
         super.init()
         
         configureAndLoadAd(
-            additionalLoadParameters: argsClass.additionalLoadParams,
+            parameters:argsClass.parameters,
             settings: argsClass.settings
         )
     }
     
     private func configureAndLoadAd(
-        additionalLoadParameters: [String: String]?,
+        parameters: AdParameters?,
         settings: BannerYandexAdViewSettings
     ) {
         banner.translatesAutoresizingMaskIntoConstraints = settings.translatesAutoresizingMaskIntoConstraints
@@ -50,29 +50,19 @@ class BannerYandexAdView: NSObject, FlutterPlatformView {
 
         banner.removeFromSuperview()
         
-        let request = buildRequest(
-            params: additionalLoadParameters
-        )
+        let request = buildRequest(params: parameters)
         
         banner.loadAd(with: request)
     }
     
-    private func buildRequest(params: [String: Any?]?) -> YMAAdRequest {
-        let request = YMAMutableAdRequest()
-        
-        if (params != nil) {
-            var parameters = Dictionary<String, String>()
-
-            for (key, value) in params! {
-                if let stringValue = value as? String {
-                    parameters[key] = stringValue
-                }
-            }
-
-            request.parameters = parameters
+    private func buildRequest(params: AdParameters?) -> YMAAdRequest {
+        if (params == nil) {
+            return YMAAdRequest()
+        } else {
+            return YMAAdRequestFactory.fromAdParameters(
+                parameters: params!
+            )
         }
-
-        return request
     }
 
     func view() -> UIView {
@@ -82,17 +72,17 @@ class BannerYandexAdView: NSObject, FlutterPlatformView {
 
 extension BannerYandexAdView: YMAAdViewDelegate {
     func adViewDidLoad(_ adView: YMAAdView) {
-        eventDispatcher.sendOnAdLoadedEvent()
+        eventDispatcher.sendOnLoadedEvent()
     }
 
     func adViewDidFailLoading(_ adView: YMAAdView, error: Error) {
-        eventDispatcher.sendOnAdFailedToLoadEvent(
+        eventDispatcher.sendOnFailedToLoadEvent(
             error: error
         )
     }
 
     func adViewDidClick(_ adView: YMAAdView) {
-        eventDispatcher.sendOnAdClickedEvent()
+        eventDispatcher.sendOnClickedEvent()
     }
 
     func adView(
@@ -105,20 +95,20 @@ extension BannerYandexAdView: YMAAdViewDelegate {
     }
 
     func adViewWillLeaveApplication(_ adView: YMAAdView) {
-        eventDispatcher.sendLeftApplicationEvent()
+        eventDispatcher.sendOnLeftApplicationEvent()
     }
 
     func adView(
         _ adView: YMAAdView,
         didDismissScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendDidDismissScreenEvent()
+        eventDispatcher.sendOnDidDismissScreenEvent()
     }
     
     func adView(
         _ adView: YMAAdView,
         willPresentScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendWillPresentScreenEvent()
+        eventDispatcher.sendOnWillPresentScreenEvent()
     }
 }

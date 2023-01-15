@@ -12,7 +12,7 @@ class BannerYandexAdViewArguments {
     let adId: String
     let height: Int
     let width: Int
-    let additionalLoadParams: [String: String]?
+    let parameters: AdParameters?
     let settings: BannerYandexAdViewSettings
 
     init(
@@ -20,14 +20,14 @@ class BannerYandexAdViewArguments {
         adId: String,
         height: Int,
         width: Int,
-        additionalParams: [String: String]?,
+        parameters: AdParameters?,
         settings: BannerYandexAdViewSettings
     ) {
         self.uid = uid
         self.adId = adId
         self.height = height
         self.width = width
-        self.additionalLoadParams = additionalParams
+        self.parameters = parameters
         self.settings = settings
     }
 }

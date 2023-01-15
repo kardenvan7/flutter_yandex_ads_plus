@@ -37,27 +37,20 @@ class NativeYandexAdView: NSObject, FlutterPlatformView {
         let conf = YMAMutableNativeAdRequestConfiguration(
             adUnitID: arguments.adUid
         )
-        
-        conf.parameters = buildAdditionalParameters()
+
+        if let params = arguments.parameters {
+            conf.parameters = params.custom
+            conf.gender = params.gender
+            conf.biddingData = params.biddingData
+            conf.contextQuery = params.contextQuery
+            conf.contextTags = params.contextTags
+            conf.location = params.location
+            conf.age = params.age
+        }
         
         setAppearance()
         
         return conf
-    }
-    
-    private func buildAdditionalParameters() -> [String: String] {
-        var parameters = [
-            "preferable-height": "\(arguments.height)",
-            "preferable-width": "\(arguments.width)"
-        ]
-        
-        if (arguments.additionalParameters != nil) {
-            for (key, value) in arguments.additionalParameters! {
-                parameters[key] = value
-            }
-        }
-        
-        return parameters
     }
     
     private func setAppearance() {
@@ -78,7 +71,7 @@ extension NativeYandexAdView: YMANativeAdLoaderDelegate {
         _ loader: YMANativeAdLoader,
         didLoad ad: YMANativeAd
     ) {
-        eventDispatcher.sendOnAdLoadedEvent()
+        eventDispatcher.sendOnLoadedEvent()
         ad.delegate = self
         nativeAdView.ad = ad
     }
@@ -87,19 +80,17 @@ extension NativeYandexAdView: YMANativeAdLoaderDelegate {
         _ loader: YMANativeAdLoader,
         didFailLoadingWithError error: Error
     ) {
-        eventDispatcher.sendOnAdFailedToLoadEvent(
-            error: error
-        )
+        eventDispatcher.sendOnFailedToLoadEvent(error: error)
     }
 }
 
 extension NativeYandexAdView: YMANativeAdDelegate {
     func nativeAdDidClick(_ ad: YMANativeAd) {
-        eventDispatcher.sendOnAdClickedEvent()
+        eventDispatcher.sendOnClickedEvent()
     }
     
     func nativeAdWillLeaveApplication(_ ad: YMANativeAd) {
-        eventDispatcher.sendLeftApplicationEvent()
+        eventDispatcher.sendOnLeftApplicationEvent()
     }
     
     func nativeAd(
@@ -115,17 +106,17 @@ extension NativeYandexAdView: YMANativeAdDelegate {
         _ ad: YMANativeAd,
         didDismissScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendDidDismissScreenEvent()
+        eventDispatcher.sendOnDidDismissScreenEvent()
     }
     
     func nativeAd(
         _ ad: YMANativeAd,
         willPresentScreen viewController: UIViewController?
     ) {
-        eventDispatcher.sendWillPresentScreenEvent()
+        eventDispatcher.sendOnWillPresentScreenEvent()
     }
     
     func close(_ ad: YMANativeAd) {
-        eventDispatcher.sendOnAdCloseEvent()
+        eventDispatcher.sendOnCloseEvent()
     }
 }

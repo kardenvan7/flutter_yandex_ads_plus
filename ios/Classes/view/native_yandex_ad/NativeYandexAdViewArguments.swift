@@ -13,7 +13,7 @@ class NativeYandexAdViewArguments {
     let height: Int
     let width: Int
     let theme: NativeYandexAdViewTheme
-    let additionalParameters: [String: String]?
+    let parameters: AdParameters?
     
     init(
         uid: String,
@@ -21,13 +21,13 @@ class NativeYandexAdViewArguments {
         height: Int,
         width: Int,
         theme: NativeYandexAdViewTheme,
-        additionalParameters: [String: String]?
+        parameters: AdParameters?
     ) {
         self.uid = uid
         self.adUid = adId
         self.height = height
         self.width = width
         self.theme = theme
-        self.additionalParameters = additionalParameters
+        self.parameters = parameters
     }
 }

@@ -89,7 +89,7 @@ class BannerAdTabView extends StatelessWidget {
               onAdLoaded: () {
                 debugPrint('SMALL BANNER AD LOADED');
               },
-              onAdFailedToLoad: (int code, String description) {
+              onAdFailedToLoad: (int? code, String? description) {
                 debugPrint(
                   'SMALL BANNER AD FAILED TO LOAD: CODE $code, DESC: $description',
                 );
@@ -123,7 +123,7 @@ class BannerAdTabView extends StatelessWidget {
               onAdLoaded: () {
                 debugPrint('BIG BANNER AD LOADED');
               },
-              onAdFailedToLoad: (int code, String description) {
+              onAdFailedToLoad: (int? code, String? description) {
                 debugPrint(
                   'BIG BANNER AD FAILED TO LOAD: CODE $code, DESC: $description',
                 );
@@ -170,7 +170,7 @@ class NativeAdTabView extends StatelessWidget {
             id: 'demo-native-app-yandex',
             height: 170,
             width: 300,
-            parameters: const AdParameters(
+            parameters: const YandexAdParameters(
               custom: {
                 'test': '123',
                 'notText': '132',
@@ -179,7 +179,7 @@ class NativeAdTabView extends StatelessWidget {
             onAdLoaded: () {
               debugPrint('NATIVE AD LOADED');
             },
-            onAdFailedToLoad: (int code, String description) {
+            onAdFailedToLoad: (int? code, String? description) {
               debugPrint(
                 'NATIVE AD FAILED TO LOAD: CODE $code, DESC: $description',
               );
@@ -221,7 +221,7 @@ class InterstitialAdTabView extends StatelessWidget {
       onAdLoaded: () {
         debugPrint('INTERSTITIAL AD LOADED');
       },
-      onAdFailedToLoad: (int code, String description) {
+      onAdFailedToLoad: (int? code, String? description) {
         debugPrint(
           'INTERSTITIAL AD FAILED TO LOAD: CODE $code, DESC: $description',
         );
@@ -238,8 +238,19 @@ class InterstitialAdTabView extends StatelessWidget {
       onReturnedToApplication: () {
         debugPrint('INTERSTITIAL AD RETURNED TO APP');
       },
+      onAdFailedToAppear: (int? code, String? description) {
+        debugPrint(
+          'INTERSTITIAL AD FAILED TO APPEAR: CODE: $code, DESC: $description',
+        );
+      },
+      onAdWillAppear: () {
+        debugPrint('INTERSTITIAL AD WILL APPEAR');
+      },
       onAdShown: () {
         debugPrint('INTERSTITIAL AD SHOWN');
+      },
+      onAdWillDisappear: () {
+        debugPrint('INTERSTITIAL AD WILL DISAPPEAR');
       },
       onAdDismissed: () {
         debugPrint('INTERSTITIAL AD DISMISSED');

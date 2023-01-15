@@ -1,28 +1,23 @@
 import Flutter
 import UIKit
 
-public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
-    private static var api: FlutterYandexAdsApi!
+public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin  {
+    private static var api: FlutterYandexAdsApi? = nil
 
     public static func register(
         with registrar: FlutterPluginRegistrar
     ) {
-        let messenger : FlutterBinaryMessenger = registrar.messenger()
-          
-        api = FlutterYandexAdsApi(messenger: messenger)
+        api = FlutterYandexAdsApi(messenger: registrar.messenger())
 
-        // widgets
+        let eventDispatcher = api!.eventDispatcher
+
         registrar.register(
-            BannerYandexAdViewFactory(
-                eventDispatcher: api.eventDispatcher
-            ),
+            BannerYandexAdViewFactory(eventDispatcher: eventDispatcher),
             withId: PlatfromApiConfig.bannerAdViewTypeId
         )
           
         registrar.register(
-            NativeYandexAdViewFactory(
-                eventDispatcher: api.eventDispatcher
-            ),
+            NativeYandexAdViewFactory(eventDispatcher: eventDispatcher),
             withId: PlatfromApiConfig.nativeAdViewTypeId
         )
     }
@@ -30,6 +25,6 @@ public class SwiftFlutterYandexAdsPlugin: NSObject, FlutterPlugin {
     public func detachFromEngine(
         for registrar: FlutterPluginRegistrar
     ) {
-        SwiftFlutterYandexAdsPlugin.api.dispose()
+        SwiftFlutterYandexAdsPlugin.api?.dispose()
     }
 }

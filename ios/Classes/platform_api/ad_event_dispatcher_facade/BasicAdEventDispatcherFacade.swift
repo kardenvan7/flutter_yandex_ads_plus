@@ -8,13 +8,13 @@
 import Foundation
 
 class BasicAdEventDispatcherFacade: AdEventDispatcherFacade {
-    func sendOnAdLoadedEvent() {
+    func sendOnLoadedEvent() {
         sendBasicAdEvent(
             type: BasicAdEventType.onAdLoaded
         )
     }
 
-    func sendOnAdFailedToLoadEvent(error: Error) {
+    func sendOnFailedToLoadEvent(error: Error) {
         sendBasicAdEvent(
             type: BasicAdEventType.onAdFailedToLoad,
             parameters: [
@@ -24,25 +24,25 @@ class BasicAdEventDispatcherFacade: AdEventDispatcherFacade {
         )
     }
 
-    func sendOnAdClickedEvent() {
+    func sendOnClickedEvent() {
         sendBasicAdEvent(
             type: BasicAdEventType.onAdClicked
         )
     }
 
-    func sendLeftApplicationEvent() {
+    func sendOnLeftApplicationEvent() {
         sendBasicAdEvent(
             type: BasicAdEventType.onLeftApplication
         )
     }
     
-    func sendDidDismissScreenEvent() {
+    func sendOnDidDismissScreenEvent() {
         sendBasicAdEvent(
             type: BasicAdEventType.didDismissScreen
         )
     }
     
-    func sendWillPresentScreenEvent() {
+    func sendOnWillPresentScreenEvent() {
         sendBasicAdEvent(
             type: BasicAdEventType.willPresentScreen
         )

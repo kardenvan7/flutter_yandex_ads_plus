@@ -9,50 +9,59 @@ import Foundation
 import UIKit
 
 class NativeAdViewArgumentsFactory {
-    public static func fromMap(args: [String: Any?]) -> NativeYandexAdViewArguments {
-            var uid = args["uid"]
-        
-            if (!(uid is String)) {
-                PluginLogger.log(
-                    message: "Argument \"uid\" is not valid"
-                )
-            }
-        
-            var adId = args["ad_id"]
-        
-            if (!(adId is String)) {
-                PluginLogger.log(
-                    message: "Argument \"ad_id\" is not valid"
-                )
-            }
-        
-            var height = args["height"]
-
-            if (!(height is Int)) {
-                PluginLogger.log(
-                    message: "Argument \"height\" is not valid"
-                )
-            }
-        
-            var width = args["width"]
-
-            if (!(width is Int)) {
-                PluginLogger.log(
-                    message: "Argument \"width\" is not valid"
-                )
-            }
-                
-            return NativeYandexAdViewArguments(
-                uid: uid as! String,
-                adId: adId as! String,
-                height: height as! Int,
-                width: width as! Int,
-                theme: NativeAdViewThemeFactory.fromMap(
-                    map: args["theme"] as! [String: Any?]
-                ),
-                additionalParameters: args["additional_parameters"] as! [String: String]?
+    public static func fromMap(map: [String: Any?]) -> NativeYandexAdViewArguments {
+        let uid = map["uid"]
+    
+        if (!(uid is String)) {
+            PluginLogger.log(
+                message: "Argument \"uid\" is not valid"
             )
         }
+    
+        let adId = map["ad_id"]
+    
+        if (!(adId is String)) {
+            PluginLogger.log(
+                message: "Argument \"ad_id\" is not valid"
+            )
+        }
+    
+        let height = map["height"]
+
+        if (!(height is Int)) {
+            PluginLogger.log(
+                message: "Argument \"height\" is not valid"
+            )
+        }
+    
+        let width = map["width"]
+
+        if (!(width is Int)) {
+            PluginLogger.log(
+                message: "Argument \"width\" is not valid"
+            )
+        }
+        
+        let rawParameters = map["parameters"]
+        var parameters: AdParameters? = nil
+        
+        if (rawParameters is [String:Any?]) {
+            parameters = AdParametersFactory.fromMap(
+                map: map["parameters"] as! [String: Any?]
+            )
+        }
+                
+        return NativeYandexAdViewArguments(
+            uid: uid as! String,
+            adId: adId as! String,
+            height: height as! Int,
+            width: width as! Int,
+            theme: NativeAdViewThemeFactory.fromMap(
+                map: map["theme"] as! [String: Any?]
+            ),
+            parameters: parameters
+        )
+    }
     
     class NativeAdViewThemeFactory {
         public static func fromMap(map: [String: Any?]) -> NativeYandexAdViewTheme {

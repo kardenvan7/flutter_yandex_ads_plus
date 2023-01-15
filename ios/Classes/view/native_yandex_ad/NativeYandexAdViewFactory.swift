@@ -16,7 +16,7 @@ class NativeYandexAdViewFactory: NSObject, FlutterPlatformViewFactory {
         arguments args: Any?
     ) -> FlutterPlatformView {
         let argsClass = NativeAdViewArgumentsFactory.fromMap(
-            args: args as! [String: Any?]
+            map: args as! [String: Any?]
         )
     
         return NativeYandexAdView(

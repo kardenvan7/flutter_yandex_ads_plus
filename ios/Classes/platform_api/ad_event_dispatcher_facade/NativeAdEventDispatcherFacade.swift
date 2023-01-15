@@ -8,7 +8,7 @@
 import Foundation
 
 class NativeAdEventDispatcherFacade: BasicAdEventDispatcherFacade {
-    func sendOnAdCloseEvent() {
+    func sendOnCloseEvent() {
         sendNativeAdEvent(
             type: NativeAdEventType.onClose
         )

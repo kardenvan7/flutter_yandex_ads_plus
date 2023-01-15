@@ -19,7 +19,7 @@ class BannerYandexAdViewFactory:
         arguments args: Any?
     ) -> FlutterPlatformView {
         let argsClass = BannerAdViewArgumentsFactory.fromMap(
-            args: args as! [String: Any?]
+            map: args as! [String: Any?]
         )
 
         return BannerYandexAdView(

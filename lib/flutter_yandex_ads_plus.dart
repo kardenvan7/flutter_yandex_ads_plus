@@ -1,12 +1,12 @@
+library flutter_yandex_ads_plus;
+
 import 'package:flutter/foundation.dart';
 
-import 'core/ad_parameters/ad_parameters.dart';
-import 'platform_api/flutter_yandex_ads_api.dart';
+import 'src/core/core.dart';
+import 'src/platform_api/platform_api.dart';
 
-export 'core/ad_parameters/ad_parameters.dart';
-export 'core/ios_banner_ad_view_settings.dart';
-export 'core/native_ad_theme/native_ad_theme.dart';
-export 'widgets/widgets.dart';
+export 'src/core/core.dart';
+export 'src/widgets/widgets.dart';
 
 class FlutterYandexAdsPlus {
   const FlutterYandexAdsPlus._();
@@ -16,14 +16,17 @@ class FlutterYandexAdsPlus {
   ///
   static Future<void> showInterstitialAd({
     required String adId,
-    AdParameters? parameters,
+    YandexAdParameters? parameters,
     VoidCallback? onAdLoaded,
-    void Function(int code, String description)? onAdFailedToLoad,
+    void Function(int? code, String? description)? onAdFailedToLoad,
     void Function(String? impression)? onImpression,
     VoidCallback? onAdClicked,
     VoidCallback? onLeftApplication,
     VoidCallback? onReturnedToApplication,
+    void Function(int? code, String? description)? onAdFailedToAppear,
+    VoidCallback? onAdWillAppear,
     VoidCallback? onAdShown,
+    VoidCallback? onAdWillDisappear,
     VoidCallback? onAdDismissed,
   }) async {
     final api = FlutterYandexAdsApi();
@@ -37,7 +40,10 @@ class FlutterYandexAdsPlus {
       onAdClicked: onAdClicked,
       onLeftApplication: onLeftApplication,
       onReturnedToApplication: onReturnedToApplication,
+      onAdFailedToAppear: onAdFailedToAppear,
+      onAdWillAppear: onAdWillAppear,
       onAdShown: onAdShown,
+      onAdWillDisappear: onAdWillDisappear,
       onAdDismissed: onAdDismissed,
     );
   }
