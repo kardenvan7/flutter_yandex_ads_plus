@@ -20,11 +20,31 @@ class InterstitialYandexAd: NSObject {
         self.eventDispatcher = eventDispatcher
     }
     
-    func loadAndShow(parameters: AdParameters?) {
+    func load(parameters: AdParameters?) {
         let request = buildRequest(parameters: parameters)
         ad.delegate = self
 
         ad.load(with: request)
+    }
+    
+    func show() throws {
+        if (ad.hasBeenPresented) {
+            return
+        }
+
+        if (!ad.loaded) {
+            throw PluginError.runtimeError(
+                "Ad can not be shown. It has to be loaded first"
+            )
+        }
+
+        if let vc = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController {
+            ad.present(from: vc)
+        }
+    }
+    
+    func destroy() {
+        ad.delegate = nil
     }
 
     private func buildRequest(parameters: AdParameters?) -> YMAAdRequest? {
@@ -41,9 +61,6 @@ class InterstitialYandexAd: NSObject {
 extension InterstitialYandexAd: YMAInterstitialAdDelegate {
     func interstitialAdDidLoad(_ interstitialAd: YMAInterstitialAd) {
         PluginLogger.log(message: "ad loaded")
-        if let vc = UIApplication.shared.delegate?.window??.rootViewController as? FlutterViewController {
-            interstitialAd.present(from: vc)
-        }
         eventDispatcher.sendOnLoadedEvent()
     }
     

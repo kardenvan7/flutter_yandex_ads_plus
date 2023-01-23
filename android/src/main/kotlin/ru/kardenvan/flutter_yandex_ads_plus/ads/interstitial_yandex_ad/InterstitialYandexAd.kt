@@ -13,7 +13,6 @@ import ru.kardenvan.flutter_yandex_ads_plus.utils.AdRequestFacade
 class InterstitialYandexAd(
     context: Context,
     adId: String,
-    private val eventDispatcher: InterstitialAdEventDispatcherFacade,
 ) {
     private val ad: InterstitialAd = InterstitialAd(context)
 
@@ -21,12 +20,23 @@ class InterstitialYandexAd(
         ad.setAdUnitId(adId)
     }
 
-    fun loadAndShowAd(parameters: AdParameters?) {
-        setUpListener()
-        loadAd(parameters)
+    fun load(parameters: AdParameters?, eventDispatcher: InterstitialAdEventDispatcherFacade) {
+        setUpListener(eventDispatcher)
+        buildRequestAndLoadAd(parameters)
     }
 
-    private fun loadAd(parameters: AdParameters?) {
+    fun show() {
+        if (!ad.isLoaded) throw Exception("Ad can not be shown. It should be loaded first.")
+
+        ad.show()
+    }
+
+    fun destroy() {
+        ad.setInterstitialAdEventListener(null)
+        ad.destroy()
+    }
+
+    private fun buildRequestAndLoadAd(parameters: AdParameters?) {
         val request = buildRequest(parameters)
 
         ad.loadAd(request)
@@ -36,13 +46,16 @@ class InterstitialYandexAd(
         return AdRequestFacade.buildWithParameters(parameters)
     }
 
-    private fun setUpListener() {
-        ad.setInterstitialAdEventListener(InterstitialAdActivityEventListener())
+    private fun setUpListener(eventDispatcher: InterstitialAdEventDispatcherFacade) {
+        ad.setInterstitialAdEventListener(
+            InterstitialAdActivityEventListener(eventDispatcher)
+        )
     }
 
-    private inner class InterstitialAdActivityEventListener: InterstitialAdEventListener {
+    private class InterstitialAdActivityEventListener(
+        private val eventDispatcher: InterstitialAdEventDispatcherFacade,
+    ): InterstitialAdEventListener {
         override fun onAdLoaded() {
-            ad.show()
             eventDispatcher.sendAdLoadedEvent()
         }
 

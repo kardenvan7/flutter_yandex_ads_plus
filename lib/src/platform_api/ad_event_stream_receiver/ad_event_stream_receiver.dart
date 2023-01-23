@@ -35,10 +35,10 @@ class AdEventStreamReceiver {
     _addAdEventListener(listener);
   }
 
-  /// Cancels subscription of listener with given [viewUid]
+  /// Cancels subscription of listener with given [uid]
   ///
-  void removeEventListener(String viewUid) {
-    _removeAdEventListener(viewUid);
+  void removeEventListener(String uid) {
+    _removeAdEventListener(uid);
   }
 
   /// Adds listener to the list of active stream listeners.
@@ -49,8 +49,8 @@ class AdEventStreamReceiver {
 
   /// Removes subscription from the active stream listeners.
   ///
-  void _removeAdEventListener(String viewUid) {
-    _listeners.remove(viewUid);
+  void _removeAdEventListener(String uid) {
+    _listeners.remove(uid);
   }
 
   /// Creates an event stream, subscribes to it and sets it as object property.

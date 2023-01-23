@@ -216,10 +216,14 @@ class InterstitialAdTabView extends StatelessWidget {
   const InterstitialAdTabView({Key? key}) : super(key: key);
 
   Future<void> _onAdShowPressed() async {
-    await FlutterYandexAdsPlus.showInterstitialAd(
+    final ad = InterstitialYandexAd(
       adId: "demo-interstitial-yandex",
+    );
+
+    ad.load(
       onAdLoaded: () {
         debugPrint('INTERSTITIAL AD LOADED');
+        ad.show();
       },
       onAdFailedToLoad: (int? code, String? description) {
         debugPrint(

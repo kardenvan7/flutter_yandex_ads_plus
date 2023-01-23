@@ -1,7 +1,8 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/ad_event.dart';
+import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/type/basic_ad_event_type.dart';
 
-import '../../ad_event/type/basic_ad_event_type.dart';
 import 'ad_event_listener.dart';
 
 class BasicAdEventListener extends AdEventListener {
@@ -18,8 +19,8 @@ class BasicAdEventListener extends AdEventListener {
   });
 
   final VoidCallback? onAdLoaded;
-  final void Function(int? code, String? description)? onAdFailedToLoad;
-  final void Function(String? impression)? onImpression;
+  final YandexAdErrorCallback? onAdFailedToLoad;
+  final YandexAdImpressionCallback? onImpression;
   final VoidCallback? onAdClicked;
   final VoidCallback? onLeftApplication;
   final VoidCallback? onReturnedToApplication;

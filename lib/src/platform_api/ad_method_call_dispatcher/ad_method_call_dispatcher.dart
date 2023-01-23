@@ -2,16 +2,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_yandex_ads_plus/src/core/ad_parameters/yandex_ad_parameters.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/platform_parameters/interstitial_yandex_ad_platform_parameters.dart';
 
-class AdMethodCallDispatcher {
+import 'flutter_yandex_ads_plus_method_call_dispatcher.dart';
+
+class AdMethodCallDispatcher extends FlutterYandexAdsPlusMethodCallDispatcher {
   AdMethodCallDispatcher({
     required String channelName,
   }) {
     _setUpMethodChannel(channelName);
   }
 
-  late MethodChannel _methodChannel;
+  late final MethodChannel _methodChannel;
 
-  Future<void> showInterstitialAd({
+  @override
+  Future<void> loadInterstitialAd({
     required String uid,
     required String adId,
     YandexAdParameters? parameters,
@@ -23,8 +26,28 @@ class AdMethodCallDispatcher {
     );
 
     await _methodChannel.invokeMethod(
-      'showInterstitialAd',
+      'loadInterstitialAd',
       platformParams.toJson(),
+    );
+  }
+
+  @override
+  Future<void> showInterstitialAd({
+    required String uid,
+  }) async {
+    await _methodChannel.invokeMethod(
+      'showInterstitialAd',
+      uid,
+    );
+  }
+
+  @override
+  Future<void> removeInterstitialAd({
+    required String uid,
+  }) async {
+    await _methodChannel.invokeMethod(
+      'removeInterstitialAd',
+      uid,
     );
   }
 

@@ -71,8 +71,8 @@ class BannerYandexAdView extends StatefulWidget {
   final IosBannerAdViewSettings? iosSettings;
 
   final VoidCallback? onAdLoaded;
-  final void Function(int? code, String? description)? onAdFailedToLoad;
-  final void Function(String? impression)? onImpression;
+  final YandexAdErrorCallback? onAdFailedToLoad;
+  final YandexAdImpressionCallback? onImpression;
   final VoidCallback? onAdClicked;
   final VoidCallback? onLeftApplication;
   final VoidCallback? onReturnedToApplication;

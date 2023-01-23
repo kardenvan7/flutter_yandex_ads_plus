@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/ad_event.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/type/interstitial_ad_event_type.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_stream_receiver/ad_event_listener/ad_event_listener.dart';
@@ -21,7 +22,7 @@ class InterstitialAdEventListener extends BasicAdEventListener {
     this.onAdWillBeDismissed,
   });
 
-  final void Function(int? code, String? description)? onAdFailedToAppear;
+  final YandexAdErrorCallback? onAdFailedToAppear;
   final VoidCallback? onAdShown;
   final VoidCallback? onAdWillBeShown;
   final VoidCallback? onAdDismissed;

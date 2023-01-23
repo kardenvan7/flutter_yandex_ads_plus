@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/src/core/ad_parameters/yandex_ad_parameters.dart';
-import 'package:flutter_yandex_ads_plus/src/utils/unique_id_generator.dart';
+import 'package:flutter_yandex_ads_plus/src/core/callback_definitions.dart';
 
 import 'ad_event_stream_receiver/ad_event_stream_receiver.dart';
 import 'ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
+import 'ad_method_call_dispatcher/flutter_yandex_ads_plus_method_call_dispatcher.dart';
 import 'platform_api_config.dart';
 
 /// Class responsible for initialization of components of FlutterYandexAdsPlus
@@ -24,15 +25,13 @@ class FlutterYandexAdsApi {
 
   /// Instance of method call dispatcher from Flutter to platform
   ///
-  final AdMethodCallDispatcher _methodCallDispatcher = AdMethodCallDispatcher(
-    channelName: PlatformApiConfig.methodChannelName,
-  );
+  final FlutterYandexAdsPlusMethodCallDispatcher _methodCallDispatcher =
+      AdMethodCallDispatcher(channelName: PlatformApiConfig.methodChannelName);
 
   /// Instance of a platform-to-Flutter event stream receiver.
   ///
-  final AdEventStreamReceiver _eventStreamReceiver = AdEventStreamReceiver(
-    channelName: PlatformApiConfig.eventChannelName,
-  );
+  final AdEventStreamReceiver _eventStreamReceiver =
+      AdEventStreamReceiver(channelName: PlatformApiConfig.eventChannelName);
 
   /// Adds event listener for ad view.
   ///
@@ -46,35 +45,37 @@ class FlutterYandexAdsApi {
   ///
   /// Does nothing if listener was not set up for this ad view.
   ///
-  void removeAdEventListener(String viewUId) {
-    _eventStreamReceiver.removeEventListener(viewUId);
+  void removeAdEventListener(String uid) {
+    _eventStreamReceiver.removeEventListener(uid);
   }
 
-  /// Platform request to show native [InterstitialAd]
+  /// Loads an interstitial ad with given parameters.
   ///
-  Future<void> showInterstitialAd({
+  /// If ad with given [uid] already exists, it is destroyed and a new one
+  /// is created on its place.
+  ///
+  Future<void> loadInterstitialAd({
+    required String uid,
     required String adId,
     YandexAdParameters? parameters,
     VoidCallback? onAdLoaded,
-    void Function(int? code, String? description)? onAdFailedToLoad,
-    void Function(String? impression)? onImpression,
+    YandexAdErrorCallback? onAdFailedToLoad,
+    YandexAdImpressionCallback? onImpression,
     VoidCallback? onAdClicked,
     VoidCallback? onLeftApplication,
     VoidCallback? onReturnedToApplication,
-    void Function(int? code, String? description)? onAdFailedToAppear,
+    YandexAdErrorCallback? onAdFailedToAppear,
     VoidCallback? onAdWillAppear,
     VoidCallback? onAdShown,
     VoidCallback? onAdWillDisappear,
     VoidCallback? onAdDismissed,
   }) async {
-    final uid = UniqueIdGenerator.generate();
-
     final listener = InterstitialAdEventListener(
       uid: uid,
       onAdLoaded: onAdLoaded,
       onAdFailedToLoad: (code, desc) {
         onAdFailedToLoad?.call(code, desc);
-        _eventStreamReceiver.removeEventListener(adId);
+        _removeInterstitialAd(uid);
       },
       onAdFailedToAppear: onAdFailedToAppear,
       onImpression: onImpression,
@@ -86,17 +87,31 @@ class FlutterYandexAdsApi {
       onAdWillBeDismissed: onAdWillDisappear,
       onAdDismissed: () {
         onAdDismissed?.call();
-        _eventStreamReceiver.removeEventListener(adId);
+        _removeInterstitialAd(uid);
       },
     );
 
-    _eventStreamReceiver.addEventListener(listener);
+    addAdEventListener(listener);
 
-    return _methodCallDispatcher.showInterstitialAd(
+    return _methodCallDispatcher.loadInterstitialAd(
       uid: uid,
       adId: adId,
       parameters: parameters,
     );
+  }
+
+  /// Shows interstitial ad with given [uid], if it's already loaded.
+  /// If not, throws a platform exception.
+  ///
+  Future<void> showInterstitialAd({
+    required String uid,
+  }) {
+    return _methodCallDispatcher.showInterstitialAd(uid: uid);
+  }
+
+  Future<void> _removeInterstitialAd(String uid) async {
+    removeAdEventListener(uid);
+    _methodCallDispatcher.removeInterstitialAd(uid: uid);
   }
 
   /// Cleans up memory
