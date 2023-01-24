@@ -10,6 +10,7 @@ import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.Flu
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ads_organizer.InterstitialYandexAdsOrganizer
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ads_organizer.RewardedYandexAdsOrganizer
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories.InterstitialAdArgumentsFactory
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories.RewardedAdArgumentsFactory
 
 class FlutterYandexAdsMethodCallReceiver(
     binaryMessenger: BinaryMessenger,
@@ -114,7 +115,7 @@ class FlutterYandexAdsMethodCallReceiver(
                 )
             }
 
-            val arguments = InterstitialAdArgumentsFactory.fromMap(rawArguments)
+            val arguments = RewardedAdArgumentsFactory.fromMap(rawArguments)
 
             rewardedAdsOrchestrator.createAndLoadAd(appContext!!, arguments)
 

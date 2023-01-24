@@ -16,7 +16,7 @@ class App extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       home: DefaultTabController(
-        length: 4,
+        length: 5,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
@@ -53,6 +53,15 @@ class App extends StatelessWidget {
                 ),
                 Tab(
                   child: Text(
+                    'Rewarded',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+                Tab(
+                  child: Text(
                     'Method buttons',
                     style: TextStyle(
                       color: Colors.black54,
@@ -67,6 +76,7 @@ class App extends StatelessWidget {
                 const BannerAdTabView(),
                 const NativeAdTabView(),
                 const InterstitialAdTabView(),
+                const RewardedAdTabView(),
                 MethodButtonsTabView(),
               ],
             ),
@@ -285,6 +295,85 @@ class _InterstitialAdTabViewState extends State<InterstitialAdTabView> {
       child: ElevatedButton(
         onPressed: _onAdShowPressed,
         child: const Text("Show interstitial ad"),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _ad?.dispose();
+    super.dispose();
+  }
+}
+
+class RewardedAdTabView extends StatefulWidget {
+  const RewardedAdTabView({Key? key}) : super(key: key);
+
+  @override
+  State<RewardedAdTabView> createState() => _RewardedAdTabViewState();
+}
+
+class _RewardedAdTabViewState extends State<RewardedAdTabView> {
+  RewardedYandexAd? _ad;
+
+  Future<void> _onAdShowPressed() async {
+    _ad = RewardedYandexAd(
+      adId: "demo-rewarded-yandex",
+    );
+
+    _ad?.load(
+      onAdLoaded: () {
+        debugPrint('REWARDED AD LOADED');
+        _ad?.show();
+      },
+      onAdFailedToLoad: (int? code, String? description) {
+        debugPrint(
+          'REWARDED AD FAILED TO LOAD: CODE $code, DESC: $description',
+        );
+      },
+      onImpression: (String? impression) {
+        debugPrint('REWARDED AD IMPRESSION: $impression');
+      },
+      onAdClicked: () {
+        debugPrint('REWARDED AD CLICKED');
+      },
+      onLeftApplication: () {
+        debugPrint('REWARDED AD LEFT APP');
+      },
+      onReturnedToApplication: () {
+        debugPrint('REWARDED AD RETURNED TO APP');
+      },
+      onAdFailedToAppear: (int? code, String? description) {
+        debugPrint(
+          'REWARDED AD FAILED TO APPEAR: CODE: $code, DESC: $description',
+        );
+      },
+      onAdWillAppear: () {
+        debugPrint('REWARDED AD WILL APPEAR');
+      },
+      onAdShown: () {
+        debugPrint('REWARDED AD SHOWN');
+      },
+      onAdWillDisappear: () {
+        debugPrint('REWARDED AD WILL DISAPPEAR');
+      },
+      onAdDismissed: () {
+        debugPrint('REWARDED AD DISMISSED');
+      },
+      onRewarded: (YandexAdReward reward) {
+        debugPrint(
+          'REWARD RECEIVED:\nAMOUNT: ${reward.amount}\nTYPE: ${reward.type}',
+        );
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: ElevatedButton(
+        onPressed: _onAdShowPressed,
+        child: const Text("Show rewarded ad"),
       ),
     );
   }

@@ -4,13 +4,10 @@ import android.content.Context
 import com.yandex.mobile.ads.common.AdRequest
 import com.yandex.mobile.ads.common.AdRequestError
 import com.yandex.mobile.ads.common.ImpressionData
-import com.yandex.mobile.ads.interstitial.InterstitialAd
-import com.yandex.mobile.ads.interstitial.InterstitialAdEventListener
 import com.yandex.mobile.ads.rewarded.Reward
 import com.yandex.mobile.ads.rewarded.RewardedAd
 import com.yandex.mobile.ads.rewarded.RewardedAdEventListener
 import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade.InterstitialAdEventDispatcherFacade
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade.RewardedAdEventDispatcherFacade
 import ru.kardenvan.flutter_yandex_ads_plus.utils.AdRequestFacade
 

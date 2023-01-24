@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_yandex_ads_plus/src/core/ad_parameters/yandex_ad_parameters.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/platform_parameters/interstitial_yandex_ad_platform_parameters.dart';
+import 'package:flutter_yandex_ads_plus/src/platform_api/platform_parameters/platform_parameters.dart';
 
 import 'flutter_yandex_ads_plus_method_call_dispatcher.dart';
 
@@ -98,5 +98,43 @@ class AdMethodCallDispatcher extends FlutterYandexAdsPlusMethodCallDispatcher {
   @override
   Future<String?> getNativeLibraryVersion() async {
     return _methodChannel.invokeMethod<String>('getLibraryVersion');
+  }
+
+  @override
+  Future<void> loadRewardedAd({
+    required String uid,
+    required String adId,
+    YandexAdParameters? parameters,
+  }) async {
+    final platformParams = RewardedYandexAdPlatformParameters(
+      adId: adId,
+      uid: uid,
+      parameters: parameters,
+    );
+
+    await _methodChannel.invokeMethod(
+      'loadRewardedAd',
+      platformParams.toJson(),
+    );
+  }
+
+  @override
+  Future<void> showRewardedAd({
+    required String uid,
+  }) async {
+    await _methodChannel.invokeMethod(
+      'showRewardedAd',
+      uid,
+    );
+  }
+
+  @override
+  Future<void> removeRewardedAd({
+    required String uid,
+  }) async {
+    await _methodChannel.invokeMethod(
+      'removeRewardedAd',
+      uid,
+    );
   }
 }

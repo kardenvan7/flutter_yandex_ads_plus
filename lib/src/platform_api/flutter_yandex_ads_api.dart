@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/src/core/ad_parameters/yandex_ad_parameters.dart';
 import 'package:flutter_yandex_ads_plus/src/core/callback_definitions.dart';
+import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_stream_receiver/ad_event_listener/rewarded_ad_event_listener.dart';
 
 import 'ad_event_stream_receiver/ad_event_stream_receiver.dart';
 import 'ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
@@ -83,9 +84,7 @@ class FlutterYandexAdsApi {
       onAdWillBeShown: onAdWillAppear,
       onAdShown: onAdShown,
       onAdWillBeDismissed: onAdWillDisappear,
-      onAdDismissed: () {
-        onAdDismissed?.call();
-      },
+      onAdDismissed: onAdDismissed,
     );
 
     addAdEventListener(listener);
@@ -109,6 +108,73 @@ class FlutterYandexAdsApi {
   Future<void> removeInterstitialAd(String uid) async {
     removeAdEventListener(uid);
     _methodCallDispatcher.removeInterstitialAd(uid: uid);
+  }
+
+  /// Loads an rewarded ad with given parameters.
+  ///
+  /// If ad with given [uid] already exists, it is destroyed and a new one
+  /// is created on its place.
+  ///
+  Future<void> loadRewardedAd({
+    required String uid,
+    required String adId,
+    YandexAdParameters? parameters,
+    VoidCallback? onAdLoaded,
+    YandexAdErrorCallback? onAdFailedToLoad,
+    YandexAdImpressionCallback? onImpression,
+    VoidCallback? onAdClicked,
+    VoidCallback? onLeftApplication,
+    VoidCallback? onReturnedToApplication,
+    YandexAdErrorCallback? onAdFailedToAppear,
+    VoidCallback? onAdWillAppear,
+    VoidCallback? onAdShown,
+    VoidCallback? onAdWillDisappear,
+    VoidCallback? onAdDismissed,
+    RewardedYandexAdOnRewardCallback? onRewarded,
+  }) async {
+    final listener = RewardedAdEventListener(
+      uid: uid,
+      onAdLoaded: onAdLoaded,
+      onAdFailedToLoad: (code, desc) {
+        onAdFailedToLoad?.call(code, desc);
+        removeRewardedAd(uid);
+      },
+      onAdFailedToAppear: onAdFailedToAppear,
+      onImpression: onImpression,
+      onAdClicked: onAdClicked,
+      onLeftApplication: onLeftApplication,
+      onReturnedToApplication: onReturnedToApplication,
+      onAdWillBeShown: onAdWillAppear,
+      onAdShown: onAdShown,
+      onAdWillBeDismissed: onAdWillDisappear,
+      onAdDismissed: onAdDismissed,
+      onRewarded: onRewarded,
+    );
+
+    addAdEventListener(listener);
+
+    return _methodCallDispatcher.loadRewardedAd(
+      uid: uid,
+      adId: adId,
+      parameters: parameters,
+    );
+  }
+
+  /// Shows rewarded ad with given [uid], if it's already loaded.
+  /// If not, throws a platform exception.
+  ///
+  Future<void> showRewardedAd({
+    required String uid,
+  }) {
+    return _methodCallDispatcher.showRewardedAd(uid: uid);
+  }
+
+  /// Removes listener for rewarded ad with given [uid] and removes it on
+  /// platform-side.
+  ///
+  Future<void> removeRewardedAd(String uid) async {
+    removeAdEventListener(uid);
+    _methodCallDispatcher.removeRewardedAd(uid: uid);
   }
 
   Future<void> setAgeRestrictedUser(bool value) {

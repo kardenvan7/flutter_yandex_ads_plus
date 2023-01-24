@@ -15,6 +15,20 @@ abstract class FlutterYandexAdsPlusMethodCallDispatcher {
     required String uid,
   });
 
+  Future<void> loadRewardedAd({
+    required String uid,
+    required String adId,
+    YandexAdParameters? parameters,
+  });
+
+  Future<void> showRewardedAd({
+    required String uid,
+  });
+
+  Future<void> removeRewardedAd({
+    required String uid,
+  });
+
   Future<void> setAgeRestrictedUser(bool value);
 
   Future<void> enableLogging(bool value);
