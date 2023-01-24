@@ -73,7 +73,7 @@ class FlutterYandexAdsApi {
       onAdLoaded: onAdLoaded,
       onAdFailedToLoad: (code, desc) {
         onAdFailedToLoad?.call(code, desc);
-        _removeInterstitialAd(uid);
+        removeInterstitialAd(uid);
       },
       onAdFailedToAppear: onAdFailedToAppear,
       onImpression: onImpression,
@@ -85,7 +85,6 @@ class FlutterYandexAdsApi {
       onAdWillBeDismissed: onAdWillDisappear,
       onAdDismissed: () {
         onAdDismissed?.call();
-        _removeInterstitialAd(uid);
       },
     );
 
@@ -107,7 +106,7 @@ class FlutterYandexAdsApi {
     return _methodCallDispatcher.showInterstitialAd(uid: uid);
   }
 
-  Future<void> _removeInterstitialAd(String uid) async {
+  Future<void> removeInterstitialAd(String uid) async {
     removeAdEventListener(uid);
     _methodCallDispatcher.removeInterstitialAd(uid: uid);
   }

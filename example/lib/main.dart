@@ -222,18 +222,25 @@ class NativeAdTabView extends StatelessWidget {
   }
 }
 
-class InterstitialAdTabView extends StatelessWidget {
+class InterstitialAdTabView extends StatefulWidget {
   const InterstitialAdTabView({Key? key}) : super(key: key);
 
+  @override
+  State<InterstitialAdTabView> createState() => _InterstitialAdTabViewState();
+}
+
+class _InterstitialAdTabViewState extends State<InterstitialAdTabView> {
+  InterstitialYandexAd? _ad;
+
   Future<void> _onAdShowPressed() async {
-    final ad = InterstitialYandexAd(
+    _ad = InterstitialYandexAd(
       adId: "demo-interstitial-yandex",
     );
 
-    ad.load(
+    _ad?.load(
       onAdLoaded: () {
         debugPrint('INTERSTITIAL AD LOADED');
-        ad.show();
+        _ad?.show();
       },
       onAdFailedToLoad: (int? code, String? description) {
         debugPrint(
@@ -280,6 +287,12 @@ class InterstitialAdTabView extends StatelessWidget {
         child: const Text("Show interstitial ad"),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _ad?.dispose();
+    super.dispose();
   }
 }
 
