@@ -1,17 +1,15 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.method_call_receiver
 
 import android.content.Context
-import com.yandex.mobile.ads.common.InitializationListener
-import com.yandex.mobile.ads.common.MobileAds
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import ru.kardenvan.flutter_yandex_ads_plus.ads.YandexAdsSdkFacade
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.FlutterYandexAdsEventDispatcher
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.interstitial_yandex_ads_organizer.InterstitialYandexAdsOrganizer
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ads_organizer.InterstitialYandexAdsOrganizer
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ads_organizer.RewardedYandexAdsOrganizer
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories.InterstitialAdArgumentsFactory
-import ru.kardenvan.flutter_yandex_ads_plus.utils.PluginLogger
 
 class FlutterYandexAdsMethodCallReceiver(
     binaryMessenger: BinaryMessenger,
@@ -20,7 +18,9 @@ class FlutterYandexAdsMethodCallReceiver(
 ): MethodCallHandler {
     private var appContext: Context? = null
     private val methodChannel: MethodChannel = MethodChannel(binaryMessenger, channelName)
+
     private val interstitialAdsOrchestrator = InterstitialYandexAdsOrganizer(eventDispatcher)
+    private val rewardedAdsOrchestrator = RewardedYandexAdsOrganizer(eventDispatcher)
 
     init {
         methodChannel.setMethodCallHandler(this)
@@ -35,6 +35,9 @@ class FlutterYandexAdsMethodCallReceiver(
             "loadInterstitialAd" -> loadInterstitialAd(call, result)
             "showInterstitialAd" -> showInterstitialAd(call, result)
             "removeInterstitialAd" -> removeInterstitialAd(call, result)
+            "loadRewardedAd" -> loadRewardedAd(call, result)
+            "showRewardedAd" -> showRewardedAd(call, result)
+            "removeRewardedAd" -> removeRewardedAd(call, result)
             "setAgeRestrictedUser" -> setAgeRestrictedUser(call, result)
             "enableLogging" -> setEnableLogging(call, result)
             "enableDebugErrorIndicator" -> setEnableDebugErrorIndicator(call, result)
@@ -90,6 +93,58 @@ class FlutterYandexAdsMethodCallReceiver(
             if (uid !is String) throw Exception("Passed uid is invalid. Uid: $uid")
 
             interstitialAdsOrchestrator.removeAd(uid)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun loadRewardedAd(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            if (appContext == null) {
+                throw Exception("Context is not set for the ad")
+            }
+
+            val rawArguments = call.arguments
+            if (rawArguments !is Map<*, *>) {
+                throw Exception(
+                    "Arguments for method \"loadInterstitialAd\" are not valid.\n" +
+                            "Current value: $rawArguments"
+                )
+            }
+
+            val arguments = InterstitialAdArgumentsFactory.fromMap(rawArguments)
+
+            rewardedAdsOrchestrator.createAndLoadAd(appContext!!, arguments)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun showRewardedAd(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val uid = call.arguments
+
+            if (uid !is String) throw Exception("Passed uid is invalid. Uid: $uid")
+
+            rewardedAdsOrchestrator.showAd(uid)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun removeRewardedAd(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val uid = call.arguments
+
+            if (uid !is String) throw Exception("Passed uid is invalid. Uid: $uid")
+
+            rewardedAdsOrchestrator.removeAd(uid)
 
             result.success(null)
         } catch (e: Exception) {

@@ -1,19 +1,19 @@
-package ru.kardenvan.flutter_yandex_ads_plus.platform_api.interstitial_yandex_ads_organizer
+package ru.kardenvan.flutter_yandex_ads_plus.platform_api.ads_organizer
 
 import android.content.Context
-import ru.kardenvan.flutter_yandex_ads_plus.ads.interstitial_yandex_ad.InterstitialYandexAd
-import ru.kardenvan.flutter_yandex_ads_plus.ads.interstitial_yandex_ad.InterstitialYandexAdArguments
+import ru.kardenvan.flutter_yandex_ads_plus.ads.rewarded_yandex_ad.RewardedYandexAd
+import ru.kardenvan.flutter_yandex_ads_plus.ads.rewarded_yandex_ad.RewardedYandexAdArguments
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.FlutterYandexAdsEventDispatcher
-import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade.InterstitialAdEventDispatcherFacade
+import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade.RewardedAdEventDispatcherFacade
 
-class InterstitialYandexAdsOrganizer(
+class RewardedYandexAdsOrganizer(
     private val eventDispatcher: FlutterYandexAdsEventDispatcher,
 ) {
-    private val ads: MutableMap<String, InterstitialYandexAd> = mutableMapOf()
+    private val ads: MutableMap<String, RewardedYandexAd> = mutableMapOf()
 
     fun createAndLoadAd(
         context: Context,
-        arguments: InterstitialYandexAdArguments,
+        arguments: RewardedYandexAdArguments,
     ) {
         val key = arguments.uid
 
@@ -25,7 +25,7 @@ class InterstitialYandexAdsOrganizer(
 
         ad.load(
             arguments.parameters,
-            eventDispatcher = InterstitialAdEventDispatcherFacade(
+            eventDispatcher = RewardedAdEventDispatcherFacade(
                 arguments.uid,
                 eventDispatcher
             )
@@ -44,9 +44,9 @@ class InterstitialYandexAdsOrganizer(
 
     private fun createAd(
         context: Context,
-        arguments: InterstitialYandexAdArguments,
-    ): InterstitialYandexAd {
-        return InterstitialYandexAd(
+        arguments: RewardedYandexAdArguments,
+    ): RewardedYandexAd {
+        return RewardedYandexAd(
             context = context,
             adId = arguments.adId,
         )

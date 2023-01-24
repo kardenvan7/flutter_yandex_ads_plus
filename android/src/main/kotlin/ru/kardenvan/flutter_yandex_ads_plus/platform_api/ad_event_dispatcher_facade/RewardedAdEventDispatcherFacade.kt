@@ -1,20 +1,22 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher_facade
 
+import com.yandex.mobile.ads.rewarded.Reward
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.FlutterYandexAdsEventDispatcher
 
-open class InterstitialAdEventDispatcherFacade(
+class RewardedAdEventDispatcherFacade(
     uid: String,
     dispatcher: FlutterYandexAdsEventDispatcher,
-): BasicAdEventDispatcherFacade(uid, dispatcher) {
-    fun sendAdShownEvent() {
-        sendInterstitialAdEvent(Type.ON_AD_SHOWN)
+): InterstitialAdEventDispatcherFacade(uid, dispatcher) {
+    fun sendOnRewardedEvent(reward: Reward) {
+        val map = mapOf(
+            "amount" to reward.amount,
+            "type" to reward.type
+        )
+
+        sendRewardedAdEvent(Type.ON_REWARDED, parameters = map)
     }
 
-    fun sendAdDismissedEvent() {
-        sendInterstitialAdEvent(Type.ON_AD_DISMISSED)
-    }
-
-    private fun sendInterstitialAdEvent(
+    private fun sendRewardedAdEvent(
         type: Type,
         parameters: Map<String, Any?>? = null,
     ) {
@@ -24,7 +26,6 @@ open class InterstitialAdEventDispatcherFacade(
     private enum class Type constructor(
         val value: String
     ) {
-        ON_AD_SHOWN("onAdShown"),
-        ON_AD_DISMISSED("onAdDismissed");
+        ON_REWARDED("onRewarded");
     }
 }

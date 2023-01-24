@@ -1,11 +1,11 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories
 
 import ru.kardenvan.flutter_yandex_ads_plus.ads.AdParameters
-import ru.kardenvan.flutter_yandex_ads_plus.ads.interstitial_yandex_ad.InterstitialYandexAdArguments
+import ru.kardenvan.flutter_yandex_ads_plus.ads.interstitial_yandex_ad.RewardedYandexAdArguments
 
 class InterstitialAdArgumentsFactory {
     companion object Factory {
-        fun fromMap(map: Map<*, *>): InterstitialYandexAdArguments {
+        fun fromMap(map: Map<*, *>): RewardedYandexAdArguments {
             val uid = map["uid"]
 
             if (uid !is String) throw Exception("Ad uid is not valid. Current value: $uid")
@@ -24,7 +24,7 @@ class InterstitialAdArgumentsFactory {
                 parameters = AdParametersFactory.fromMap(params)
             }
 
-            return InterstitialYandexAdArguments(
+            return RewardedYandexAdArguments(
                 uid = uid,
                 adId = adId,
                 parameters = parameters,
