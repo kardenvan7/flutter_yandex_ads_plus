@@ -1,15 +1,22 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api
 
 import android.content.Context
+import com.yandex.mobile.ads.common.MobileAds
 import io.flutter.plugin.common.BinaryMessenger
+import ru.kardenvan.flutter_yandex_ads_plus.ads.YandexAdsSdkFacade
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.FlutterYandexAdsEventDispatcher
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.method_call_receiver.FlutterYandexAdsMethodCallReceiver
+import ru.kardenvan.flutter_yandex_ads_plus.utils.PluginLogger
 
 /**
  * Class responsible for the platform messaging between Kotlin and Flutter
  *
 */
-class FlutterYandexAdsApi(binaryMessenger: BinaryMessenger) {
+class FlutterYandexAdsApi(context: Context, binaryMessenger: BinaryMessenger) {
+
+    init {
+        YandexAdsSdkFacade.initialize(context)
+    }
 
     /**
      * Event dispatcher for ads.

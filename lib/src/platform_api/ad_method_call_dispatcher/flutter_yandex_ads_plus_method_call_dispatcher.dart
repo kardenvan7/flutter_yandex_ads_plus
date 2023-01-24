@@ -14,4 +14,16 @@ abstract class FlutterYandexAdsPlusMethodCallDispatcher {
   Future<void> removeInterstitialAd({
     required String uid,
   });
+
+  Future<void> setAgeRestrictedUser(bool value);
+
+  Future<void> enableLogging(bool value);
+
+  Future<void> enableDebugErrorIndicator(bool value);
+
+  Future<void> setLocationConsent(bool value);
+
+  Future<void> setUserConsent(bool value);
+
+  Future<String?> getNativeLibraryVersion();
 }

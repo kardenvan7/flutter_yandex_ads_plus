@@ -1,13 +1,17 @@
 package ru.kardenvan.flutter_yandex_ads_plus.platform_api.method_call_receiver
 
 import android.content.Context
+import com.yandex.mobile.ads.common.InitializationListener
+import com.yandex.mobile.ads.common.MobileAds
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import ru.kardenvan.flutter_yandex_ads_plus.ads.YandexAdsSdkFacade
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.ad_event_dispatcher.FlutterYandexAdsEventDispatcher
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.interstitial_yandex_ads_organizer.InterstitialYandexAdsOrganizer
 import ru.kardenvan.flutter_yandex_ads_plus.platform_api.model_factories.InterstitialAdArgumentsFactory
+import ru.kardenvan.flutter_yandex_ads_plus.utils.PluginLogger
 
 class FlutterYandexAdsMethodCallReceiver(
     binaryMessenger: BinaryMessenger,
@@ -31,14 +35,22 @@ class FlutterYandexAdsMethodCallReceiver(
             "loadInterstitialAd" -> loadInterstitialAd(call, result)
             "showInterstitialAd" -> showInterstitialAd(call, result)
             "removeInterstitialAd" -> removeInterstitialAd(call, result)
+            "setAgeRestrictedUser" -> setAgeRestrictedUser(call, result)
+            "enableLogging" -> setEnableLogging(call, result)
+            "enableDebugErrorIndicator" -> setEnableDebugErrorIndicator(call, result)
+            "setLocationConsent" -> setLocationConsent(call, result)
+            "setUserConsent" -> setUserConsent(call, result)
+            "getLibraryVersion" -> getLibraryVersion(call, result)
             else -> handleUnknownMethodCall(call, result)
         }
     }
 
     private fun loadInterstitialAd(call: MethodCall, result: MethodChannel.Result) {
-        if (appContext == null) return
-
         try {
+            if (appContext == null) {
+                throw Exception("Context is not set for the ad")
+            }
+
             val rawArguments = call.arguments
             if (rawArguments !is Map<*, *>) {
                 throw Exception(
@@ -53,7 +65,7 @@ class FlutterYandexAdsMethodCallReceiver(
 
             result.success(null)
         } catch (e: Exception) {
-            result.error(e.toString(), e.localizedMessage, null)
+            handleError(e, call, result)
         }
     }
 
@@ -67,7 +79,7 @@ class FlutterYandexAdsMethodCallReceiver(
 
             result.success(null)
         } catch (e: Exception) {
-            result.error(e.toString(), e.localizedMessage, null)
+            handleError(e, call, result)
         }
     }
 
@@ -81,8 +93,92 @@ class FlutterYandexAdsMethodCallReceiver(
 
             result.success(null)
         } catch (e: Exception) {
-            result.error(e.toString(), e.localizedMessage, null)
+            handleError(e, call, result)
         }
+    }
+
+    private fun setAgeRestrictedUser(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val arg = call.arguments
+
+            if (arg !is Boolean) throw Exception("Wrong argument provided for method")
+
+            YandexAdsSdkFacade.setAgeRestrictedUser(arg)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun setEnableLogging(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val arg = call.arguments
+
+            if (arg !is Boolean) throw Exception("Wrong argument provided for method")
+
+            YandexAdsSdkFacade.setEnableLogging(arg)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun setEnableDebugErrorIndicator(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val arg = call.arguments
+
+            if (arg !is Boolean) throw Exception("Wrong argument provided for method")
+
+            YandexAdsSdkFacade.setEnableDebugErrorIndicator(arg)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun setLocationConsent(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val arg = call.arguments
+
+            if (arg !is Boolean) throw Exception("Wrong argument provided for method")
+
+            YandexAdsSdkFacade.setLocationConsent(arg)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun setUserConsent(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val arg = call.arguments
+
+            if (arg !is Boolean) throw Exception("Wrong argument provided for method")
+
+            YandexAdsSdkFacade.setUserConsent(arg)
+
+            result.success(null)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun getLibraryVersion(call: MethodCall, result: MethodChannel.Result) {
+        try {
+            val version = YandexAdsSdkFacade.getLibraryVersion()
+
+            result.success(version)
+        } catch (e: Exception) {
+            handleError(e, call, result)
+        }
+    }
+
+    private fun handleError(e: Exception, call: MethodCall, result: MethodChannel.Result) {
+        result.error(e.toString(), e.localizedMessage, "Method ${call.method}")
     }
 
     private fun handleUnknownMethodCall(call: MethodCall, result: MethodChannel.Result) {

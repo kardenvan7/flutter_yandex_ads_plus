@@ -13,7 +13,8 @@ class FlutterYandexAdsPlugin : FlutterPlugin, ActivityAware {
     private lateinit var api: FlutterYandexAdsApi
 
     override fun onAttachedToEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        api = FlutterYandexAdsApi(binding.binaryMessenger)
+        api = FlutterYandexAdsApi(binding.applicationContext, binding.binaryMessenger)
+
         val eventDispatcher = api.adEventDispatcher
 
         binding.platformViewRegistry.registerViewFactory(

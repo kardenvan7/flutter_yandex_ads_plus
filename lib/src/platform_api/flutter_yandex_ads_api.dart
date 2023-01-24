@@ -14,9 +14,7 @@ class FlutterYandexAdsApi {
   FlutterYandexAdsApi._();
 
   factory FlutterYandexAdsApi() {
-    _instance ??= FlutterYandexAdsApi._();
-
-    return _instance!;
+    return _instance ??= FlutterYandexAdsApi._();
   }
 
   /// Singleton instance of this class
@@ -112,6 +110,30 @@ class FlutterYandexAdsApi {
   Future<void> _removeInterstitialAd(String uid) async {
     removeAdEventListener(uid);
     _methodCallDispatcher.removeInterstitialAd(uid: uid);
+  }
+
+  Future<void> setAgeRestrictedUser(bool value) {
+    return _methodCallDispatcher.setAgeRestrictedUser(value);
+  }
+
+  Future<void> enableLogging(bool value) {
+    return _methodCallDispatcher.enableLogging(value);
+  }
+
+  Future<void> enableDebugErrorIndicator(bool value) {
+    return _methodCallDispatcher.enableDebugErrorIndicator(value);
+  }
+
+  Future<void> setLocationConsent(bool value) async {
+    return _methodCallDispatcher.setLocationConsent(value);
+  }
+
+  Future<void> setUserConsent(bool value) async {
+    return _methodCallDispatcher.setUserConsent(value);
+  }
+
+  Future<String?> getNativeLibraryVersion() {
+    return _methodCallDispatcher.getNativeLibraryVersion();
   }
 
   /// Cleans up memory

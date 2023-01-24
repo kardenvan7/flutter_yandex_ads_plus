@@ -15,7 +15,7 @@ class FlutterYandexAdsApi {
     init(
         messenger: FlutterBinaryMessenger
     ) {
-        YMAMobileAds.enableLogging()
+        YandexAdsSdkFacade.initialize()
 
         self.eventDispatcher = AdEventDispatcher(
             channelName: PlatfromApiConfig.eventChannelName,

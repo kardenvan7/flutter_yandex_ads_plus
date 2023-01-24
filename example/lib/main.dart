@@ -16,17 +16,17 @@ class App extends StatelessWidget {
       ),
       themeMode: ThemeMode.light,
       home: DefaultTabController(
-        length: 3,
+        length: 4,
         child: SafeArea(
           child: Scaffold(
             appBar: AppBar(
-              title: const Text('Yandex ADS'),
+              title: const Text('Flutter Yandex Ads Plus'),
             ),
             bottomNavigationBar: const TabBar(
               tabs: [
                 Tab(
                   child: Text(
-                    'Native',
+                    'Banner',
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 12,
@@ -35,7 +35,7 @@ class App extends StatelessWidget {
                 ),
                 Tab(
                   child: Text(
-                    'Banner',
+                    'Native',
                     style: TextStyle(
                       color: Colors.black54,
                       fontSize: 12,
@@ -51,13 +51,23 @@ class App extends StatelessWidget {
                     ),
                   ),
                 ),
+                Tab(
+                  child: Text(
+                    'Method buttons',
+                    style: TextStyle(
+                      color: Colors.black54,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
               ],
             ),
-            body: const TabBarView(
+            body: TabBarView(
               children: [
-                NativeAdTabView(),
-                BannerAdTabView(),
-                InterstitialAdTabView(),
+                const BannerAdTabView(),
+                const NativeAdTabView(),
+                const InterstitialAdTabView(),
+                MethodButtonsTabView(),
               ],
             ),
           ),
@@ -268,6 +278,186 @@ class InterstitialAdTabView extends StatelessWidget {
       child: ElevatedButton(
         onPressed: _onAdShowPressed,
         child: const Text("Show interstitial ad"),
+      ),
+    );
+  }
+}
+
+class MethodButtonsTabView extends StatelessWidget {
+  MethodButtonsTabView({Key? key}) : super(key: key);
+
+  static const double _titleBottomGap = 2;
+  static const double _sectionsGap = 24;
+
+  final ValueNotifier<String?> _version = ValueNotifier(null);
+
+  void _setUserConsent(bool value) {
+    FlutterYandexAdsPlus.setUserConsent(value);
+  }
+
+  void _setEnableLogging(bool value) {
+    FlutterYandexAdsPlus.enableLogging(value);
+  }
+
+  void _setLocationConsent(bool value) {
+    FlutterYandexAdsPlus.setLocationConsent(value);
+  }
+
+  void _setEnableDebugErrorIndicator(bool value) {
+    FlutterYandexAdsPlus.enableDebugErrorIndicator(value);
+  }
+
+  void _setAgeRestrictedUser(bool value) {
+    FlutterYandexAdsPlus.setAgeRestrictedUser(value);
+  }
+
+  Future<void> _getNativeLibraryVersion() async {
+    _version.value = await FlutterYandexAdsPlus.getNativeLibraryVersion();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.only(top: 40),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('User consent'),
+              const SizedBox(height: _titleBottomGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _setUserConsent(true),
+                    child: const Text('Enable'),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () => _setUserConsent(false),
+                    child: const Text('Disable'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: _sectionsGap),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Logging'),
+              const SizedBox(height: _titleBottomGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _setEnableLogging(true),
+                    child: const Text('Enable'),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () => _setEnableLogging(false),
+                    child: const Text('Disable'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: _sectionsGap),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Location consent'),
+              const SizedBox(height: _titleBottomGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _setLocationConsent(true),
+                    child: const Text('Enable'),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () => _setLocationConsent(false),
+                    child: const Text('Disable'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: _sectionsGap),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Debug error indicator'),
+              const SizedBox(height: _titleBottomGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _setEnableDebugErrorIndicator(true),
+                    child: const Text('Enable'),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () => _setEnableDebugErrorIndicator(false),
+                    child: const Text('Disable'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: _sectionsGap),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('User age restriction'),
+              const SizedBox(height: _titleBottomGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _setAgeRestrictedUser(true),
+                    child: const Text('Enable'),
+                  ),
+                  const SizedBox(width: 20),
+                  ElevatedButton(
+                    onPressed: () => _setAgeRestrictedUser(false),
+                    child: const Text('Disable'),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const SizedBox(height: _sectionsGap),
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text('Native library version'),
+              const SizedBox(height: _titleBottomGap),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ElevatedButton(
+                    onPressed: () => _getNativeLibraryVersion(),
+                    child: const Text('Obtain'),
+                  ),
+                  const SizedBox(width: 20),
+                  ValueListenableBuilder(
+                    valueListenable: _version,
+                    builder: (BuildContext _, String? value, Widget? __) {
+                      return Text(
+                        value ?? 'Not obtained',
+                      );
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

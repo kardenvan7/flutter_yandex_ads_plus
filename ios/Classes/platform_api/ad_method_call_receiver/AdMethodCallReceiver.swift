@@ -31,10 +31,28 @@ class AdMethodCallReceiver {
         switch call.method {
         case "loadInterstitialAd":
             loadInterstitialAd(call: call, result: result)
+            break
         case "showInterstitialAd":
             showInterstitialAd(call: call, result: result)
+            break
         case "removeInterstitialAd":
             removeInterstitialAd(call: call, result: result)
+            break
+        case "enableLogging":
+            enableLogging(call: call, result: result)
+            break
+        case "enableDebugErrorIndicator":
+            enableVisibilityErrorIndicator(call: call, result: result)
+            break
+        case "setLocationConsent":
+            setLocationTrackingEnabled(call: call, result: result)
+            break
+        case "setUserConsent":
+            setUserConsent(call: call, result: result)
+            break
+        case "getLibraryVersion":
+            getLibraryVersion(call: call, result: result)
+            break
         default:
             handleUnknownMethodCall(call: call, result: result)
         }
@@ -115,6 +133,97 @@ class AdMethodCallReceiver {
         interstitialAdOrganizer.removeAd(uid: uid as! String)
         
         result(nil)
+    }
+    
+    private func enableLogging(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let value = call.arguments
+        
+        if (!(value is Bool)) {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Argument has to be a boolean. Given argument: \(String(describing: value))"
+                )
+            )
+        }
+
+        YandexAdsSdkFacade.enableLogging(value: value as! Bool)
+        
+        result(nil)
+    }
+    
+    private func enableVisibilityErrorIndicator(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let value = call.arguments
+        
+        if (!(value is Bool)) {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Argument has to be a boolean. Given argument: \(String(describing: value))"
+                )
+            )
+        }
+
+        YandexAdsSdkFacade.enableVisibilityErrorIndicator(value: value as! Bool)
+        
+        result(nil)
+    }
+    
+    private func setLocationTrackingEnabled(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let value = call.arguments
+        
+        if (!(value is Bool)) {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Argument has to be a boolean. Given argument: \(String(describing: value))"
+                )
+            )
+        }
+
+        YandexAdsSdkFacade.setLocationTrackingEnabled(value: value as! Bool)
+        
+        result(nil)
+    }
+    
+    private func setUserConsent(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let value = call.arguments
+        
+        if (!(value is Bool)) {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Argument has to be a boolean. Given argument: \(String(describing: value))"
+                )
+            )
+        }
+        
+        YandexAdsSdkFacade.setUserConsent(value: value as! Bool)
+        
+        result(nil)
+    }
+    
+    private func getLibraryVersion(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {        
+        result(YandexAdsSdkFacade.getSdkVersion())
     }
     
     private func handleUnknownMethodCall(
