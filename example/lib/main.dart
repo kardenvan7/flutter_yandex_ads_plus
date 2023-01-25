@@ -264,6 +264,16 @@ class _InterstitialAdTabViewState extends State<InterstitialAdTabView> {
             'INTERSTITIAL AD FAILED TO LOAD: CODE $code, DESC: $description',
           );
         },
+        willPresentScreen: () {
+          debugPrint(
+            'INTERSTITIAL AD WILL PRESENT MODAL SCREEN',
+          );
+        },
+        didDismissScreen: () {
+          debugPrint(
+            'INTERSTITIAL AD DID DISMISS MODAL SCREEN',
+          );
+        },
         onImpression: (String? impression) {
           debugPrint('INTERSTITIAL AD IMPRESSION: $impression');
         },
@@ -351,6 +361,16 @@ class _RewardedAdTabViewState extends State<RewardedAdTabView> {
         },
         onReturnedToApplication: () {
           debugPrint('REWARDED AD RETURNED TO APP');
+        },
+        willPresentScreen: () {
+          debugPrint(
+            'INTERSTITIAL AD WILL PRESENT MODAL SCREEN',
+          );
+        },
+        didDismissScreen: () {
+          debugPrint(
+            'INTERSTITIAL AD DID DISMISS MODAL SCREEN',
+          );
         },
         onAdFailedToAppear: (int? code, String? description) {
           debugPrint(

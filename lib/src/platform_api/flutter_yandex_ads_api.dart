@@ -1,7 +1,8 @@
-import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/ad_event_listener.dart';
-import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/rewarded_ad_event_listener.dart';
-import 'package:flutter_yandex_ads_plus/src/core/ad_parameters/yandex_ad_parameters.dart';
+import 'package:flutter_yandex_ads_plus/src/core/core.dart';
 
+import 'ad_event_emitter/ad_event_listener_emitter.dart';
+import 'ad_event_emitter/interstitial_ad_event_listener_emitter.dart';
+import 'ad_event_emitter/rewarded_ad_event_listener_emitter.dart';
 import 'ad_event_stream_receiver/ad_event_stream_receiver.dart';
 import 'ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
 import 'ad_method_call_dispatcher/flutter_yandex_ads_plus_method_call_dispatcher.dart';
@@ -35,8 +36,11 @@ class FlutterYandexAdsApi {
   ///
   /// Every next call for the same ad view overrides previous one.
   ///
-  void addAdEventListener(String uid, AdEventListener listener) {
-    _eventStreamReceiver.addEventListener(uid, listener);
+  void listenToAdEvents(String uid, AdEventEmitter eventEmitter) {
+    _eventStreamReceiver.listenToAdEvents(
+      uid,
+      eventEmitter,
+    );
   }
 
   /// Removes event listener for banner ad view.
@@ -66,7 +70,10 @@ class FlutterYandexAdsApi {
     );
 
     if (updatedListener != null) {
-      addAdEventListener(uid, updatedListener);
+      listenToAdEvents(
+        uid,
+        InterstitialAdEventEmitter(listener: updatedListener),
+      );
     }
 
     return _methodCallDispatcher.loadInterstitialAd(
@@ -109,7 +116,10 @@ class FlutterYandexAdsApi {
     );
 
     if (updatedListener != null) {
-      addAdEventListener(uid, updatedListener);
+      listenToAdEvents(
+        uid,
+        RewardedAdEventEmitter(listener: updatedListener),
+      );
     }
 
     return _methodCallDispatcher.loadRewardedAd(

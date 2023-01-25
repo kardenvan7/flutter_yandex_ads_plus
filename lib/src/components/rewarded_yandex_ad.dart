@@ -1,10 +1,11 @@
-import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/rewarded_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/src.dart';
 
 /// Flutter implementation Androids [RewardedAd] and [YMARewardedAd]
 /// from iOS.
 ///
-/// Use method [load] to preload the ad with needed [parameters] and callbacks.
+/// Use method [load] to preload the ad with needed [parameters]. To track ad
+/// events such as [onAdLoaded], [onAdFailedToLoad], etc. use [listener]
+/// property.
 ///
 /// Use [show] method to show preloaded ad.
 ///

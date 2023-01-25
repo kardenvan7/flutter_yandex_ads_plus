@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/native_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/core/core.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/src/utils/unique_id_generator.dart';
@@ -96,7 +95,10 @@ class _NativeYandexAdViewState extends State<NativeYandexAdView> {
   ///
   void _setUpEventListener() {
     if (hasListener) {
-      _api.addAdEventListener(_viewUid, widget.listener!);
+      _api.listenToAdEvents(
+        _viewUid,
+        NativeAdEventEmitter(listener: widget.listener!),
+      );
     }
   }
 

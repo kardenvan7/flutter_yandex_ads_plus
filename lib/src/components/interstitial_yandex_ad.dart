@@ -4,7 +4,9 @@ import 'package:flutter_yandex_ads_plus/src/src.dart';
 /// Flutter implementation Androids [InterstitialAd] and [YMAInterstitialAd]
 /// from iOS.
 ///
-/// Use method [load] to preload the ad with needed [parameters] and callbacks.
+/// Use method [load] to preload the ad with needed [parameters]. To track ad
+/// events such as [onAdLoaded], [onAdFailedToLoad], etc. use [listener]
+/// property.
 ///
 /// Use [show] method to show preloaded ad.
 ///
@@ -21,6 +23,10 @@ class InterstitialYandexAd {
   final FlutterYandexAdsApi _api = FlutterYandexAdsApi();
   final String _uid = UniqueIdGenerator.generate();
 
+  /// Creates and loads the ad with given [parameters].
+  ///
+  /// [Listener] is responsible for tracking ad events.
+  ///
   Future<void> load({
     YandexAdParameters? parameters,
     InterstitialAdEventListener? listener,
@@ -35,7 +41,7 @@ class InterstitialYandexAd {
 
   /// Shows preloaded ad. If used before ad is loaded,
   /// throws a platform Exception. Use [onAdLoaded] and [onAdFailedToLoad]
-  /// callbacks from [load] method to track ad load status.
+  /// callbacks from [listener] in [load] method to track ad load status.
   ///
   Future<void> show() {
     return _api.showInterstitialAd(uid: _uid);

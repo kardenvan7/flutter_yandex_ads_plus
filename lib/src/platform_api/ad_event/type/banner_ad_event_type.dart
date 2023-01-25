@@ -1,4 +1,4 @@
-enum BasicAdEventType {
+enum BannerAdEventType {
   onAdLoaded('onAdLoaded'),
   onAdFailedToLoad('onAdFailedToLoad'),
   onImpression('onImpression'),
@@ -9,14 +9,14 @@ enum BasicAdEventType {
   onAdClicked('onAdClicked'),
   unknown('unknown');
 
-  const BasicAdEventType(this.value);
+  const BannerAdEventType(this.value);
 
   final String value;
 
-  factory BasicAdEventType.fromString(String value) {
-    return BasicAdEventType.values.firstWhere(
+  factory BannerAdEventType.fromString(String value) {
+    return BannerAdEventType.values.firstWhere(
       (element) => element.value == value,
-      orElse: () => BasicAdEventType.unknown,
+      orElse: () => BannerAdEventType.unknown,
     );
   }
 }

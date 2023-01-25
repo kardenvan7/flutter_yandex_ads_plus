@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/ad_event.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/type/basic_ad_event_type.dart';
 
 import 'ad_event_listener.dart';
 
+/// Listener for banner ad events.
+///
 class BannerAdEventListener extends AdEventListener {
   const BannerAdEventListener({
     this.onAdLoaded,
@@ -17,63 +17,49 @@ class BannerAdEventListener extends AdEventListener {
     this.didDismissScreen,
   });
 
+  /// Callback triggered when the ad is successfully loaded.
+  ///
   final VoidCallback? onAdLoaded;
+
+  /// Callback triggered when ad is failed to load. Passes
+  /// error code and error description as parameter.
+  ///
   final YandexAdErrorCallback? onAdFailedToLoad;
+
+  /// Callback triggered when [impression] is tracked.
+  ///
   final YandexAdImpressionCallback? onImpression;
+
+  /// Callback triggered when user taps on the ad.
+  ///
   final VoidCallback? onAdClicked;
+
+  /// Callback triggered when app is moved to background due to interacting
+  /// with the ad (primarily, on ad tap).
+  ///
   final VoidCallback? onLeftApplication;
+
+  /// Callback triggered when app is returned to foreground after events that
+  /// triggered [onLeftApplication].
+  ///
+  /// Due to YandexAds native SDK limitations this callback works only on
+  /// Android.
+  ///
   final VoidCallback? onReturnedToApplication;
-  final VoidCallback? didDismissScreen;
+
+  /// Callback triggered when ad will show the modal in response to the user
+  /// interacting with the banner.
+  ///
+  /// Due to YandexAds native SDK limitations this callback works only on iOS.
+  ///
   final VoidCallback? willPresentScreen;
 
-  @override
-  void emitCallbackByEvent(
-    AdEvent event,
-  ) {
-    final type = BasicAdEventType.fromString(event.type);
-
-    switch (type) {
-      case BasicAdEventType.onAdLoaded:
-        onAdLoaded?.call();
-        break;
-
-      case BasicAdEventType.onAdFailedToLoad:
-        onAdFailedToLoad?.call(
-          event.parameters?['code'],
-          event.parameters?['description'],
-        );
-        break;
-
-      case BasicAdEventType.onLeftApplication:
-        onLeftApplication?.call();
-        break;
-
-      case BasicAdEventType.onReturnedToApplication:
-        onReturnedToApplication?.call();
-        break;
-
-      case BasicAdEventType.onAdClicked:
-        onAdClicked?.call();
-        break;
-
-      case BasicAdEventType.onImpression:
-        final data = event.parameters?['data'];
-
-        onImpression?.call(data);
-        break;
-
-      case BasicAdEventType.didDismissScreen:
-        didDismissScreen?.call();
-        break;
-
-      case BasicAdEventType.willPresentScreen:
-        willPresentScreen?.call();
-        break;
-
-      case BasicAdEventType.unknown:
-        return;
-    }
-  }
+  /// Callback triggered when ad finished showing the modal in response to the
+  /// user interacting with the banner.
+  ///
+  /// Due to YandexAds native SDK limitations this callback works only on iOS.
+  ///
+  final VoidCallback? didDismissScreen;
 
   BannerAdEventListener copyWith({
     VoidCallback? onAdLoaded,
@@ -82,8 +68,8 @@ class BannerAdEventListener extends AdEventListener {
     VoidCallback? onAdClicked,
     VoidCallback? onLeftApplication,
     VoidCallback? onReturnedToApplication,
-    VoidCallback? didDismissScreen,
     VoidCallback? willPresentScreen,
+    VoidCallback? didDismissScreen,
   }) {
     return BannerAdEventListener(
       onAdLoaded: onAdLoaded ?? this.onAdLoaded,
@@ -93,8 +79,8 @@ class BannerAdEventListener extends AdEventListener {
       onLeftApplication: onLeftApplication ?? this.onLeftApplication,
       onReturnedToApplication:
           onReturnedToApplication ?? this.onReturnedToApplication,
-      didDismissScreen: didDismissScreen ?? this.didDismissScreen,
       willPresentScreen: willPresentScreen ?? this.willPresentScreen,
+      didDismissScreen: didDismissScreen ?? this.didDismissScreen,
     );
   }
 }

@@ -1,51 +1,96 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/ad_event.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/type/rewarded_ad_event_type.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/json_converters/yandex_ad_reward_json_converter.dart';
 
-import 'ad_event_listener.dart';
-
-class RewardedAdEventListener extends InterstitialAdEventListener {
+class RewardedAdEventListener extends AdEventListener {
   const RewardedAdEventListener({
-    super.onAdLoaded,
-    super.onImpression,
-    super.onAdClicked,
-    super.onReturnedToApplication,
-    super.onLeftApplication,
-    super.onAdFailedToLoad,
-    super.willPresentScreen,
-    super.didDismissScreen,
-    super.onAdFailedToAppear,
-    super.onAdShown,
-    super.onAdWillBeShown,
-    super.onAdDismissed,
-    super.onAdWillBeDismissed,
+    this.onAdLoaded,
+    this.onImpression,
+    this.onAdClicked,
+    this.onReturnedToApplication,
+    this.onLeftApplication,
+    this.onAdFailedToLoad,
+    this.willPresentScreen,
+    this.didDismissScreen,
+    this.onAdFailedToAppear,
+    this.onAdShown,
+    this.onAdWillBeShown,
+    this.onAdDismissed,
+    this.onAdWillBeDismissed,
     this.onRewarded,
   });
 
+  /// Callback triggered when the ad is successfully loaded.
+  ///
+  final VoidCallback? onAdLoaded;
+
+  /// Callback triggered when ad is failed to load. Passes
+  /// error code and error description as parameter.
+  ///
+  final YandexAdErrorCallback? onAdFailedToLoad;
+
+  /// Callback triggered when [impression] is tracked.
+  ///
+  final YandexAdImpressionCallback? onImpression;
+
+  /// Callback triggered when user taps on the ad.
+  ///
+  final VoidCallback? onAdClicked;
+
+  /// Callback triggered when app is moved to background due to interacting
+  /// with the ad (primarily, on ad tap).
+  ///
+  final VoidCallback? onLeftApplication;
+
+  /// Callback triggered when app is returned to foreground after events that
+  /// triggered [onLeftApplication].
+  ///
+  /// Due to YandexAds native SDK limitations this callback works only on
+  /// Android.
+  ///
+  final VoidCallback? onReturnedToApplication;
+
+  /// Callback triggered when ad will show the modal in response to the user
+  /// interacting with the banner.
+  ///
+  /// Due to YandexAds native SDK limitations this callback works only on iOS.
+  ///
+  final VoidCallback? willPresentScreen;
+
+  /// Callback triggered when ad finished showing the modal in response to the
+  /// user interacting with the banner.
+  ///
+  /// Due to YandexAds native SDK limitations this callback works only on iOS.
+  ///
+  final VoidCallback? didDismissScreen;
+
+  /// Callback triggered when ad fails to appear.
+  ///
+  final YandexAdErrorCallback? onAdFailedToAppear;
+
+  /// Callback triggered before ad appears on screen.
+  ///
+  ///  Due to YandexAds native SDK limitation this callback works only on iOS.
+  ///
+  final VoidCallback? onAdWillBeShown;
+
+  /// Callback triggered when ad appears on screen.
+  ///
+  final VoidCallback? onAdShown;
+
+  /// Callback triggered before ad is dismissed from screen.
+  ///
+  /// Due to YandexAds native SDK limitation this callback works only on iOS.
+  ///
+  final VoidCallback? onAdWillBeDismissed;
+
+  /// Callback triggered after ad is dismissed from screen.
+  ///
+  final VoidCallback? onAdDismissed;
+
+  /// Callback triggered when user watched the ad and should be given a reward.
+  ///
   final RewardedYandexAdOnRewardCallback? onRewarded;
 
-  @override
-  void emitCallbackByEvent(AdEvent event) {
-    final eventType = RewardedAdEventType.fromString(event.type);
-
-    switch (eventType) {
-      case RewardedAdEventType.onRewarded:
-        final reward = YandexAdRewardJsonConverter().fromJson(
-          event.parameters!,
-        );
-
-        onRewarded?.call(reward);
-        break;
-
-      case RewardedAdEventType.unknown:
-        super.emitCallbackByEvent(event);
-        break;
-    }
-  }
-
-  @override
   RewardedAdEventListener copyWith({
     VoidCallback? onAdLoaded,
     YandexAdErrorCallback? onAdFailedToLoad,

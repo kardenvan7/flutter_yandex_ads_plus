@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
-import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/ad_event.dart';
+import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_emitter/ad_event_listener_emitter.dart';
 import 'package:flutter_yandex_ads_plus/src/utils/plugin_logger.dart';
 
 /// Class responsible for creating platform ad event stream as well as adding
@@ -25,30 +25,30 @@ class AdEventStreamReceiver {
 
   /// Ad event listeners by viewUid
   ///
-  final Map<String, AdEventListener> _listeners = {};
+  final Map<String, AdEventEmitter> _emitters = {};
 
-  /// Subscribes [listener] to the ad event stream.
+  /// Subscribes [emitter] to the ad event stream.
   ///
-  void addEventListener(String uid, AdEventListener listener) {
-    _addAdEventListener(uid, listener);
+  void listenToAdEvents(String uid, AdEventEmitter emitter) {
+    _addAdEventEmitter(uid, emitter);
   }
 
   /// Cancels subscription of listener with given [uid]
   ///
   void removeEventListener(String uid) {
-    _removeAdEventListener(uid);
+    _removeAdEventEmitter(uid);
   }
 
   /// Adds listener to the list of active stream listeners.
   ///
-  void _addAdEventListener(String uid, AdEventListener listener) {
-    _listeners[uid] = listener;
+  void _addAdEventEmitter(String uid, AdEventEmitter emitter) {
+    _emitters[uid] = emitter;
   }
 
   /// Removes subscription from the active stream listeners.
   ///
-  void _removeAdEventListener(String uid) {
-    _listeners.remove(uid);
+  void _removeAdEventEmitter(String uid) {
+    _emitters.remove(uid);
   }
 
   /// Creates an event stream, subscribes to it and sets it as object property.
@@ -70,17 +70,19 @@ class AdEventStreamReceiver {
     try {
       final eventMap = Map<String, dynamic>.from(event);
       final parsedEvent = AdEvent.fromJson(eventMap);
-      final listener = _listeners[parsedEvent.uid];
+      final emitter = _emitters[parsedEvent.uid];
 
-      if (listener == null) return;
+      if (emitter == null) return;
 
-      listener.emitCallbackByEvent(parsedEvent);
+      emitter.emitCallbackByEvent(parsedEvent);
     } catch (e, st) {
       PluginLogger.log(e);
       PluginLogger.log(st);
     }
   }
 
+  /// Cleans up memory
+  ///
   void dispose() {
     _adEventStreamSubscription.cancel();
   }

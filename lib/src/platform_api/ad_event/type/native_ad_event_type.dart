@@ -1,4 +1,12 @@
 enum NativeAdEventType {
+  onAdLoaded('onAdLoaded'),
+  onAdFailedToLoad('onAdFailedToLoad'),
+  onImpression('onImpression'),
+  onLeftApplication('onLeftApplication'),
+  onReturnedToApplication('onReturnedToApplication'),
+  willPresentScreen('willPresentScreen'),
+  didDismissScreen('didDismissScreen'),
+  onAdClicked('onAdClicked'),
   onClose('onClose'),
   unknown('unknown');
 

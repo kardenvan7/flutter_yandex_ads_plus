@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
 Flutter Yandex Ads.
                        DESC
   s.homepage         = 'https://github.com/kardenvan7/flutter_yandex_ads_plus'
+  s.license          = { :file => '../LICENSE' }
   s.author           = { 'kardenvan' => 'glushkovlad98@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'

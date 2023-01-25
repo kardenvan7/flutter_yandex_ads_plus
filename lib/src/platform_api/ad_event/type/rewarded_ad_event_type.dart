@@ -1,4 +1,17 @@
 enum RewardedAdEventType {
+  onAdLoaded('onAdLoaded'),
+  onAdFailedToLoad('onAdFailedToLoad'),
+  onImpression('onImpression'),
+  onLeftApplication('onLeftApplication'),
+  onReturnedToApplication('onReturnedToApplication'),
+  willPresentScreen('willPresentScreen'),
+  didDismissScreen('didDismissScreen'),
+  onAdClicked('onAdClicked'),
+  onAdFailedToAppear('onAdFailedToAppear'),
+  onAdShown('onAdShown'),
+  onAdWillBeShown('onAdWillAppear'),
+  onAdDismissed('onAdDismissed'),
+  onAdWillBeDismissed('onAdWillDisappear'),
   onRewarded('onRewarded'),
   unknown('unknown');
 

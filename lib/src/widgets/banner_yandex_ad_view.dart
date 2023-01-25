@@ -2,10 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_yandex_ads_plus/src/core/core.dart';
+import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_emitter/banner_ad_event_listener_emitter.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/src/utils/unique_id_generator.dart';
-
-import '../core/ad_event_listener/banner_ad_event_listener.dart';
 
 /// Flutter-implementation of native [BannerYandexAdView] (Kotlin, Android) and
 /// [YMAAdView] (Swift, iOS).
@@ -23,30 +22,7 @@ import '../core/ad_event_listener/banner_ad_event_listener.dart';
 ///
 /// [iosSettings] - additional presentation settings for iOS.
 ///
-/// [onAdLoaded] - callback triggered when the ad is successfully loaded.
-///
-/// [onAdFailedToLoad] - callback triggered when ad is failed to load. Passes
-/// error code and error description as parameter.
-///
-/// [onLeftApplication] - callback triggered when another app is launched
-/// (browser, etc.) because of user interaction with the ad.
-///
-/// [onAdClicked] - callback triggered when user taps on the ad.
-///
-/// [onImpression] - callback triggered when impression is tracked. Passes raw
-/// data (String) as parameter.
-///
-/// [onReturnedToApplication] - callback triggered when app is returned to
-/// foreground after events that triggered [onLeftApplication]. Due to
-/// YandexAds native SDK limitations this callback works only on Android.
-///
-/// [willPresentScreen] - callback triggered when ad will show the modal
-/// in response to the user interacting with the banner. Due to
-/// YandexAds native SDK limitations this callback works only on iOS.
-///
-/// [didDismissScreen] - callback triggered when ad finished showing the modal
-/// in response to the user interacting with the banner. Due to
-/// YandexAds native SDK limitations this callback works only on iOS.
+/// [listener] - ad event listener.
 ///
 class BannerYandexAdView extends StatefulWidget {
   const BannerYandexAdView({
@@ -93,7 +69,10 @@ class _BannerYandexAdViewState extends State<BannerYandexAdView> {
   ///
   void _setUpEventListener() {
     if (hasListener) {
-      _api.addAdEventListener(_viewUid, widget.listener!);
+      _api.listenToAdEvents(
+        _viewUid,
+        BannerAdEventEmitter(listener: widget.listener!),
+      );
     }
   }
 
