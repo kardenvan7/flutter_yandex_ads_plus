@@ -364,12 +364,12 @@ class _RewardedAdTabViewState extends State<RewardedAdTabView> {
         },
         willPresentScreen: () {
           debugPrint(
-            'INTERSTITIAL AD WILL PRESENT MODAL SCREEN',
+            'REWARDED AD WILL PRESENT MODAL SCREEN',
           );
         },
         didDismissScreen: () {
           debugPrint(
-            'INTERSTITIAL AD DID DISMISS MODAL SCREEN',
+            'REWARDED AD DID DISMISS MODAL SCREEN',
           );
         },
         onAdFailedToAppear: (int? code, String? description) {
