@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/native_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/core/core.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/src/utils/unique_id_generator.dart';
@@ -57,15 +58,7 @@ class NativeYandexAdView extends StatefulWidget {
     this.height,
     this.width,
     this.theme,
-    this.onAdLoaded,
-    this.onAdFailedToLoad,
-    this.onImpression,
-    this.onAdClicked,
-    this.onLeftApplication,
-    this.onReturnedToApplication,
-    this.willPresentScreen,
-    this.didDismissScreen,
-    this.onClose,
+    this.listener,
     Key? key,
   }) : super(key: key);
 
@@ -74,16 +67,7 @@ class NativeYandexAdView extends StatefulWidget {
   final double? height;
   final double? width;
   final NativeAdTheme? theme;
-
-  final VoidCallback? onAdLoaded;
-  final YandexAdErrorCallback? onAdFailedToLoad;
-  final YandexAdImpressionCallback? onImpression;
-  final VoidCallback? onAdClicked;
-  final VoidCallback? onLeftApplication;
-  final VoidCallback? onReturnedToApplication;
-  final VoidCallback? willPresentScreen;
-  final VoidCallback? didDismissScreen;
-  final VoidCallback? onClose;
+  final NativeAdEventListener? listener;
 
   @override
   State<NativeYandexAdView> createState() => _NativeYandexAdViewState();
@@ -99,6 +83,8 @@ class _NativeYandexAdViewState extends State<NativeYandexAdView> {
   ///
   final FlutterYandexAdsApi _api = FlutterYandexAdsApi();
 
+  bool get hasListener => widget.listener != null;
+
   @override
   void initState() {
     super.initState();
@@ -109,25 +95,14 @@ class _NativeYandexAdViewState extends State<NativeYandexAdView> {
   /// Sets up ad events listener
   ///
   void _setUpEventListener() {
-    final listener = NativeAdEventListener(
-      uid: _viewUid,
-      onAdLoaded: widget.onAdLoaded,
-      onAdFailedToLoad: widget.onAdFailedToLoad,
-      onLeftApplication: widget.onLeftApplication,
-      onReturnedToApplication: widget.onReturnedToApplication,
-      onAdClicked: widget.onAdClicked,
-      onImpression: widget.onImpression,
-      didDismissScreen: widget.didDismissScreen,
-      willPresentScreen: widget.willPresentScreen,
-      onClose: widget.onClose,
-    );
-
-    _api.addAdEventListener(listener);
+    if (hasListener) {
+      _api.addAdEventListener(_viewUid, widget.listener!);
+    }
   }
 
   @override
   void dispose() {
-    _api.removeAdEventListener(_viewUid);
+    if (hasListener) _api.removeAdEventListener(_viewUid);
 
     super.dispose();
   }

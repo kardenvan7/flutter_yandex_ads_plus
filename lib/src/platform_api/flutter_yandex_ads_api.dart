@@ -1,7 +1,6 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/ad_event_listener.dart';
+import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/rewarded_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/core/ad_parameters/yandex_ad_parameters.dart';
-import 'package:flutter_yandex_ads_plus/src/core/callback_definitions.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_stream_receiver/ad_event_listener/rewarded_ad_event_listener.dart';
 
 import 'ad_event_stream_receiver/ad_event_stream_receiver.dart';
 import 'ad_method_call_dispatcher/ad_method_call_dispatcher.dart';
@@ -36,8 +35,8 @@ class FlutterYandexAdsApi {
   ///
   /// Every next call for the same ad view overrides previous one.
   ///
-  void addAdEventListener(AdEventListener listener) {
-    _eventStreamReceiver.addEventListener(listener);
+  void addAdEventListener(String uid, AdEventListener listener) {
+    _eventStreamReceiver.addEventListener(uid, listener);
   }
 
   /// Removes event listener for banner ad view.
@@ -57,37 +56,18 @@ class FlutterYandexAdsApi {
     required String uid,
     required String adId,
     YandexAdParameters? parameters,
-    VoidCallback? onAdLoaded,
-    YandexAdErrorCallback? onAdFailedToLoad,
-    YandexAdImpressionCallback? onImpression,
-    VoidCallback? onAdClicked,
-    VoidCallback? onLeftApplication,
-    VoidCallback? onReturnedToApplication,
-    YandexAdErrorCallback? onAdFailedToAppear,
-    VoidCallback? onAdWillAppear,
-    VoidCallback? onAdShown,
-    VoidCallback? onAdWillDisappear,
-    VoidCallback? onAdDismissed,
+    InterstitialAdEventListener? listener,
   }) async {
-    final listener = InterstitialAdEventListener(
-      uid: uid,
-      onAdLoaded: onAdLoaded,
-      onAdFailedToLoad: (code, desc) {
-        onAdFailedToLoad?.call(code, desc);
+    final updatedListener = listener?.copyWith(
+      onAdFailedToLoad: (int? code, String? description) {
         removeInterstitialAd(uid);
+        listener.onAdFailedToAppear?.call(code, description);
       },
-      onAdFailedToAppear: onAdFailedToAppear,
-      onImpression: onImpression,
-      onAdClicked: onAdClicked,
-      onLeftApplication: onLeftApplication,
-      onReturnedToApplication: onReturnedToApplication,
-      onAdWillBeShown: onAdWillAppear,
-      onAdShown: onAdShown,
-      onAdWillBeDismissed: onAdWillDisappear,
-      onAdDismissed: onAdDismissed,
     );
 
-    addAdEventListener(listener);
+    if (updatedListener != null) {
+      addAdEventListener(uid, updatedListener);
+    }
 
     return _methodCallDispatcher.loadInterstitialAd(
       uid: uid,
@@ -119,39 +99,18 @@ class FlutterYandexAdsApi {
     required String uid,
     required String adId,
     YandexAdParameters? parameters,
-    VoidCallback? onAdLoaded,
-    YandexAdErrorCallback? onAdFailedToLoad,
-    YandexAdImpressionCallback? onImpression,
-    VoidCallback? onAdClicked,
-    VoidCallback? onLeftApplication,
-    VoidCallback? onReturnedToApplication,
-    YandexAdErrorCallback? onAdFailedToAppear,
-    VoidCallback? onAdWillAppear,
-    VoidCallback? onAdShown,
-    VoidCallback? onAdWillDisappear,
-    VoidCallback? onAdDismissed,
-    RewardedYandexAdOnRewardCallback? onRewarded,
+    RewardedAdEventListener? listener,
   }) async {
-    final listener = RewardedAdEventListener(
-      uid: uid,
-      onAdLoaded: onAdLoaded,
-      onAdFailedToLoad: (code, desc) {
-        onAdFailedToLoad?.call(code, desc);
+    final updatedListener = listener?.copyWith(
+      onAdFailedToLoad: (int? code, String? description) {
         removeRewardedAd(uid);
+        listener.onAdFailedToAppear?.call(code, description);
       },
-      onAdFailedToAppear: onAdFailedToAppear,
-      onImpression: onImpression,
-      onAdClicked: onAdClicked,
-      onLeftApplication: onLeftApplication,
-      onReturnedToApplication: onReturnedToApplication,
-      onAdWillBeShown: onAdWillAppear,
-      onAdShown: onAdShown,
-      onAdWillBeDismissed: onAdWillDisappear,
-      onAdDismissed: onAdDismissed,
-      onRewarded: onRewarded,
     );
 
-    addAdEventListener(listener);
+    if (updatedListener != null) {
+      addAdEventListener(uid, updatedListener);
+    }
 
     return _methodCallDispatcher.loadRewardedAd(
       uid: uid,

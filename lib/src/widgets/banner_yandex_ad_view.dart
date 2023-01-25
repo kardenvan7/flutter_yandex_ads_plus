@@ -5,6 +5,8 @@ import 'package:flutter_yandex_ads_plus/src/core/core.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/src/utils/unique_id_generator.dart';
 
+import '../core/ad_event_listener/banner_ad_event_listener.dart';
+
 /// Flutter-implementation of native [BannerYandexAdView] (Kotlin, Android) and
 /// [YMAAdView] (Swift, iOS).
 ///
@@ -53,14 +55,7 @@ class BannerYandexAdView extends StatefulWidget {
     this.width,
     this.parameters,
     this.iosSettings,
-    this.onAdLoaded,
-    this.onAdFailedToLoad,
-    this.onImpression,
-    this.onAdClicked,
-    this.onLeftApplication,
-    this.onReturnedToApplication,
-    this.willPresentScreen,
-    this.didDismissScreen,
+    this.listener,
     Key? key,
   }) : super(key: key);
 
@@ -69,15 +64,7 @@ class BannerYandexAdView extends StatefulWidget {
   final double? width;
   final YandexAdParameters? parameters;
   final IosBannerAdViewSettings? iosSettings;
-
-  final VoidCallback? onAdLoaded;
-  final YandexAdErrorCallback? onAdFailedToLoad;
-  final YandexAdImpressionCallback? onImpression;
-  final VoidCallback? onAdClicked;
-  final VoidCallback? onLeftApplication;
-  final VoidCallback? onReturnedToApplication;
-  final VoidCallback? willPresentScreen;
-  final VoidCallback? didDismissScreen;
+  final BannerAdEventListener? listener;
 
   @override
   State<BannerYandexAdView> createState() => _BannerYandexAdViewState();
@@ -93,6 +80,8 @@ class _BannerYandexAdViewState extends State<BannerYandexAdView> {
   ///
   final FlutterYandexAdsApi _api = FlutterYandexAdsApi();
 
+  bool get hasListener => widget.listener != null;
+
   @override
   void initState() {
     super.initState();
@@ -103,24 +92,14 @@ class _BannerYandexAdViewState extends State<BannerYandexAdView> {
   /// Sets up ad events listener
   ///
   void _setUpEventListener() {
-    final listener = BasicAdEventListener(
-      uid: _viewUid,
-      onAdLoaded: widget.onAdLoaded,
-      onAdFailedToLoad: widget.onAdFailedToLoad,
-      onLeftApplication: widget.onLeftApplication,
-      onReturnedToApplication: widget.onReturnedToApplication,
-      onAdClicked: widget.onAdClicked,
-      onImpression: widget.onImpression,
-      willPresentScreen: widget.willPresentScreen,
-      didDismissScreen: widget.didDismissScreen,
-    );
-
-    _api.addAdEventListener(listener);
+    if (hasListener) {
+      _api.addAdEventListener(_viewUid, widget.listener!);
+    }
   }
 
   @override
   void dispose() {
-    _api.removeAdEventListener(_viewUid);
+    if (hasListener) _api.removeAdEventListener(_viewUid);
 
     super.dispose();
   }

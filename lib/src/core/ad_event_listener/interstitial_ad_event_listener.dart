@@ -2,11 +2,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/ad_event.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/type/interstitial_ad_event_type.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_stream_receiver/ad_event_listener/ad_event_listener.dart';
 
-class InterstitialAdEventListener extends BasicAdEventListener {
+class InterstitialAdEventListener extends BannerAdEventListener {
   const InterstitialAdEventListener({
-    required super.uid,
     super.onAdLoaded,
     super.onImpression,
     super.onAdClicked,
@@ -60,5 +58,39 @@ class InterstitialAdEventListener extends BasicAdEventListener {
         super.emitCallbackByEvent(event);
         break;
     }
+  }
+
+  @override
+  InterstitialAdEventListener copyWith({
+    VoidCallback? onAdLoaded,
+    YandexAdErrorCallback? onAdFailedToLoad,
+    YandexAdImpressionCallback? onImpression,
+    VoidCallback? onAdClicked,
+    VoidCallback? onLeftApplication,
+    VoidCallback? onReturnedToApplication,
+    VoidCallback? didDismissScreen,
+    VoidCallback? willPresentScreen,
+    YandexAdErrorCallback? onAdFailedToAppear,
+    VoidCallback? onAdShown,
+    VoidCallback? onAdWillBeShown,
+    VoidCallback? onAdDismissed,
+    VoidCallback? onAdWillBeDismissed,
+  }) {
+    return InterstitialAdEventListener(
+      onAdLoaded: onAdLoaded ?? this.onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad ?? this.onAdFailedToLoad,
+      onImpression: onImpression ?? this.onImpression,
+      onAdClicked: onAdClicked ?? this.onAdClicked,
+      onLeftApplication: onLeftApplication ?? this.onLeftApplication,
+      onReturnedToApplication:
+          onReturnedToApplication ?? this.onReturnedToApplication,
+      didDismissScreen: didDismissScreen ?? this.didDismissScreen,
+      willPresentScreen: willPresentScreen ?? this.willPresentScreen,
+      onAdFailedToAppear: onAdFailedToAppear ?? this.onAdFailedToAppear,
+      onAdShown: onAdShown ?? this.onAdShown,
+      onAdWillBeShown: onAdWillBeShown ?? this.onAdWillBeShown,
+      onAdDismissed: onAdDismissed ?? this.onAdDismissed,
+      onAdWillBeDismissed: onAdWillBeDismissed ?? this.onAdWillBeDismissed,
+    );
   }
 }

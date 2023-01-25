@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/rewarded_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/src.dart';
 
 /// Flutter implementation Androids [RewardedAd] and [YMARewardedAd]
@@ -23,35 +23,13 @@ class RewardedYandexAd {
 
   Future<void> load({
     YandexAdParameters? parameters,
-    VoidCallback? onAdLoaded,
-    YandexAdErrorCallback? onAdFailedToLoad,
-    YandexAdImpressionCallback? onImpression,
-    VoidCallback? onAdClicked,
-    VoidCallback? onLeftApplication,
-    VoidCallback? onReturnedToApplication,
-    YandexAdErrorCallback? onAdFailedToAppear,
-    VoidCallback? onAdWillAppear,
-    VoidCallback? onAdShown,
-    VoidCallback? onAdWillDisappear,
-    VoidCallback? onAdDismissed,
-    RewardedYandexAdOnRewardCallback? onRewarded,
+    RewardedAdEventListener? listener,
   }) {
     return _api.loadRewardedAd(
       uid: _uid,
       adId: _adId,
       parameters: parameters,
-      onAdLoaded: onAdLoaded,
-      onAdFailedToLoad: onAdFailedToLoad,
-      onAdDismissed: onAdDismissed,
-      onAdShown: onAdShown,
-      onReturnedToApplication: onReturnedToApplication,
-      onLeftApplication: onLeftApplication,
-      onAdClicked: onAdClicked,
-      onImpression: onImpression,
-      onAdFailedToAppear: onAdFailedToAppear,
-      onAdWillAppear: onAdWillAppear,
-      onAdWillDisappear: onAdWillDisappear,
-      onRewarded: onRewarded,
+      listener: listener,
     );
   }
 

@@ -5,9 +5,8 @@ import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event/type/basic_ad_
 
 import 'ad_event_listener.dart';
 
-class BasicAdEventListener extends AdEventListener {
-  const BasicAdEventListener({
-    required super.uid,
+class BannerAdEventListener extends AdEventListener {
+  const BannerAdEventListener({
     this.onAdLoaded,
     this.onAdFailedToLoad,
     this.onImpression,
@@ -74,5 +73,28 @@ class BasicAdEventListener extends AdEventListener {
       case BasicAdEventType.unknown:
         return;
     }
+  }
+
+  BannerAdEventListener copyWith({
+    VoidCallback? onAdLoaded,
+    YandexAdErrorCallback? onAdFailedToLoad,
+    YandexAdImpressionCallback? onImpression,
+    VoidCallback? onAdClicked,
+    VoidCallback? onLeftApplication,
+    VoidCallback? onReturnedToApplication,
+    VoidCallback? didDismissScreen,
+    VoidCallback? willPresentScreen,
+  }) {
+    return BannerAdEventListener(
+      onAdLoaded: onAdLoaded ?? this.onAdLoaded,
+      onAdFailedToLoad: onAdFailedToLoad ?? this.onAdFailedToLoad,
+      onImpression: onImpression ?? this.onImpression,
+      onAdClicked: onAdClicked ?? this.onAdClicked,
+      onLeftApplication: onLeftApplication ?? this.onLeftApplication,
+      onReturnedToApplication:
+          onReturnedToApplication ?? this.onReturnedToApplication,
+      didDismissScreen: didDismissScreen ?? this.didDismissScreen,
+      willPresentScreen: willPresentScreen ?? this.willPresentScreen,
+    );
   }
 }
