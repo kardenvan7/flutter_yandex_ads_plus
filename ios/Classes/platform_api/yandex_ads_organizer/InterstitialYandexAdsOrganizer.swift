@@ -7,7 +7,7 @@
 
 import Foundation
 
-class InterstitialYandexAdOrganizer {
+class InterstitialYandexAdsOrganizer {
     private let eventDispatcher: AdEventDispatcher
     private var ads: [String: InterstitialYandexAd] = [:]
     

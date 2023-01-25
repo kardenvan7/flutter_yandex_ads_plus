@@ -9,7 +9,8 @@ import Foundation
 
 class AdMethodCallReceiver {
     private let methodChannel: FlutterMethodChannel
-    private let interstitialAdOrganizer: InterstitialYandexAdOrganizer
+    private let interstitialAdsOrganizer: InterstitialYandexAdsOrganizer
+    private let rewardedAdsOrganizer: RewardedYandexAdsOrganizer
     
     init(
         name: String,
@@ -20,7 +21,10 @@ class AdMethodCallReceiver {
             name: name,
             binaryMessenger: binaryMessenger
         )
-        self.interstitialAdOrganizer = InterstitialYandexAdOrganizer(
+        self.interstitialAdsOrganizer = InterstitialYandexAdsOrganizer(
+            eventDispatcher: eventDispatcher
+        )
+        self.rewardedAdsOrganizer = RewardedYandexAdsOrganizer(
             eventDispatcher: eventDispatcher
         )
 
@@ -37,6 +41,15 @@ class AdMethodCallReceiver {
             break
         case "removeInterstitialAd":
             removeInterstitialAd(call: call, result: result)
+            break
+        case "loadRewardedAd":
+            loadRewardedAd(call: call, result: result)
+            break
+        case "showRewardedAd":
+            showRewardedAd(call: call, result: result)
+            break
+        case "removeRewardedAd":
+            removeRewardedAd(call: call, result: result)
             break
         case "enableLogging":
             enableLogging(call: call, result: result)
@@ -78,7 +91,7 @@ class AdMethodCallReceiver {
             map: arguments as! [String: Any?]
         )
         
-        interstitialAdOrganizer.createAndLoadAd(args: args)
+        interstitialAdsOrganizer.createAndLoadAd(args: args)
         
         result(nil)
     }
@@ -100,7 +113,7 @@ class AdMethodCallReceiver {
         }
 
         do {
-            try interstitialAdOrganizer.showAd(uid: uid as! String)
+            try interstitialAdsOrganizer.showAd(uid: uid as! String)
         } catch {
             result(
                 FlutterError(
@@ -130,7 +143,84 @@ class AdMethodCallReceiver {
             )
         }
 
-        interstitialAdOrganizer.removeAd(uid: uid as! String)
+        interstitialAdsOrganizer.removeAd(uid: uid as! String)
+        
+        result(nil)
+    }
+    
+    private func loadRewardedAd(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let arguments = call.arguments
+        
+        if (!(arguments is [String: Any?])) {
+            return result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Given arguments: \(String(describing: arguments))"
+                )
+            )
+        }
+        
+        let args = RewardedAdArgumentsFactory.fromMap(
+            map: arguments as! [String: Any?]
+        )
+        
+        rewardedAdsOrganizer.createAndLoadAd(args: args)
+        
+        result(nil)
+    }
+    
+    private func showRewardedAd(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let uid = call.arguments
+        
+        if (!(uid is String)) {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Uid has to be String. Given uid: \(String(describing: uid))"
+                )
+            )
+        }
+
+        do {
+            try rewardedAdsOrganizer.showAd(uid: uid as! String)
+        } catch {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: error.localizedDescription,
+                    details: nil
+                )
+            )
+        }
+        
+        result(nil)
+    }
+    
+    private func removeRewardedAd(
+        call: FlutterMethodCall,
+        result: FlutterResult
+    ) {
+        let uid = call.arguments
+        
+        if (!(uid is String)) {
+            result(
+                FlutterError(
+                    code: "-1",
+                    message: "Call arguments are invalid.",
+                    details: "Uid has to be String. Given uid: \(String(describing: uid))"
+                )
+            )
+        }
+
+        rewardedAdsOrganizer.removeAd(uid: uid as! String)
         
         result(nil)
     }
