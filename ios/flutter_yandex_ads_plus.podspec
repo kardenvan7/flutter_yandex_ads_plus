@@ -4,18 +4,18 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_yandex_ads_plus'
-  s.version          = '0.3.0'
+  s.version          = '0.5.0'
   s.summary          = 'Flutter Yandex Ads.'
   s.description      = <<-DESC
 Flutter Yandex Ads.
                        DESC
   s.homepage         = 'https://github.com/kardenvan7/flutter_yandex_ads_plus'
-  s.license          = { :file => '../LICENSE' }
   s.author           = { 'kardenvan' => 'glushkovlad98@gmail.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   s.dependency 'YandexMobileAds'
+  s.dependency 'YandexMobileAdsInstream'
   s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice.

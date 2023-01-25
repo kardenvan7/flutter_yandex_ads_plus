@@ -1,12 +1,15 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_yandex_ads_plus (0.2.3):
+  - flutter_yandex_ads_plus (0.5.0):
     - Flutter
     - YandexMobileAds
+    - YandexMobileAdsInstream
   - YandexMobileAds (5.2.1):
     - YandexMobileAds/Static (= 5.2.1)
   - YandexMobileAds/Static (5.2.1):
     - YandexMobileMetrica (< 5.0.0, >= 4.0.0)
+  - YandexMobileAdsInstream (0.12.0):
+    - YandexMobileAds (~> 5.2.0)
   - YandexMobileMetrica (4.4.0):
     - YandexMobileMetrica/Static (= 4.4.0)
   - YandexMobileMetrica/Static (4.4.0):
@@ -23,6 +26,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - YandexMobileAds
+    - YandexMobileAdsInstream
     - YandexMobileMetrica
 
 EXTERNAL SOURCES:
@@ -33,8 +37,9 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
-  flutter_yandex_ads_plus: 5b5c3b786a88f17fe4a9291dcd9515801e22a39d
+  flutter_yandex_ads_plus: ffba73f8c1f4d825ac4378efed4e623f964e43c1
   YandexMobileAds: 3d7708df615f92815a3acedf9869da46d0b4d65e
+  YandexMobileAdsInstream: 9af68b07d930a9d16b343838ebffe6605ef086a2
   YandexMobileMetrica: baf7cea47cb87fc9af963c4f747ce8dd7df3d7c0
 
 PODFILE CHECKSUM: 0ae2ea0d52379fd8c6a9b9fd356fb1173f6d9a0d
