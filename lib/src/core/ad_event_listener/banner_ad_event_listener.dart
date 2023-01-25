@@ -1,8 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_yandex_ads_plus/flutter_yandex_ads_plus.dart';
 
-import 'ad_event_listener.dart';
-
 /// Listener for banner ad events.
 ///
 class BannerAdEventListener extends AdEventListener {

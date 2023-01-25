@@ -2,7 +2,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_yandex_ads_plus/src/core/core.dart';
-import 'package:flutter_yandex_ads_plus/src/platform_api/ad_event_emitter/banner_ad_event_listener_emitter.dart';
 import 'package:flutter_yandex_ads_plus/src/platform_api/platform_api.dart';
 import 'package:flutter_yandex_ads_plus/src/utils/unique_id_generator.dart';
 

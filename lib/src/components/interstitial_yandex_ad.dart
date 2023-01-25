@@ -1,4 +1,3 @@
-import 'package:flutter_yandex_ads_plus/src/core/ad_event_listener/interstitial_ad_event_listener.dart';
 import 'package:flutter_yandex_ads_plus/src/src.dart';
 
 /// Flutter implementation Androids [InterstitialAd] and [YMAInterstitialAd]

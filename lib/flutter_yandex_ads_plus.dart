@@ -13,9 +13,11 @@ class FlutterYandexAdsPlus {
     return _apiInstance ??= FlutterYandexAdsApi();
   }
 
-  /// Sets user age restriction.
+  /// Sets user age restriction. Set a value indicating whether user is a child
+  /// or undefined age. If the value is set to true personal data will not be
+  /// collected.
   ///
-  /// Works only on Android. On any other platform throws [NotImplemented]
+  /// Works only on Android. On any other platform throws [NotImplemented].
   ///
   static Future<void> setAgeRestrictedUser(bool value) {
     return _api.setAgeRestrictedUser(value);
@@ -30,19 +32,24 @@ class FlutterYandexAdsPlus {
     return _api.enableLogging(value);
   }
 
-  /// Enabled/disabled debug error indicator for ads.
+  /// Enable or disable visibility error indicator in Debug Mode. Indicator is
+  /// enabled by default.
   ///
   static Future<void> enableDebugErrorIndicator(bool value) {
     return _api.enableDebugErrorIndicator(value);
   }
 
-  /// Sets location consent given by the user.
+  /// Enables/Disables location usage for ad loading. Disabled by default.
+  /// Location permission is still required to be granted additionally to the
+  /// consent.
   ///
   static Future<void> setLocationConsent(bool value) {
     return _api.setLocationConsent(value);
   }
 
-  /// Sets consent given by user.
+  /// Set a value indicating whether user from GDPR region allowed to collect
+  /// personal data which is used for analytics and ad targeting. If the value
+  /// is set to false personal data will not be collected.
   ///
   static Future<void> setUserConsent(bool value) {
     return _api.setUserConsent(value);
