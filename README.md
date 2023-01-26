@@ -39,37 +39,34 @@ This section has examples of code for the following tasks:
 ### Bannеr Ad Widget
 ```dart
 BannerYandexAdView(
-  height: 250,
-  id: 'R-M-DEMO-300x250',
-  iosSettings: const IosBannerAdViewSettings(
-    translatesAutoResizingMaskIntoConstraints: true,
-  ),
-  listener: BannerAdEventListener(
-    onAdLoaded: () {
-      debugPrint('BANNER AD LOADED');
-    },
-    onAdFailedToLoad: (int? code, String? description) {
-      debugPrint(
-        'BANNER AD FAILED TO LOAD: CODE $code, DESC: $description',
-      );
-    },
-  ),
+height: 250,    // Height of the ad. Has to be explicitly restricted.
+id: 'R-M-DEMO-300x250',    // AdUid given by ad provider
+listener: BannerAdEventListener(    // Listener for ad events
+onAdLoaded: () {
+debugPrint('BANNER AD LOADED');
+},
+onAdFailedToLoad: (int? code, String? description) {
+debugPrint(
+'BANNER AD FAILED TO LOAD: CODE $code, DESC: $description',
+);
+},
+),
 ),
 ```
 
 ### Native Ad Widget
 ```dart
 NativeYandexAdView(
-  id: 'demo-native-app-yandex',
-  height: 170,
-  width: 300,
-  parameters: const YandexAdParameters(
+  id: 'demo-native-app-yandex',    // AdUid given by ad provider
+  height: 170,    // Height of the ad. Has to be explicitly restricted.
+  width: 300,    // Width of the ad
+  parameters: const YandexAdParameters( // Additional ad load parameters
     custom: {
       'adfx-p1': 'asdx',
       'adfx-p2': 'asdc',
     },
   ),
-  listener: NativeAdEventListener(
+  listener: NativeAdEventListener(    // Listener for ad events
     onAdLoaded: () {
       debugPrint('NATIVE AD LOADED');
     },
@@ -95,15 +92,15 @@ class _InterstitialAdTabViewState extends State<InterstitialAdTabView> {
   InterstitialYandexAd? _ad;
 
   Future<void> _onAdShowPressed() async {
-    _ad = InterstitialYandexAd(
+    _ad = InterstitialYandexAd(          // Instance of the ad
       adId: "demo-interstitial-yandex",
     );
 
-    _ad?.load(
+    _ad?.load(                           // Loading ad
       listener: InterstitialAdEventListener(
         onAdLoaded: () {
           debugPrint('INTERSTITIAL AD LOADED');
-          _ad?.show();
+          _ad?.show();                   // Showing ad after it is loaded
         },
         onAdFailedToLoad: (int? code, String? description) {
           debugPrint(
@@ -126,7 +123,7 @@ class _InterstitialAdTabViewState extends State<InterstitialAdTabView> {
 
   @override
   void dispose() {
-    _ad?.dispose();
+    _ad?.dispose();          // Disposing ad instance when it is no longer needed
     super.dispose();
   }
 }
@@ -139,22 +136,22 @@ class _RewardedAdTabViewState extends State<RewardedAdTabView> {
   RewardedYandexAd? _ad;
 
   Future<void> _onAdShowPressed() async {
-    _ad = RewardedYandexAd(
+    _ad = RewardedYandexAd(               // Instance of the ad
       adId: "demo-rewarded-yandex",
     );
 
-    _ad?.load(
+    _ad?.load(                            // Loading ad
       listener: RewardedAdEventListener(
         onAdLoaded: () {
           debugPrint('REWARDED AD LOADED');
-          _ad?.show();
+          _ad?.show();                    // Showing ad after it is loaded
         },
         onAdFailedToLoad: (int? code, String? description) {
           debugPrint(
             'REWARDED AD FAILED TO LOAD: CODE $code, DESC: $description',
           );
         },
-        onRewarded: (YandexAdReward reward) {
+        onRewarded: (YandexAdReward reward) {    // Receiving a reward
           debugPrint(
             'REWARD RECEIVED:\nAMOUNT: ${reward.amount}\nTYPE: ${reward.type}',
           );
@@ -175,7 +172,7 @@ class _RewardedAdTabViewState extends State<RewardedAdTabView> {
 
   @override
   void dispose() {
-    _ad?.dispose();
+    _ad?.dispose();          // Disposing ad instance when it is no longer needed
     super.dispose();
   }
 }
