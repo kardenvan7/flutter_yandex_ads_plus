@@ -76,7 +76,7 @@ class RewardedAdEventEmitter extends AdEventEmitter {
         break;
 
       case RewardedAdEventType.onRewarded:
-        final reward = YandexAdRewardJsonConverter().fromJson(
+        final reward = YandexAdRewardFactory.fromJson(
           event.parameters!,
         );
 
