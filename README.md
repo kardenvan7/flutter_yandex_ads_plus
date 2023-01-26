@@ -39,8 +39,8 @@ This section has examples of code for the following tasks:
 ### Bannеr Ad Widget
 ```dart
 BannerYandexAdView(
-height: 250,    // Height of the ad. Has to be explicitly restricted.
 id: 'R-M-DEMO-300x250',    // AdUid given by ad provider
+height: 250,    // Height of the ad. Has to be explicitly restricted.
 listener: BannerAdEventListener(    // Listener for ad events
 onAdLoaded: () {
 debugPrint('BANNER AD LOADED');
