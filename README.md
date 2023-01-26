@@ -1,6 +1,12 @@
-# A Flutter plugin for Yandex Ads SDK.
+# A Flutter plugin for Yandex Ads SDK
 
-## Requirements:
+Navigation
+* [Requirements](#requirements)
+* [Features](#features)
+* [Examples](#examples)
+* [Usage](#usage)
+
+## Requirements
 
 |             | Android | iOS  |
 |-------------|---------|------|
@@ -10,11 +16,12 @@
 
 | Feature                        | Android | iOS | macOS | Web | Windows | Linux |
 | ------------------------------ | :-----: | :-: | :---: | :-: | :-----: | :---: |
-| Banner                | ✅      | ✅  |    ||     |
-| Native                | ✅      | ✅  |    ||     |
-| Interstitial                | ✅      | ✅  |    ||     |
-| Rewarded                | ✅      | ✅  |    ||     |
-## Ad examples
+| Banner Ad               | ✅      | ✅  |    ||     |
+| Native Ad               | ✅      | ✅  |    ||     |
+| Interstitial Ad               | ✅      | ✅  |    ||     |
+| Rewarded Ad               | ✅      | ✅  |    ||     |
+
+## Examples
 Banner Ad Widget| Native Ad Widget |Interstitial Ad| Rewarded Ad |
 :-------------------------:|:-------------------------:|:---------------:|:-:|
 ![Banner](https://github.com/kardenvan7/flutter_yandex_ads_plus/blob/0.6.0/doc/banner_example.jpg?raw=true)  |  ![Native](https://github.com/kardenvan7/flutter_yandex_ads_plus/blob/0.6.0/doc/native_example.jpg?raw=true) | ![Interstitial](https://github.com/kardenvan7/flutter_yandex_ads_plus/blob/0.6.0/doc/interstitial_example.jpg?raw=true) | ![Reward](https://github.com/kardenvan7/flutter_yandex_ads_plus/blob/0.6.0/doc/rewarded_example.jpg?raw=true)
@@ -27,7 +34,7 @@ This section has examples of code for the following tasks:
 * [Native Ad Widget](#native-ad-widget)
 * [Interstitial Ad](#interstitial-ad)
 * [Rewarded Ad](#rewarded-ad)
-* [SDK Configuration](#sdk-configuration)
+* [Configuration](#configuration)
 
 ### Bannеr Ad Widget
 ```dart
@@ -174,30 +181,31 @@ class _RewardedAdTabViewState extends State<RewardedAdTabView> {
 }
 ```
 
-### SDK Configuration
+### Configuration
 
 ```dart
 void _setUserConsent(bool value) {
-  FlutterYandexAdsPlus.setUserConsent(value);
+  FlutterYandexAdsPlus.setUserConsent(value); // Sets user consent
 }
 
 void _setEnableLogging(bool value) {
-  FlutterYandexAdsPlus.enableLogging(value);
+  FlutterYandexAdsPlus.enableLogging(value); // Enables/disables debug logging. Disabled by default
 }
 
 void _setLocationConsent(bool value) {
-  FlutterYandexAdsPlus.setLocationConsent(value);
+  FlutterYandexAdsPlus.setLocationConsent(value); // Sets location consent given by user
 }
 
 void _setEnableDebugErrorIndicator(bool value) {
-  FlutterYandexAdsPlus.enableDebugErrorIndicator(value);
+  FlutterYandexAdsPlus.enableDebugErrorIndicator(value); // Enables/disables error indicator for ads in debug mode
 }
 
 void _setAgeRestrictedUser(bool value) {
-  FlutterYandexAdsPlus.setAgeRestrictedUser(value);
+  FlutterYandexAdsPlus.setAgeRestrictedUser(value); // Sets age restriction
 }
 
 Future<void> _getNativeLibraryVersion() async {
-  final String version = await FlutterYandexAdsPlus.getNativeLibraryVersion();
+  final String version = await FlutterYandexAdsPlus.getNativeLibraryVersion(); // Returns native library version
+  debugPrint(version);
 }
 ```
